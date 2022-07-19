@@ -1,0 +1,30 @@
+import 'package:sportmen_in_gym/services/http/visit_http_service.dart';
+
+import '../models/sportsman.dart';
+import '../models/visit.dart';
+import '../services/http/sportsman_http_service.dart';
+
+class HttpController {
+
+  final SportsmanHttpService _sportsmanHttpService = SportsmanHttpService();
+  final VisitHttpService _visitHttpService = VisitHttpService();
+
+  HttpController._privateConstructor();
+  static final HttpController _instance = HttpController._privateConstructor();
+
+  static HttpController get instance => _instance;
+
+  Future<Sportsman> getSportsman(String email, String pass) async {
+    Sportsman sportsman = await _sportsmanHttpService.getByEmail(email);
+    if (pass == sportsman.password) {
+      return sportsman;
+    } else {
+      throw "Incorrect password";
+    }
+  }
+
+  Future<List<Visit>> getVisits(int sportsmanId) async {
+    List<Visit> visits = await _visitHttpService.getBySportsman(sportsmanId);
+    return visits;
+  }
+}
