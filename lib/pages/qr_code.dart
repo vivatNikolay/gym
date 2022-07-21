@@ -30,99 +30,114 @@ class _QrCodeState extends State<QrCode> {
       appBar: AppBar(
         title: const Text('QR code'),
       ),
-      body: ListView(padding: const EdgeInsets.only(top: 30), children: [
-          InkWell(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 98),
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/gantel.jpg'),
+            fit: BoxFit.cover,
+            alignment: Alignment.bottomLeft,
+            opacity: 0.6,
+          ),
+        ),
+        child: ListView(padding: const EdgeInsets.only(top: 30), children: [
+            InkWell(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 98),
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(children: [
+                  QrImage(
+                    data: _dbController.getSportsman()!.email,
+                    size: 200,
+                    backgroundColor: Colors.white,
+                  ),
+                  const Text(
+                    'Show this QR-code manager of gym',
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                ]),
               ),
-              child: Column(children: [
-                QrImage(
-                  data: _dbController.getSportsman()!.email,
-                  size: 200,
-                  backgroundColor: Colors.white,
-                ),
-                const Text(
-                  'Show this QR-code manager of gym',
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              ]),
-            ),
-            onTap: () async {
-              await ScreenBrightness()
-                  .current
-                  .then((value) => currentBrightness = value);
-              ScreenBrightness().setScreenBrightness(1);
-              showDialog(
-                context: context,
-                builder: (context) => Dialog(
-                  backgroundColor: Colors.transparent,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
+              onTap: () async {
+                await ScreenBrightness()
+                    .current
+                    .then((value) => currentBrightness = value);
+                ScreenBrightness().setScreenBrightness(1);
+                showDialog(
+                  context: context,
+                  builder: (context) => Dialog(
+                    backgroundColor: Colors.transparent,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: QrImage(
+                            data: _dbController.getSportsman()!.email,
+                            size: 300,
+                            backgroundColor: Colors.white,
+                          ),
                         ),
-                        child: QrImage(
-                          data: _dbController.getSportsman()!.email,
-                          size: 300,
-                          backgroundColor: Colors.white,
+                        const SizedBox(
+                          height: 5,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.black12,
-                          side: const BorderSide(
-                              color: Colors.deepOrangeAccent, width: 2),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: Colors.black12,
+                            side: const BorderSide(width: 2),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                             ),
                           ),
-                        ),
-                        onPressed: () {
-                          ScreenBrightness()
-                              .setScreenBrightness(currentBrightness);
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          'Close',
-                          style: TextStyle(
-                            color: Colors.deepOrangeAccent,
-                            fontSize: 19,
+                          onPressed: () {
+                            ScreenBrightness()
+                                .setScreenBrightness(currentBrightness);
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Close',
+                            style: TextStyle(
+                              fontSize: 19,
+                            ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              leading: const Icon(Icons.credit_card),
+              minLeadingWidth: 24,
+              title: const Text(
+                'Subscription',
+                style: TextStyle(
+                  fontSize: 18,
                 ),
-              );
-            },
-          ),
-          const SizedBox(height: 20),
-          ListTile(
-            leading:
-                const Icon(Icons.credit_card, color: Colors.deepOrangeAccent),
-            minLeadingWidth: 24,
-            title: const Text(
-              'Subscription',
+              ),
+              subtitle: Text(
+                _subscriptionProgress,
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              onTap: () {},
             ),
-            subtitle: Text(
-              _subscriptionProgress,
-            ),
-            onTap: () {},
-          ),
-        ]),
+          ]),
+      ),
     );
   }
 

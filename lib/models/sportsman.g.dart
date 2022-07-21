@@ -22,15 +22,16 @@ class SportsmanAdapter extends TypeAdapter<Sportsman> {
       password: fields[2] as String,
       phone: fields[3] as String,
       firstName: fields[4] as String,
-      dateOfBirth: fields[5] as DateTime,
-      subscription: fields[6] as Subscription?,
+      gender: fields[5] as bool,
+      dateOfBirth: fields[6] as DateTime,
+      subscription: fields[7] as Subscription?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Sportsman obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -42,8 +43,10 @@ class SportsmanAdapter extends TypeAdapter<Sportsman> {
       ..writeByte(4)
       ..write(obj.firstName)
       ..writeByte(5)
-      ..write(obj.dateOfBirth)
+      ..write(obj.gender)
       ..writeByte(6)
+      ..write(obj.dateOfBirth)
+      ..writeByte(7)
       ..write(obj.subscription);
   }
 

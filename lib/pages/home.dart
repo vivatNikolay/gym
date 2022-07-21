@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sticky_note_2_outlined),
-            label: 'Training',
+            label: 'Training List',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),

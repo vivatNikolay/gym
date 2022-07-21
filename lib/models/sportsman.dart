@@ -16,8 +16,10 @@ class Sportsman extends HiveObject{
   @HiveField(4)
   String firstName;
   @HiveField(5)
-  DateTime dateOfBirth;
+  bool gender;
   @HiveField(6)
+  DateTime dateOfBirth;
+  @HiveField(7)
   Subscription? subscription;
 
   Sportsman({
@@ -26,6 +28,7 @@ class Sportsman extends HiveObject{
     required this.password,
     required this.phone,
     required this.firstName,
+    required this.gender,
     required this.dateOfBirth,
     this.subscription
   });
@@ -39,6 +42,7 @@ class Sportsman extends HiveObject{
         password: json["password"],
         phone: json["phone"],
         firstName: json["firstName"],
+        gender: json["gender"],
         dateOfBirth: DateTime.parse(json["dateOfBirth"].toString()),
         subscription: subscription
     );
@@ -48,7 +52,7 @@ class Sportsman extends HiveObject{
   String toString() {
     return 'Sportsman{'
         'id: $id, email: $email, password: $password, phone: $phone, '
-        'firstName: $firstName, dateOfBirth: $dateOfBirth, '
+        'firstName: $firstName, gender: $gender, dateOfBirth: $dateOfBirth, '
         'subscription: $subscription'
         '}';
   }

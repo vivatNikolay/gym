@@ -36,12 +36,27 @@ class ThemeProvider extends ChangeNotifier {
 class MyThemes {
   static final light = ThemeData(
     brightness: Brightness.light,
+    primaryColor: Colors.white,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white70,
-      foregroundColor: Colors.black87),
+      foregroundColor: Colors.black87,
+      titleTextStyle: TextStyle(
+          fontSize: 22,
+          color: Colors.black87,
+          fontFamily: 'Times New Roman',
+          fontWeight: FontWeight.bold),
+      titleSpacing: 18,
+    ),
   );
 
   static final dark = ThemeData(
     brightness: Brightness.dark,
+    appBarTheme: const AppBarTheme(
+      titleTextStyle: TextStyle(
+          fontSize: 22,
+          fontFamily: 'Raleway',
+          fontWeight: FontWeight.bold),
+      titleSpacing: 18,
+    ),
   );
 }

@@ -14,7 +14,7 @@ import 'models/visit.dart';
 import 'pages/login.dart';
 
 void main() async {
-  HttpOverrides.global = MyHttpOverrides ();
+  HttpOverrides.global = MyHttpOverrides();
 
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -35,31 +35,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-    builder: (context, _) {
-        final themeProvider = Provider.of<ThemeProvider>(context);
+        create: (context) => ThemeProvider(),
+        builder: (context, _) {
+          final themeProvider = Provider.of<ThemeProvider>(context);
 
-      StatefulWidget home;
-      if (_dbController.isHasSportsman()) {
-        home = const Home();
-      } else {
-        home = const Login();
-      }
-      return MaterialApp(
-        title: 'Gym',
-        darkTheme: MyThemes.dark,
-        theme: MyThemes.light,
-        themeMode: themeProvider.themeMode,
-        home: home,
+          StatefulWidget home;
+          if (_dbController.isHasSportsman()) {
+            home = const Home();
+          } else {
+            home = const Login();
+          }
+          return MaterialApp(
+            title: 'Gym',
+            darkTheme: MyThemes.dark,
+            theme: MyThemes.light,
+            themeMode: themeProvider.themeMode,
+            home: home,
+          );
+        },
       );
-    },
-  );
 }
 
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

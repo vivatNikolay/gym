@@ -95,7 +95,7 @@ class _LoginState extends State<Login> {
                       ),
                       onPressed: () => setState(() {
                         _futureSportsman = _httpController.getSportsman(
-                            _loginController.text, _passController.text);
+                            _loginController.text.trim(), _passController.text);
                       }),
                       child: const Text(
                         'Log in',
