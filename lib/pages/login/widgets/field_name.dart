@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sportmen_in_gym/helpers/constants.dart';
 
 class FieldName extends StatelessWidget {
   final String text;
@@ -18,7 +19,7 @@ class FieldName extends StatelessWidget {
           fontFamily: 'PT-Sans',
           fontSize: 16,
           fontWeight: FontWeight.bold,
-          color: Colors.deepOrangeAccent,
+          color: mainColor,
         ),
       ),
     );

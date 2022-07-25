@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../controllers/db_controller.dart';
-import 'login.dart';
+import 'login/login.dart';
 import 'history.dart';
 import 'settings.dart';
 

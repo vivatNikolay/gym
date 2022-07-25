@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/http_controller.dart';
-import '../controllers/db_controller.dart';
-import '../models/sportsman.dart';
+import '../../controllers/http_controller.dart';
+import '../../controllers/db_controller.dart';
+import '../../models/sportsman.dart';
 import 'widgets/field_name.dart';
-import 'home.dart';
+import '../home.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);

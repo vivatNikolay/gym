@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sportmen_in_gym/helpers/constants.dart';
 
 import '../pages/qr_code.dart';
 import '../pages/training_list.dart';
@@ -29,23 +30,10 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          child: _widgetOptions.elementAt(_selectedIndex),
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [
-                  Colors.transparent,
-                  Colors.transparent,
-                  Color(0x1AFF6A21),
-                ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            )
-          ),
-        ),
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.deepOrangeAccent,
+        selectedItemColor: mainColor,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.qr_code),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sportmen_in_gym/helpers/constants.dart';
 
 import '../controllers/db_controller.dart';
 import '../controllers/http_controller.dart';
@@ -43,7 +44,7 @@ class _HistoryState extends State<History> {
             case ConnectionState.waiting:
               return const Center(
                 child: CircularProgressIndicator(
-                    color: Colors.deepOrangeAccent, strokeWidth: 5),
+                    color: mainColor, strokeWidth: 5),
               );
             default:
               if (snapshot.hasError) {

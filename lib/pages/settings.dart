@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sportmen_in_gym/helpers/constants.dart';
 
 import '../services/theme/theme_provider.dart';
 
@@ -33,7 +34,7 @@ class _SettingsState extends State<Settings> {
                   onChanged: (value) {
                     themeProvider.toggleTheme(value);
                   },
-                  activeColor: Colors.deepOrangeAccent,
+                  activeColor: mainColor,
                 ),
                 onTap: () {},
               ),
