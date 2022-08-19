@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:sportmen_in_gym/helpers/constants.dart';
 
 import '../models/subscription.dart';
 import '../controllers/db_controller.dart';
@@ -38,7 +39,7 @@ class _QrCodeState extends State<QrCode> {
             image: AssetImage('images/gantel.jpg'),
             fit: BoxFit.cover,
             alignment: Alignment.bottomLeft,
-            opacity: 0.6,
+            opacity: 0.5,
           ),
         ),
         child: ListView(padding: const EdgeInsets.only(top: 30), children: [
@@ -56,11 +57,6 @@ class _QrCodeState extends State<QrCode> {
                     size: 200,
                     backgroundColor: Colors.white,
                   ),
-                  const Text(
-                    'Show this QR-code manager of gym',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                    textAlign: TextAlign.center,
-                  ),
                 ]),
               ),
               onTap: () async {
@@ -72,69 +68,79 @@ class _QrCodeState extends State<QrCode> {
                   context: context,
                   builder: (context) => Dialog(
                     backgroundColor: Colors.transparent,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: QrImage(
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          QrImage(
                             data: _dbController.getSportsman()!.email,
                             size: 300,
                             backgroundColor: Colors.white,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.black12,
-                            side: const BorderSide(width: 2),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: Size.fromWidth(280),
+                              primary: mainColor,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
                               ),
                             ),
-                          ),
-                          onPressed: () {
-                            ScreenBrightness()
-                                .setScreenBrightness(currentBrightness);
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            'Close',
-                            style: TextStyle(
-                              fontSize: 19,
+                            onPressed: () {
+                              ScreenBrightness()
+                                  .setScreenBrightness(currentBrightness);
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              ' Close ',
+                              style: TextStyle(
+                                fontSize: 19,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );
               },
             ),
             const SizedBox(height: 20),
-            ListTile(
-              leading: const Icon(Icons.credit_card),
-              minLeadingWidth: 24,
-              title: const Text(
-                'Subscription',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
+            Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(13.0),
               ),
-              subtitle: Text(
-                _subscriptionProgress,
-                style: const TextStyle(
-                  fontSize: 16,
+              color: Colors.white,
+              child: ListTile(
+                leading: const Icon(Icons.credit_card, size: 26, color: mainColor),
+                minLeadingWidth: 22,
+                title: const Text(
+                  'Subscription',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black
+                  ),
                 ),
+                subtitle: Text(
+                  _subscriptionProgress,
+                  style: const TextStyle(
+                    fontSize: 17,
+                      color: Colors.black
+                  ),
+                ),
+                onTap: () {},
               ),
-              onTap: () {},
             ),
           ]),
       ),

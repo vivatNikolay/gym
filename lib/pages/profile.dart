@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sportmen_in_gym/helpers/constants.dart';
 
 import '../controllers/db_controller.dart';
 import 'login/login.dart';
@@ -21,23 +22,14 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/profile_m.jpg'),
-            fit: BoxFit.cover,
-            alignment: Alignment.center,
-            opacity: 0.5,
-          ),
-        ),
         child: Column(
           children: [
             const SizedBox(height: 5),
             Card(
-              color: Theme.of(context).primaryColor.withOpacity(0.75),
-              elevation: 1,
+              elevation: 2,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(13.0),
               ),
@@ -65,7 +57,7 @@ class _ProfileState extends State<Profile> {
                     style: const TextStyle(fontSize: 20)),
                 trailing: IconButton(
                   icon: const Icon(Icons.edit, size: 26),
-                  splashColor: Colors.deepOrangeAccent,
+                  splashColor: mainColor,
                   splashRadius: 24,
                   onPressed: () {},
                 ),
@@ -74,7 +66,7 @@ class _ProfileState extends State<Profile> {
             const SizedBox(height: 15),
             ListTile(
               leading: const Icon(Icons.list_alt_rounded,
-                  color: Colors.deepOrangeAccent),
+                  color: mainColor),
               minLeadingWidth: 24,
               title: const Text('History', style: TextStyle(fontSize: 18)),
               onTap: () {
@@ -84,7 +76,7 @@ class _ProfileState extends State<Profile> {
             ),
             ListTile(
               leading: const Icon(Icons.settings_outlined,
-                  color: Colors.deepOrangeAccent),
+                  color: mainColor),
               minLeadingWidth: 24,
               title: const Text('Settings', style: TextStyle(fontSize: 18)),
               onTap: () {
@@ -93,7 +85,7 @@ class _ProfileState extends State<Profile> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.logout, color: Colors.deepOrangeAccent),
+              leading: const Icon(Icons.logout, color: mainColor),
               minLeadingWidth: 24,
               title: const Text('Exit', style: TextStyle(fontSize: 18)),
               onTap: () {

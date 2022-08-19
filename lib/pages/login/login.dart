@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sportmen_in_gym/helpers/constants.dart';
 
 import '../../controllers/http_controller.dart';
 import '../../controllers/db_controller.dart';
@@ -46,7 +47,7 @@ class _LoginState extends State<Login> {
                       fontFamily: 'PT-Sans',
                       fontSize: 50,
                       fontWeight: FontWeight.bold,
-                      color: Colors.deepOrangeAccent,
+                      color: mainColor,
                     ),
                   ),
                   const SizedBox(
@@ -55,11 +56,11 @@ class _LoginState extends State<Login> {
                   const FieldName(text: 'Login'),
                   TextField(
                     controller: _loginController,
-                    cursorColor: Colors.deepOrangeAccent,
+                    cursorColor: mainColor,
                     decoration: const InputDecoration(
                       focusedBorder: UnderlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.deepOrangeAccent)),
+                              BorderSide(color: mainColor)),
                     ),
                   ),
                   const SizedBox(
@@ -68,11 +69,11 @@ class _LoginState extends State<Login> {
                   const FieldName(text: 'Password'),
                   TextField(
                     controller: _passController,
-                    cursorColor: Colors.deepOrangeAccent,
+                    cursorColor: mainColor,
                     decoration: const InputDecoration(
                       focusedBorder: UnderlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.deepOrangeAccent)),
+                              BorderSide(color: mainColor)),
                     ),
                     obscureText: true,
                   ),
@@ -86,7 +87,7 @@ class _LoginState extends State<Login> {
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.black12,
                         side: const BorderSide(
-                            color: Colors.deepOrangeAccent, width: 1),
+                            color: mainColor, width: 1),
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(10),
@@ -100,7 +101,7 @@ class _LoginState extends State<Login> {
                       child: const Text(
                         'Log in',
                         style: TextStyle(
-                          color: Colors.deepOrangeAccent,
+                          color: mainColor,
                           fontSize: 19,
                         ),
                       ),
@@ -117,7 +118,7 @@ class _LoginState extends State<Login> {
                             return Container();
                           case ConnectionState.waiting:
                             return const CircularProgressIndicator(
-                                color: Colors.deepOrangeAccent);
+                                color: mainColor);
                           default:
                             if (snapshot.hasError) {
                               throw snapshot.error!;
@@ -131,7 +132,7 @@ class _LoginState extends State<Login> {
                                     MaterialPageRoute(
                                         builder: (context) => const Home()));
                               }); //Сначала переход на страницу, а потом рисую, видимо это ошибка
-                              return const Icon(Icons.check, color: Colors.deepOrangeAccent, size: 24);
+                              return const Icon(Icons.check, color: mainColor, size: 24);
                             } else {
                               return const Text('not found');
                             }
