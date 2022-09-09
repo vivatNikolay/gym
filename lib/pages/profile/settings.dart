@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
 
-import '../services/theme/theme_provider.dart';
+import '../../services/theme/theme_provider.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);

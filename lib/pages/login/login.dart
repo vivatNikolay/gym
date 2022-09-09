@@ -121,11 +121,11 @@ class _LoginState extends State<Login> {
                                 color: mainColor);
                           default:
                             if (snapshot.hasError) {
-                              throw snapshot.error!;
+                              return const Text('Incorrect login or passwor');
                             }
                             if (snapshot.hasData) {
                               print('hasData');
-                              _dbController.addSportsman(snapshot.data!);
+                              _dbController.saveOrUpdateSportsman(snapshot.data!);
                               WidgetsBinding.instance
                                   ?.addPostFrameCallback((_) {
                                 Navigator.of(context).pushReplacement(

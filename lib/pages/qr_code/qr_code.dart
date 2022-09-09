@@ -3,8 +3,8 @@ import 'package:screen_brightness/screen_brightness.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
 
-import '../models/subscription.dart';
-import '../controllers/db_controller.dart';
+import '../../models/subscription.dart';
+import '../../controllers/db_controller.dart';
 
 class QrCode extends StatefulWidget {
   const QrCode({Key? key}) : super(key: key);

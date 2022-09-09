@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
 
-import '../pages/qr_code.dart';
-import '../pages/training_list.dart';
-import 'profile.dart';
+import 'qr_code/qr_code.dart';
+import 'training_list/training_list.dart';
+import 'profile/profile.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {

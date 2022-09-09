@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
 
-import '../controllers/db_controller.dart';
-import '../controllers/http_controller.dart';
-import '../models/visit.dart';
+import '../../controllers/db_controller.dart';
+import '../../controllers/http_controller.dart';
+import '../../models/visit.dart';
 
 class History extends StatefulWidget {
   const History({Key? key}) : super(key: key);
