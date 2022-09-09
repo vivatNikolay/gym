@@ -12,20 +12,29 @@ import 'models/sportsman.dart';
 import 'models/subscription.dart';
 import 'models/visit.dart';
 import 'pages/login/login.dart';
+import 'models/training.dart';
+import 'models/exercise.dart';
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
 
+  await hiveInitialization();
+
+  runApp(MyApp());
+}
+
+Future<void> hiveInitialization() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(SportsmanAdapter());
   Hive.registerAdapter(SubscriptionAdapter());
   Hive.registerAdapter(VisitAdapter());
   Hive.registerAdapter(SettingsAdapter());
+  Hive.registerAdapter(TrainingAdapter());
+  Hive.registerAdapter(ExerciseAdapter());
   await Hive.openBox<Sportsman>('sportsman');
   await Hive.openBox<Settings>('settings');
-
-  runApp(MyApp());
+  await Hive.openBox<Training>('training');
 }
 
 class MyApp extends StatelessWidget {
