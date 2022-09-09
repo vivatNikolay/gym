@@ -8,12 +8,23 @@ class SportsmanHttpService extends HttpService<Sportsman>{
 
   Future<Sportsman> getByEmail(String email) async {
     Response res = await get(Uri.parse(url+"/sportsman/$email"));
-    print(res.body);
     if (res.statusCode == 200) {
       Sportsman sportsman = Sportsman.fromJson(jsonDecode(res.body));
       return sportsman;
     } else {
       throw "Unable to retrieve sportsman.";
     }
+  }
+
+  Future<bool> putByEmail(String email, Sportsman sportsman) async {
+    Response res = await put(Uri.parse(url+"/sportsman/$email"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(sportsman.toJson()));
+    if (res.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 }

@@ -48,6 +48,17 @@ class Sportsman extends HiveObject{
     );
   }
 
+  Map<String, dynamic> toJson() => {
+      'id': id,
+      'email': email,
+      'password': password,
+      'phone': phone,
+      'firstName': firstName,
+      'gender': gender,
+      'dateOfBirth': dateOfBirth.toString().substring(0, 10),
+      'subscription': subscription?.toJson()
+  };
+
   @override
   String toString() {
     return 'Sportsman{'

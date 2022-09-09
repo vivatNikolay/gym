@@ -23,6 +23,11 @@ class HttpController {
     }
   }
 
+  Future<bool> putSportsman(Sportsman sportsman) async {
+    bool success = await _sportsmanHttpService.putByEmail(sportsman.email, sportsman);
+    return success;
+  }
+
   Future<List<Visit>> getVisits(int sportsmanId) async {
     List<Visit> visits = await _visitHttpService.getBySportsman(sportsmanId);
     return visits;

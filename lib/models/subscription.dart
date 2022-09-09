@@ -33,6 +33,14 @@ class Subscription {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+      'id': id,
+      'dateOfPurchase': dateOfPurchase.toString().substring(0, 10),
+      'dateOfEnd': dateOfEnd.toString().substring(0, 10),
+      'numberOfVisits': numberOfVisits,
+      'visitCounter': visitCounter
+  };
+
   @override
   String toString() {
     return 'Subscription{'

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
+import 'package:sportmen_in_gym/pages/profile/profile_edit.dart';
 
-import '../controllers/db_controller.dart';
-import 'login/login.dart';
+import '../../controllers/db_controller.dart';
+import '../../models/sportsman.dart';
+import '../login/login.dart';
 import 'history.dart';
 import 'settings.dart';
 
@@ -15,6 +17,14 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final DBController _dbController = DBController.instance;
+  Sportsman? sportsman;
+
+  @override
+  void initState() {
+    sportsman = _dbController.getSportsman();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,27 +49,32 @@ class _ProfileState extends State<Profile> {
                   height: 60.0,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(_dbController.getSportsman()!.gender ? 'images/man.png' : 'images/woman.png'),
+                      image: AssetImage(sportsman!.gender ? 'images/man.png' : 'images/woman.png'),
                       fit: BoxFit.cover,
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                    border: Border.all(
-                      color: Colors.white24,
-                      width: 1.0,
-                    ),
                   ),
                 ),
                 minLeadingWidth: 24,
-                title: Text(_dbController.getSportsman()!.firstName,
+                title: Text(sportsman!.firstName,
                     style:
                         const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                subtitle: Text(_dbController.getSportsman()!.email,
+                subtitle: Text(sportsman!.email,
                     style: const TextStyle(fontSize: 20)),
                 trailing: IconButton(
                   icon: const Icon(Icons.edit, size: 26),
                   splashColor: mainColor,
                   splashRadius: 24,
-                  onPressed: () {},
+                  onPressed: ()  async {
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProfileEdit(sportsman: sportsman!)));
+                    setState(() {
+                      sportsman = _dbController.getSportsman();
+                    });
+                  },
                 ),
               ),
             ),
