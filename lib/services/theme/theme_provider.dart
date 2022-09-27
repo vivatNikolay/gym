@@ -37,6 +37,7 @@ class MyThemes {
   static final light = ThemeData(
     brightness: Brightness.light,
     primaryColor: Colors.white,
+    backgroundColor: const Color(0xFFF3F3F8),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white70,
       foregroundColor: Colors.black87,
@@ -47,16 +48,28 @@ class MyThemes {
           fontWeight: FontWeight.bold),
       titleSpacing: 18,
     ),
+    textTheme: const TextTheme(
+      bodyMedium: TextStyle(
+        color: Colors.black54,
+      ),
+    ),
   );
 
   static final dark = ThemeData(
     brightness: Brightness.dark,
+    backgroundColor: const Color(0xFF2C2D2F),
     appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.black45,
       titleTextStyle: TextStyle(
           fontSize: 22,
           fontFamily: 'Raleway',
           fontWeight: FontWeight.bold),
       titleSpacing: 18,
+    ),
+    textTheme: const TextTheme(
+      bodyMedium: TextStyle(
+        color: Colors.white54,
+      ),
     ),
   );
 }

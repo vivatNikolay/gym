@@ -6,7 +6,7 @@ import '../../controllers/db_controller.dart';
 import '../../models/sportsman.dart';
 import '../login/login.dart';
 import 'history.dart';
-import 'settings.dart';
+import 'settings/settings.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
