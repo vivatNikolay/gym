@@ -21,9 +21,9 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    sportsman = _dbController.getSportsman();
-
     super.initState();
+
+    sportsman = _dbController.getSportsman();
   }
 
   @override
@@ -45,8 +45,8 @@ class _ProfileState extends State<Profile> {
               ),
               child: ListTile(
                 leading: Container(
-                  width: 60.0,
-                  height: 60.0,
+                  width: 70.0,
+                  height: 70.0,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(sportsman!.gender ? 'images/man.png' : 'images/woman.png'),
@@ -58,13 +58,13 @@ class _ProfileState extends State<Profile> {
                 minLeadingWidth: 24,
                 title: Text(sportsman!.firstName,
                     style:
-                        const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                        const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
                 subtitle: Text(sportsman!.email,
                     style: const TextStyle(fontSize: 20)),
                 trailing: IconButton(
-                  icon: const Icon(Icons.edit, size: 26),
+                  icon: const Icon(Icons.edit, size: 28),
                   splashColor: mainColor,
-                  splashRadius: 24,
+                  splashRadius: 26,
                   onPressed: ()  async {
                     await Navigator.push(
                         context,
