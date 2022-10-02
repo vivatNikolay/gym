@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sportmen_in_gym/models/exercise.dart';
+import 'package:sportmen_in_gym/pages/training_list/exercise_edit.dart';
 
 import '../../models/training.dart';
 import '../../services/db/training_db_service.dart';
@@ -17,68 +18,66 @@ class _TrainingEditState extends State<TrainingEdit> {
   final Training training;
   final TrainingDBService dbService = TrainingDBService();
   late List<Exercise> _exercises;
-  late TextEditingController exerciseController;
 
   _TrainingEditState(this.training);
 
   @override
   void initState() {
-    _exercises = training.exercises;
-
-    exerciseController = TextEditingController();
-
     super.initState();
+
+    _exercises = training.exercises;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(training.name),
-        actions: [
-          IconButton(
-              onPressed: () {
-                dbService.delete(training);
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.delete_outlined)),
-          IconButton(
-              onPressed: () {
-                dbService.saveOrUpdate(training);
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.check))
-        ],
-      ),
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(top: 20),
-        child: Column(
-          children: [
-            InkWell(
-              child: Card(
-                color: Theme.of(context).primaryColor.withOpacity(0.75),
-                elevation: 2.0,
-                child: ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.add),
-                      Text('Add exercise', style: TextStyle(fontSize: 19)),
-                    ],
+    return WillPopScope(
+      onWillPop: () {
+        return dbService.saveOrUpdate(training);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(training.name),
+        ),
+        body: SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(top: 20),
+          child: Column(
+            children: [
+              buildList(context),
+              InkWell(
+                child: Card(
+                  color: Theme.of(context).primaryColor.withOpacity(0.75),
+                  elevation: 2.0,
+                  child: ListTile(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.add),
+                        Text('Add exercise', style: TextStyle(fontSize: 19)),
+                      ],
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
+                onTap: () async {
+                  ValueNotifier<Exercise> newExercise =
+                      ValueNotifier(Exercise(name: '', reps: 10, sets: 5));
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ExerciseEdit(exercise: newExercise)));
+                  setState(() {
+                    _exercises.add(newExercise.value);
+                  });
+                },
               ),
-              onTap: () {
-                openDialog(Exercise(name: '', reps: 10, sets: 5));
-              },
-            ),
-          ],
-        ),
-      )),
+            ],
+          ),
+        )),
+      ),
     );
   }
 
@@ -96,9 +95,25 @@ class _TrainingEditState extends State<TrainingEdit> {
                 title: Text('${_exercises[index].name}',
                     style: const TextStyle(fontSize: 19)),
                 trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () async {},
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() {
+                      _exercises.remove(_exercises[index]);
+                    });
+                  },
                 ),
+                onTap: () async {
+                  ValueNotifier<Exercise> exercise =
+                  ValueNotifier(_exercises[index]);
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ExerciseEdit(exercise: exercise)));
+                  setState(() {
+                    _exercises[index] = exercise.value;
+                  });
+                },
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -108,46 +123,5 @@ class _TrainingEditState extends State<TrainingEdit> {
     } else {
       return Container();
     }
-  }
-
-  Future openDialog(Exercise exercise) {
-    exerciseController.text = exercise.name;
-    return showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text('Exercise'),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
-              content: Container(
-                height: 300,
-                child: Column(
-                  children: [
-                    TextField(
-                      decoration: const InputDecoration(
-                        hintText: 'Name',
-                      ),
-                      controller: exerciseController,
-                    ),
-                    Slider(
-                      min: 1,
-                      max: 100,
-                      divisions: 100,
-                      value: exercise.reps.toDouble(),
-                      onChanged: (double value) {
-                        setState(() {
-                          exercise.reps = value.toInt();
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  child: const Text('Save'),
-                  onPressed: () async {},
-                )
-              ],
-            ));
   }
 }

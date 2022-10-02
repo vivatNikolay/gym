@@ -17,11 +17,12 @@ class TrainingDBService {
     return box.values.toList();
   }
 
-  void saveOrUpdate(Training training) {
+  Future<bool> saveOrUpdate(Training training) async {
     if (training.isInBox) {
-      training.save();
+      await training.save();
     } else {
-      box.add(training);
+      await box.add(training);
     }
+    return true;
   }
 }

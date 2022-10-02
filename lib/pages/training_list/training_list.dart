@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sportmen_in_gym/helpers/constants.dart';
 import 'package:sportmen_in_gym/pages/training_list/training_edit.dart';
 
 import '../../services/db/training_db_service.dart';
@@ -18,11 +19,11 @@ class _TrainingListState extends State<TrainingList> {
 
   @override
   void initState() {
+    super.initState();
+
     _trainings = _dbService.getAll();
 
     nameController = TextEditingController();
-
-    super.initState();
   }
 
   @override
@@ -48,8 +49,8 @@ class _TrainingListState extends State<TrainingList> {
             buildList(context),
             InkWell(
               child: Card(
-                color: Theme.of(context).primaryColor.withOpacity(0.75),
-                elevation: 4.0,
+                color: Theme.of(context).primaryColor.withOpacity(0.8),
+                elevation: 2.0,
                 child: ListTile(
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -75,40 +76,45 @@ class _TrainingListState extends State<TrainingList> {
   }
 
   Widget buildList(BuildContext context) {
-    if (_trainings.isNotEmpty) {
-      return ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: _trainings.length,
-          itemBuilder: (_, index) {
-            return Card(
-              color: Theme.of(context).primaryColor.withOpacity(0.75),
-              elevation: 4.0,
-              child: ListTile(
-                title: Text('${_trainings[index].name}',
-                    style: const TextStyle(fontSize: 19)),
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () async {
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                TrainingEdit(training: _trainings[index])));
-                    setState(() {
-                      _trainings = _dbService.getAll();
-                    });
-                  },
-                ),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            );
-          });
-    } else {
+    if (_trainings.isEmpty) {
       return Container();
     }
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: _trainings.length,
+        itemBuilder: (_, index) {
+          return Card(
+            color: Theme.of(context).primaryColor.withOpacity(0.8),
+            elevation: 2.0,
+            child: ListTile(
+              title: Text('${_trainings[index].name}',
+                  style: const TextStyle(fontSize: 19)),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () async {
+                  _dbService.delete(_trainings[index]);
+                  setState(() {
+                    _trainings = _dbService.getAll();
+                  });
+                },
+              ),
+              onTap: () async {
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            TrainingEdit(training: _trainings[index])));
+                setState(() {
+                  _trainings = _dbService.getAll();
+                });
+              },
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          );
+        });
   }
 
   Future openDialog() => showDialog(
@@ -116,17 +122,21 @@ class _TrainingListState extends State<TrainingList> {
       builder: (context) => AlertDialog(
             title: const Text('Training'),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0)),
+              borderRadius: BorderRadius.circular(12.0)),
             content: TextField(
               autofocus: true,
               decoration: const InputDecoration(
                 hintText: 'Name',
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: mainColor, width: 2)),
               ),
               controller: nameController,
             ),
+            backgroundColor: Theme.of(context).backgroundColor,
             actions: [
               TextButton(
-                child: const Text('Continue'),
+                child: const Text('Continue',
+                    style: TextStyle(color: mainColor, fontSize: 18)),
                 onPressed: () async {
                   Navigator.pop(context);
                   await Navigator.push(
