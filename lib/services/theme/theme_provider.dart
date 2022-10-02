@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../helpers/constants.dart';
 import '../../models/settings.dart';
 import '../db/settings_db_service.dart';
 
@@ -44,7 +45,7 @@ class MyThemes {
       titleTextStyle: TextStyle(
           fontSize: 22,
           color: Colors.black87,
-          fontFamily: 'Times New Roman',
+          fontFamily: 'Raleway',
           fontWeight: FontWeight.bold),
       titleSpacing: 18,
     ),
@@ -52,6 +53,9 @@ class MyThemes {
       bodyMedium: TextStyle(
         color: Colors.black54,
       ),
+    ),
+    textSelectionTheme: const TextSelectionThemeData(
+      cursorColor: mainColor,
     ),
   );
 
@@ -70,6 +74,9 @@ class MyThemes {
       bodyMedium: TextStyle(
         color: Colors.white54,
       ),
+    ),
+    textSelectionTheme: const TextSelectionThemeData(
+      cursorColor: mainColor,
     ),
   );
 }
