@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../../helpers/constants.dart';
-import '../../models/settings.dart';
-import '../db/settings_db_service.dart';
+import '../../models/system_settings.dart';
+import '../db/system_settings_db_service.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  final SettingsDBService _dbService = SettingsDBService();
+  final SystemSettingsDBService _dbService = SystemSettingsDBService();
 
   late ThemeMode themeMode;
-  late Settings _settings;
+  late SystemSettings _settings;
 
   ThemeProvider() {
     _settings = _dbService.getFirst() ??
-        Settings(isDark: ThemeMode.system == ThemeMode.dark);
+        SystemSettings(isDark: ThemeMode.system == ThemeMode.dark);
     themeMode = initThemeMode();
   }
 

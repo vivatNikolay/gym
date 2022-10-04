@@ -1,35 +1,32 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'training.dart';
+part of 'system_settings.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TrainingAdapter extends TypeAdapter<Training> {
+class SystemSettingsAdapter extends TypeAdapter<SystemSettings> {
   @override
-  final int typeId = 3;
+  final int typeId = 5;
 
   @override
-  Training read(BinaryReader reader) {
+  SystemSettings read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Training(
-      name: fields[0] as String,
-      exercises: (fields[1] as List).cast<Exercise>(),
+    return SystemSettings(
+      isDark: fields[0] as bool,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Training obj) {
+  void write(BinaryWriter writer, SystemSettings obj) {
     writer
-      ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.exercises);
+      ..writeByte(0)
+      ..write(obj.isDark);
   }
 
   @override
@@ -38,7 +35,7 @@ class TrainingAdapter extends TypeAdapter<Training> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TrainingAdapter &&
+      other is SystemSettingsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

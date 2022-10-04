@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'exercise.g.dart';
 
-@HiveType(typeId: 5)
+@HiveType(typeId: 4)
 class Exercise extends HiveObject{
   @HiveField(0)
   String name;

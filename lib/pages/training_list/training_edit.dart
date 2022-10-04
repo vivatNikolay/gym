@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sportmen_in_gym/models/exercise.dart';
+import 'package:sportmen_in_gym/models/training_settings.dart';
 import 'package:sportmen_in_gym/pages/training_list/exercise_edit.dart';
+import 'package:sportmen_in_gym/services/db/training_settings_db_service.dart';
 
 import '../../models/training.dart';
 import '../../services/db/training_db_service.dart';
@@ -16,7 +18,8 @@ class TrainingEdit extends StatefulWidget {
 
 class _TrainingEditState extends State<TrainingEdit> {
   final Training training;
-  final TrainingDBService dbService = TrainingDBService();
+  final TrainingDBService _dbService = TrainingDBService();
+  final TrainingSettings _settings = TrainingSettingsDBService().getFirst();
   late List<Exercise> _exercises;
 
   _TrainingEditState(this.training);
@@ -32,7 +35,7 @@ class _TrainingEditState extends State<TrainingEdit> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        return dbService.saveOrUpdate(training);
+        return _dbService.saveOrUpdate(training);
       },
       child: Scaffold(
         appBar: AppBar(
@@ -62,8 +65,10 @@ class _TrainingEditState extends State<TrainingEdit> {
                   ),
                 ),
                 onTap: () async {
-                  ValueNotifier<Exercise> newExercise =
-                      ValueNotifier(Exercise(name: '', reps: 10, sets: 5));
+                  ValueNotifier<Exercise> newExercise = ValueNotifier(Exercise(
+                      name: '',
+                      reps: _settings.defaultExerciseReps,
+                      sets: _settings.defaultExerciseSets));
                   await Navigator.push(
                       context,
                       MaterialPageRoute(

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
+import 'package:sportmen_in_gym/models/training_settings.dart';
+import 'package:sportmen_in_gym/pages/profile/settings/widgets/setting_name.dart';
 import 'package:sportmen_in_gym/pages/profile/settings/widgets/setting_pack.dart';
 import 'package:sportmen_in_gym/pages/profile/settings/widgets/setting_title.dart';
+import 'package:sportmen_in_gym/services/db/training_settings_db_service.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-import '../../../services/db/settings_db_service.dart';
 import '../../../services/theme/theme_provider.dart';
 
 class Settings extends StatefulWidget {
@@ -15,6 +18,14 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+
+  final TrainingSettingsDBService _dbService = TrainingSettingsDBService();
+  late TrainingSettings _trainingSettings;
+
+  initState() {
+    _trainingSettings = _dbService.getFirst();
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -47,6 +58,44 @@ class _SettingsState extends State<Settings> {
                     activeColor: mainColor,
                   ),
                 ),
+              ]),
+              SettingTitle(text: 'Training'),
+              SettingPack(children: [
+                const SizedBox(height: 15),
+                SettingName(text: 'Sets count:'),
+                SfSlider(
+                  min: 0,
+                  max: 10,
+                  interval: 5,
+                  showLabels: true,
+                  enableTooltip: true,
+                  activeColor: mainColor,
+                  value: _trainingSettings.defaultExerciseSets,
+                  onChanged: (value) {
+                    setState(() {
+                      _trainingSettings.defaultExerciseSets = value.toInt();
+                      _dbService.put(_trainingSettings);
+                    });
+                  },
+                ),
+                const SizedBox(height: 15),
+                SettingName(text: 'Reps count:'),
+                SfSlider(
+                  min: 0,
+                  max: 30,
+                  interval: 10,
+                  showLabels: true,
+                  enableTooltip: true,
+                  activeColor: mainColor,
+                  value: _trainingSettings.defaultExerciseReps,
+                  onChanged: (value) {
+                    setState(() {
+                      _trainingSettings.defaultExerciseReps = value.toInt();
+                      _dbService.put(_trainingSettings);
+                    });
+                  },
+                ),
+                const SizedBox(height: 15),
               ]),
             ],
           ),
