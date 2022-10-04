@@ -22,8 +22,8 @@ class _HistoryState extends State<History> {
 
   @override
   void initState() {
-    _futureVisits = _httpController.getVisits(_dbController.getSportsman()!.id);
     super.initState();
+    _futureVisits = _httpController.getVisits(_dbController.getSportsman()!.id);
   }
 
   @override

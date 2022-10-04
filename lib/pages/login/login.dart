@@ -56,7 +56,6 @@ class _LoginState extends State<Login> {
                   const FieldName(text: 'Login'),
                   TextField(
                     controller: _loginController,
-                    cursorColor: mainColor,
                     decoration: const InputDecoration(
                       focusedBorder: UnderlineInputBorder(
                           borderSide:
@@ -69,7 +68,6 @@ class _LoginState extends State<Login> {
                   const FieldName(text: 'Password'),
                   TextField(
                     controller: _passController,
-                    cursorColor: mainColor,
                     decoration: const InputDecoration(
                       focusedBorder: UnderlineInputBorder(
                           borderSide:
