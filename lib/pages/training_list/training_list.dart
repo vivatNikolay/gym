@@ -145,7 +145,7 @@ class _TrainingListState extends State<TrainingList> {
                           builder: (context) => TrainingEdit(
                               training: Training(
                                   name: nameController.text.trim(),
-                                  exercises: List.empty()))));
+                                  exercises: List.empty(growable: true)))));
                   nameController.clear();
                   setState(() {
                     _trainings = _dbService.getAll();

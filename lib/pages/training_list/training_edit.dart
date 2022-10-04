@@ -64,6 +64,8 @@ class _TrainingEditState extends State<TrainingEdit> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
+                highlightColor: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(10.0),
                 onTap: () async {
                   ValueNotifier<Exercise> newExercise = ValueNotifier(Exercise(
                       name: '',
