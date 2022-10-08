@@ -104,8 +104,7 @@ class _ProfileState extends State<Profile> {
               minLeadingWidth: 24,
               title: const Text('Exit', style: TextStyle(fontSize: 18)),
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => const Login()));
+                Navigator.pushReplacementNamed(context, 'login');
                 _dbController.deleteAll();
               },
             ),

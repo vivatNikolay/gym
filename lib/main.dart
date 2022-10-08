@@ -51,18 +51,20 @@ class MyApp extends StatelessWidget {
         builder: (context, _) {
           final themeProvider = Provider.of<ThemeProvider>(context);
 
-          StatefulWidget home;
+          String initialRoute = 'login';
           if (_dbController.isHasSportsman()) {
-            home = const Home();
-          } else {
-            home = const Login();
+            initialRoute = 'home';
           }
           return MaterialApp(
             title: 'Gym',
             darkTheme: MyThemes.dark,
             theme: MyThemes.light,
             themeMode: themeProvider.themeMode,
-            home: home,
+            initialRoute: initialRoute,
+            routes: {
+              'home':(context) => const Home(),
+              'login':(context) => const Login(),
+            },
           );
         },
       );

@@ -119,16 +119,14 @@ class _LoginState extends State<Login> {
                                 color: mainColor);
                           default:
                             if (snapshot.hasError) {
-                              return const Text('Incorrect login or passwor');
+                              return const Text('Incorrect login or password');
                             }
                             if (snapshot.hasData) {
                               print('hasData');
                               _dbController.saveOrUpdateSportsman(snapshot.data!);
                               WidgetsBinding.instance
                                   ?.addPostFrameCallback((_) {
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) => const Home()));
+                                Navigator.pushReplacementNamed(context, 'home');
                               }); //Сначала переход на страницу, а потом рисую, видимо это ошибка
                               return const Icon(Icons.check, color: mainColor, size: 24);
                             } else {
