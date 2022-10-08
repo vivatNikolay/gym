@@ -135,7 +135,7 @@ class _TrainingListState extends State<TrainingList> {
             backgroundColor: Theme.of(context).backgroundColor,
             actions: [
               TextButton(
-                child: const Text('Continue',
+                child: const Text('Add',
                     style: TextStyle(color: mainColor, fontSize: 18)),
                 onPressed: () async {
                   Navigator.pop(context);
