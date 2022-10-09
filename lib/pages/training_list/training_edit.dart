@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:sportmen_in_gym/models/exercise.dart';
-import 'package:sportmen_in_gym/models/training_settings.dart';
-import 'package:sportmen_in_gym/pages/training_list/exercise_edit.dart';
-import 'package:sportmen_in_gym/services/db/training_settings_db_service.dart';
 
+import '../../models/exercise.dart';
+import '../../models/training_settings.dart';
 import '../../models/training.dart';
+import '../../services/db/training_settings_db_service.dart';
 import '../../services/db/training_db_service.dart';
+import '../../pages/training_list/exercise_edit.dart';
+import '../../pages/training_list/widgets/add_button.dart';
 
 class TrainingEdit extends StatefulWidget {
   final Training training;
@@ -47,25 +48,8 @@ class _TrainingEditState extends State<TrainingEdit> {
           child: Column(
             children: [
               buildList(context),
-              InkWell(
-                child: Card(
-                  color: Theme.of(context).primaryColor.withOpacity(0.75),
-                  elevation: 2.0,
-                  child: ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.add),
-                        Text('Add exercise', style: TextStyle(fontSize: 19)),
-                      ],
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                highlightColor: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(10.0),
+              AddButton(
+                text: 'Add exercise',
                 onTap: () async {
                   ValueNotifier<Exercise> newExercise = ValueNotifier(Exercise(
                       name: '',
@@ -80,6 +64,7 @@ class _TrainingEditState extends State<TrainingEdit> {
                     _exercises.add(newExercise.value);
                   });
                 },
+                highlightColor: Theme.of(context).primaryColor,
               ),
             ],
           ),
@@ -89,46 +74,45 @@ class _TrainingEditState extends State<TrainingEdit> {
   }
 
   Widget buildList(BuildContext context) {
-    if (_exercises.isNotEmpty) {
-      return ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: _exercises.length,
-          itemBuilder: (_, index) {
-            return Card(
-              color: Theme.of(context).primaryColor.withOpacity(0.75),
-              elevation: 4.0,
-              child: ListTile(
-                title: Text('${_exercises[index].name}',
-                    style: const TextStyle(fontSize: 19)),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    setState(() {
-                      _exercises.remove(_exercises[index]);
-                    });
-                  },
-                ),
-                onTap: () async {
-                  ValueNotifier<Exercise> exercise =
-                  ValueNotifier(_exercises[index]);
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ExerciseEdit(exercise: exercise)));
+    if (_exercises.isEmpty) {
+      return Container();
+    }
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: _exercises.length,
+        itemBuilder: (_, index) {
+          return Card(
+            color: Theme.of(context).primaryColor.withOpacity(0.8),
+            elevation: 4.0,
+            child: ListTile(
+              title: Text('${_exercises[index].name}',
+                  style: const TextStyle(fontSize: 19)),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
                   setState(() {
-                    _exercises[index] = exercise.value;
+                    _exercises.remove(_exercises[index]);
                   });
                 },
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            );
-          });
-    } else {
-      return Container();
-    }
+              onTap: () async {
+                ValueNotifier<Exercise> exercise =
+                    ValueNotifier(_exercises[index]);
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ExerciseEdit(exercise: exercise)));
+                setState(() {
+                  _exercises[index] = exercise.value;
+                });
+              },
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          );
+        });
   }
 }

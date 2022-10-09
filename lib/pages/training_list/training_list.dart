@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sportmen_in_gym/helpers/constants.dart';
-import 'package:sportmen_in_gym/pages/training_list/training_edit.dart';
 
+import '../../helpers/constants.dart';
+import '../../pages/training_list/training_edit.dart';
+import '../../pages/training_list/widgets/add_button.dart';
 import '../../services/db/training_db_service.dart';
 import '../../models/training.dart';
 
@@ -48,27 +49,10 @@ class _TrainingListState extends State<TrainingList> {
           child: Column(
             children: [
               buildList(context),
-              InkWell(
-                child: Card(
-                  color: Theme.of(context).primaryColor.withOpacity(0.8),
-                  elevation: 2.0,
-                  child: ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.add),
-                        Text('Add training', style: TextStyle(fontSize: 19)),
-                      ],
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                onTap: () {
-                  openDialog();
-                },
-                splashColor: Colors.black,
+              AddButton(
+                  text: 'Add training',
+                  onTap: () => openDialog(),
+                  highlightColor: Colors.black,
               ),
             ],
           ),
