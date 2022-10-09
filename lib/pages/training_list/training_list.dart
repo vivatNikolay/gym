@@ -44,32 +44,34 @@ class _TrainingListState extends State<TrainingList> {
             opacity: 0.6,
           ),
         ),
-        child: Column(
-          children: [
-            buildList(context),
-            InkWell(
-              child: Card(
-                color: Theme.of(context).primaryColor.withOpacity(0.8),
-                elevation: 2.0,
-                child: ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.add),
-                      Text('Add training', style: TextStyle(fontSize: 19)),
-                    ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              buildList(context),
+              InkWell(
+                child: Card(
+                  color: Theme.of(context).primaryColor.withOpacity(0.8),
+                  elevation: 2.0,
+                  child: ListTile(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.add),
+                        Text('Add training', style: TextStyle(fontSize: 19)),
+                      ],
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
+                onTap: () {
+                  openDialog();
+                },
+                splashColor: Colors.black,
               ),
-              onTap: () {
-                openDialog();
-              },
-              splashColor: Colors.black,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -80,8 +82,8 @@ class _TrainingListState extends State<TrainingList> {
       return Container();
     }
     return ListView.builder(
-        scrollDirection: Axis.vertical,
         shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: _trainings.length,
         itemBuilder: (_, index) {
           return Card(

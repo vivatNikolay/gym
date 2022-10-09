@@ -91,8 +91,8 @@ class _TrainingEditState extends State<TrainingEdit> {
   Widget buildList(BuildContext context) {
     if (_exercises.isNotEmpty) {
       return ListView.builder(
-          scrollDirection: Axis.vertical,
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: _exercises.length,
           itemBuilder: (_, index) {
             return Card(
