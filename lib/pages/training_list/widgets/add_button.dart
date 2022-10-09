@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class AddButton extends StatelessWidget {
   String text;
-  Function onTap;
+  VoidCallback? onTap;
   Color highlightColor;
 
   AddButton({
     required this.text,
-    required this.onTap,
     required this.highlightColor,
+    this.onTap,
     Key? key}) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class AddButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
         ),
       ),
-      onTap: () => onTap,
+      onTap: onTap,
       highlightColor: highlightColor,
       borderRadius: BorderRadius.circular(10.0),
     );
