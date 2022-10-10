@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../../helpers/constants.dart';
 
-class AuthenticationField extends StatelessWidget {
+class AuthField extends StatelessWidget {
   final TextEditingController controller;
   late ValueNotifier<bool> validation;
   final String? errorText;
   bool obscureText;
 
-  AuthenticationField({
+  AuthField({
     required this.controller,
     required this.validation,
     this.errorText,
@@ -28,7 +28,6 @@ class AuthenticationField extends StatelessWidget {
               : errorText,
       ),
       obscureText: obscureText,
-      maxLength: 300,
     );
   }
 }

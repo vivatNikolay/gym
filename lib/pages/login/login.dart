@@ -5,7 +5,7 @@ import '../../controllers/http_controller.dart';
 import '../../controllers/db_controller.dart';
 import '../../models/sportsman.dart';
 import 'widgets/field_name.dart';
-import 'widgets/authentication_field.dart';
+import 'widgets/auth_field.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -71,7 +71,7 @@ class _LoginState extends State<Login> {
                     height: 45,
                   ),
                   const FieldName(text: 'Login'),
-                  AuthenticationField(
+                  AuthField(
                     controller: _loginController,
                     validation: _loginValidation,
                     errorText: 'Invalid login',
@@ -80,7 +80,7 @@ class _LoginState extends State<Login> {
                     height: 15,
                   ),
                   const FieldName(text: 'Password'),
-                  AuthenticationField(
+                  AuthField(
                     controller: _passController,
                     validation: _passwordValidation,
                     obscureText: true,
