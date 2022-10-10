@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:sportmen_in_gym/helpers/constants.dart';
 
+import '../../helpers/constants.dart';
 import '../../controllers/http_controller.dart';
 import '../../controllers/db_controller.dart';
 import '../../models/sportsman.dart';
 import 'widgets/field_name.dart';
-import '../home.dart';
+import 'widgets/authentication_field.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -19,11 +19,28 @@ class _LoginState extends State<Login> {
   final DBController _dbController = DBController.instance;
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  late ValueNotifier<bool> _loginValidation;
+  late ValueNotifier<bool> _passwordValidation;
   Future<Sportsman>? _futureSportsman;
+  final RegExp _regExpEmail = RegExp(
+      r"^[\w.%+-]+@[A-z0-9.-]+\.[A-z]{2,}$",
+      multiLine: false
+  );
 
   @override
   void initState() {
     super.initState();
+
+    _loginValidation = ValueNotifier(true);
+    _passwordValidation = ValueNotifier(true);
+  }
+
+  @override
+  void dispose() {
+    _loginValidation.dispose();
+    _passwordValidation.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -51,32 +68,25 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   const SizedBox(
-                    height: 50,
+                    height: 45,
                   ),
                   const FieldName(text: 'Login'),
-                  TextField(
+                  AuthenticationField(
                     controller: _loginController,
-                    decoration: const InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: mainColor)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const FieldName(text: 'Password'),
-                  TextField(
-                    controller: _passController,
-                    decoration: const InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: mainColor)),
-                    ),
-                    obscureText: true,
+                    validation: _loginValidation,
+                    errorText: 'Invalid login',
                   ),
                   const SizedBox(
                     height: 15,
+                  ),
+                  const FieldName(text: 'Password'),
+                  AuthenticationField(
+                    controller: _passController,
+                    validation: _passwordValidation,
+                    obscureText: true,
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   SizedBox(
                     height: 50,
@@ -93,8 +103,11 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       onPressed: () => setState(() {
-                        _futureSportsman = _httpController.getSportsman(
-                            _loginController.text.trim(), _passController.text);
+                        if (validateFields()) {
+                          _futureSportsman = _httpController.getSportsman(
+                              _loginController.text.trim(),
+                              _passController.text);
+                        }
                       }),
                       child: const Text(
                         'Log in',
@@ -122,7 +135,6 @@ class _LoginState extends State<Login> {
                               return const Text('Incorrect login or password');
                             }
                             if (snapshot.hasData) {
-                              print('hasData');
                               _dbController.saveOrUpdateSportsman(snapshot.data!);
                               WidgetsBinding.instance
                                   ?.addPostFrameCallback((_) {
@@ -141,5 +153,11 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  bool validateFields() {
+    _loginValidation.value = _regExpEmail.hasMatch(_loginController.text.trim());
+    _passwordValidation.value = _passController.text.isNotEmpty;
+    return _loginValidation.value && _passwordValidation.value;
   }
 }
