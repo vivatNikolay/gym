@@ -12,20 +12,19 @@ class QrItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 98),
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(children: [
-          QrImage(
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: QrImage(
             data: data,
             size: 200,
             backgroundColor: Colors.white,
           ),
-        ]),
+        ),
       ),
       onTap: () async {
         await ScreenBrightness()
