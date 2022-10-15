@@ -51,7 +51,7 @@ class _TrainingListState extends State<TrainingList> {
               buildList(context),
               AddButton(
                   text: 'Add training',
-                  onTap: () => openDialog(),
+                  onTap: () => creationDialog(),
                   highlightColor: Colors.black,
               ),
             ],
@@ -78,12 +78,7 @@ class _TrainingListState extends State<TrainingList> {
                   style: const TextStyle(fontSize: 19)),
               trailing: IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: () async {
-                  _dbService.delete(_trainings[index]);
-                  setState(() {
-                    _trainings = _dbService.getAll();
-                  });
-                },
+                onPressed: () => deletionDialog(index),
               ),
               onTap: () async {
                 await Navigator.push(
@@ -103,7 +98,7 @@ class _TrainingListState extends State<TrainingList> {
         });
   }
 
-  Future openDialog() => showDialog(
+  Future creationDialog() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
             title: const Text('Training'),
@@ -140,4 +135,33 @@ class _TrainingListState extends State<TrainingList> {
               )
             ],
           ));
+
+  deletionDialog(int index) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Confirmation'),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0)),
+          content: const Text('Are you sure?'),
+          backgroundColor: Theme.of(context).backgroundColor,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('No',
+                  style: TextStyle(color: mainColor, fontSize: 18)),
+            ),
+            TextButton(
+              onPressed: () async {
+                _dbService.delete(_trainings[index]);
+                setState(() {
+                  _trainings = _dbService.getAll();
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Yes',
+                  style: TextStyle(color: mainColor, fontSize: 18)),
+            ),
+          ],
+        ),
+      );
 }

@@ -1,3 +1,3 @@
 abstract class HttpService<T> {
-  final String url = "http://10.0.2.2:8080";
+  final String url = "http://192.168.100.5:8080";
 }
