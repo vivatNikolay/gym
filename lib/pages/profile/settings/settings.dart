@@ -62,7 +62,7 @@ class _SettingsState extends State<Settings> {
               SettingTitle(text: 'Training'),
               SettingPack(children: [
                 const SizedBox(height: 15),
-                SettingName(text: 'Sets count:'),
+                SettingName(text: 'Default sets count:'),
                 SfSlider(
                   min: 0,
                   max: 10,
@@ -79,7 +79,7 @@ class _SettingsState extends State<Settings> {
                   },
                 ),
                 const SizedBox(height: 15),
-                SettingName(text: 'Reps count:'),
+                SettingName(text: 'Default reps count:'),
                 SfSlider(
                   min: 0,
                   max: 30,
