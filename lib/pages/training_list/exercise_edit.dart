@@ -57,10 +57,6 @@ class _ExerciseEditState extends State<ExerciseEdit> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: TextField(
                 autofocus: _exerciseController.text.isEmpty,
-                decoration: const InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: mainColor, width: 2)),
-                ),
                 controller: _exerciseController,
               ),
             ),

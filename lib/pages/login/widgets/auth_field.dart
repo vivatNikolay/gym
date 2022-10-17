@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../helpers/constants.dart';
-
 class AuthField extends StatelessWidget {
   final TextEditingController controller;
   late ValueNotifier<bool> validation;
@@ -20,8 +18,6 @@ class AuthField extends StatelessWidget {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: mainColor)),
         errorText: validation.value ? null
             : controller.text.isEmpty
               ? 'Field is empty'

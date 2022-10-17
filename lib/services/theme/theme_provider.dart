@@ -78,5 +78,9 @@ class MyThemes {
     textSelectionTheme: const TextSelectionThemeData(
       cursorColor: mainColor,
     ),
+    inputDecorationTheme: const InputDecorationTheme(
+      focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: mainColor, width: 2)),
+    ),
   );
 }

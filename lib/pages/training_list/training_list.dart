@@ -108,8 +108,6 @@ class _TrainingListState extends State<TrainingList> {
               autofocus: true,
               decoration: const InputDecoration(
                 hintText: 'Name',
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: mainColor, width: 2)),
               ),
               controller: nameController,
             ),

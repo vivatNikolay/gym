@@ -47,20 +47,12 @@ class _ProfileEditState extends State<ProfileEdit> {
                     fontSize: 18,
                   ),
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: mainColor, width: 2)),
-                  ),
                 ),
                 TextField(
                   style: const TextStyle(
                     fontSize: 18,
                   ),
                   controller: _phoneController,
-                  decoration: const InputDecoration(
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: mainColor, width: 2)),
-                  ),
                 ),
                 const SizedBox(height: 20),
                 Center(
