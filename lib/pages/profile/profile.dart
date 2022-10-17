@@ -4,7 +4,6 @@ import 'package:sportmen_in_gym/pages/profile/profile_edit.dart';
 
 import '../../controllers/db_controller.dart';
 import '../../models/sportsman.dart';
-import '../login/login.dart';
 import 'history.dart';
 import 'settings/settings.dart';
 
@@ -30,7 +29,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('My Profile'),
       ),
       body: SizedBox(
         width: double.infinity,

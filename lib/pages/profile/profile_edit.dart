@@ -35,7 +35,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('My Profile'),
       ),
       body: SingleChildScrollView(
         child: Padding(
