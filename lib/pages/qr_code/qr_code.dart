@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
 
 import '../../models/subscription.dart';
@@ -15,6 +16,7 @@ class QrCode extends StatefulWidget {
 class _QrCodeState extends State<QrCode> {
   final DBController _dbController = DBController.instance;
   late String _subscriptionProgress;
+  final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
 
   @override
   void initState() {
@@ -77,7 +79,8 @@ class _QrCodeState extends State<QrCode> {
   String getProgress() {
     Subscription? subscription = _dbController.getSportsman()!.subscription;
     if (subscription != null) {
-      return '${subscription.visitCounter}/${subscription.numberOfVisits}';
+      return '${subscription.visitCounter}/${subscription.numberOfVisits} '
+          'until ${formatterDate.format(subscription.dateOfEnd)}';
     } else {
       return '(no)';
     }
