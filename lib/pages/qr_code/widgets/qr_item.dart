@@ -46,15 +46,12 @@ class QrItem extends StatelessWidget {
                 children: [
                   QrImage(
                     data: data,
-                    size: 300,
+                    size: 280,
                     backgroundColor: Colors.white,
-                  ),
-                  const SizedBox(
-                    height: 5,
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      fixedSize: const Size.fromWidth(280),
+                      fixedSize: const Size.fromWidth(270),
                       primary: mainColor,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
