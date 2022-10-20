@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
 
-import 'qr_code/qr_code.dart';
+import 'main_page/qr_code.dart';
 import 'training_list/training_list.dart';
 import 'profile/profile.dart';
 

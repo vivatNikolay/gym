@@ -4,7 +4,6 @@ import 'package:sportmen_in_gym/pages/profile/profile_edit.dart';
 
 import '../../controllers/db_controller.dart';
 import '../../models/sportsman.dart';
-import '../qr_code/history.dart';
 import 'settings/settings.dart';
 
 class Profile extends StatefulWidget {
