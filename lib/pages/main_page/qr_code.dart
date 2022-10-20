@@ -69,11 +69,12 @@ class _QrCodeState extends State<QrCode> {
                       color: Colors.black
                   ),
                 ),
-                onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const History())
-                ),
-              ),
+                onTap: _dbController.getSportsman()!.subscription != null
+                  ? () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const History()))
+                  : null,
             ),
+          ),
           ]),
       ),
     );

@@ -34,7 +34,10 @@ class Sportsman extends HiveObject{
   });
 
   factory Sportsman.fromJson(Map<String, dynamic> json) {
-    Subscription? subscription = Subscription.fromJson(json["subscription"]);
+    Subscription? subscription;
+    if (json["subscription"] != null) {
+      subscription = Subscription.fromJson(json["subscription"]);
+    }
 
     return Sportsman(
         id: json["id"],
