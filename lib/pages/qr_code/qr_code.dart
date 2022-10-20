@@ -4,6 +4,7 @@ import 'package:sportmen_in_gym/helpers/constants.dart';
 
 import '../../models/subscription.dart';
 import '../../controllers/db_controller.dart';
+import 'history.dart';
 import 'widgets/qr_item.dart';
 
 class QrCode extends StatefulWidget {
@@ -68,7 +69,9 @@ class _QrCodeState extends State<QrCode> {
                       color: Colors.black
                   ),
                 ),
-                onTap: () {},
+                onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const History())
+                ),
               ),
             ),
           ]),

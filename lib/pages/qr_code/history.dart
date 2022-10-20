@@ -23,14 +23,16 @@ class _HistoryState extends State<History> {
   @override
   void initState() {
     super.initState();
-    _futureVisits = _httpController.getVisits(_dbController.getSportsman()!.id);
+    _futureVisits = _httpController.getVisitsByDates(_dbController.getSportsman()!.id,
+      _dbController.getSportsman()!.subscription!.dateOfPurchase,
+        _dbController.getSportsman()!.subscription!.dateOfEnd);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('History'),
+        title: const Text('History of Sub'),
       ),
       body: buildBody(),
     );

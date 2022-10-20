@@ -4,7 +4,7 @@ import 'package:sportmen_in_gym/pages/profile/profile_edit.dart';
 
 import '../../controllers/db_controller.dart';
 import '../../models/sportsman.dart';
-import 'history.dart';
+import '../qr_code/history.dart';
 import 'settings/settings.dart';
 
 class Profile extends StatefulWidget {
@@ -78,16 +78,6 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             const SizedBox(height: 15),
-            ListTile(
-              leading: const Icon(Icons.list_alt_rounded,
-                  color: mainColor),
-              minLeadingWidth: 24,
-              title: const Text('History', style: TextStyle(fontSize: 18)),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const History()));
-              },
-            ),
             ListTile(
               leading: const Icon(Icons.settings_outlined,
                   color: mainColor),
