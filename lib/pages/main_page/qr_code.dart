@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sportmen_in_gym/helpers/constants.dart';
 
+import '../../helpers/constants.dart';
 import '../../models/subscription.dart';
 import '../../controllers/db_controller.dart';
 import 'history.dart';
@@ -37,7 +37,7 @@ class _QrCodeState extends State<QrCode> {
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/gantel.jpg'),
+            image: AssetImage(gantelImage),
             fit: BoxFit.cover,
             alignment: Alignment.bottomLeft,
             opacity: 0.5,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
-import 'package:sportmen_in_gym/pages/profile/profile_edit.dart';
 
+import '../../pages/profile/profile_edit.dart';
 import '../../controllers/db_controller.dart';
 import '../../models/sportsman.dart';
 import 'settings/settings.dart';
@@ -47,7 +47,7 @@ class _ProfileState extends State<Profile> {
                   height: 70.0,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(sportsman!.gender ? 'images/man.png' : 'images/woman.png'),
+                      image: AssetImage(sportsman!.gender ? manImage : womanImage),
                       fit: BoxFit.cover,
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(50.0)),

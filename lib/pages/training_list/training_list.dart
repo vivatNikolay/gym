@@ -39,7 +39,7 @@ class _TrainingListState extends State<TrainingList> {
         padding: const EdgeInsets.only(top: 5),
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/training_list.jpg'),
+            image: AssetImage(trainingListImage),
             fit: BoxFit.cover,
             alignment: Alignment.centerRight,
             opacity: 0.6,
