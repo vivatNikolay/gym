@@ -54,11 +54,15 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 minLeadingWidth: 24,
-                title: Text(sportsman!.firstName,
+                title: Text(
+                    sportsman!.firstName,
+                    maxLines: 2,
                     style:
                         const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-                subtitle: Text(sportsman!.email,
-                    style: const TextStyle(fontSize: 20)),
+                subtitle: Text(
+                    sportsman!.email,
+                    maxLines: 2,
+                    style: const TextStyle(fontSize: 19)),
                 trailing: IconButton(
                   icon: const Icon(Icons.edit, size: 28),
                   splashColor: mainColor,

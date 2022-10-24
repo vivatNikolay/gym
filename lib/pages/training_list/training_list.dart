@@ -5,6 +5,7 @@ import '../../pages/training_list/training_edit.dart';
 import '../../pages/training_list/widgets/add_button.dart';
 import '../../services/db/training_db_service.dart';
 import '../../models/training.dart';
+import '../widgets/my_text_field.dart';
 
 class TrainingList extends StatefulWidget {
   const TrainingList({Key? key}) : super(key: key);
@@ -16,7 +17,8 @@ class TrainingList extends StatefulWidget {
 class _TrainingListState extends State<TrainingList> {
   final TrainingDBService _dbService = TrainingDBService();
   late List<Training> _trainings;
-  late TextEditingController nameController;
+  late TextEditingController _nameController;
+  late ValueNotifier<bool> _nameValidator;
 
   @override
   void initState() {
@@ -24,7 +26,15 @@ class _TrainingListState extends State<TrainingList> {
 
     _trainings = _dbService.getAll();
 
-    nameController = TextEditingController();
+    _nameController = TextEditingController();
+    _nameValidator = ValueNotifier(true);
+  }
+
+  @override
+  void dispose() {
+    _nameValidator.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -98,41 +108,49 @@ class _TrainingListState extends State<TrainingList> {
         });
   }
 
-  Future creationDialog() => showDialog(
+  Future creationDialog() {
+    _nameValidator.value = true;
+    _nameController.clear();
+    return showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-            title: const Text('Training'),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0)),
-            content: TextField(
-              autofocus: true,
-              decoration: const InputDecoration(
+      builder: (context) => StatefulBuilder(
+            builder: (context, setState) => AlertDialog(
+              title: const Text('Training'),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0)),
+              content: MyTextField(
+                autofocus: true,
                 hintText: 'Name',
+                controller: _nameController,
+                validation: _nameValidator,
               ),
-              controller: nameController,
+              backgroundColor: Theme.of(context).backgroundColor,
+              actions: [
+                TextButton(
+                  child: const Text('Add',
+                      style: TextStyle(color: mainColor, fontSize: 18)),
+                  onPressed: () async {
+                    setState(() =>
+                        _nameValidator.value = _nameController.text.isNotEmpty);
+                    if (_nameValidator.value) {
+                      Navigator.pop(context);
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TrainingEdit(
+                                  training: Training(
+                                      name: _nameController.text.trim(),
+                                      exercises: List.empty(growable: true)))));
+                      this.setState(() {
+                        _trainings = _dbService.getAll();
+                      });
+                    }
+                  },
+                )
+              ],
             ),
-            backgroundColor: Theme.of(context).backgroundColor,
-            actions: [
-              TextButton(
-                child: const Text('Add',
-                    style: TextStyle(color: mainColor, fontSize: 18)),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TrainingEdit(
-                              training: Training(
-                                  name: nameController.text.trim(),
-                                  exercises: List.empty(growable: true)))));
-                  nameController.clear();
-                  setState(() {
-                    _trainings = _dbService.getAll();
-                  });
-                },
-              )
-            ],
           ));
+  }
 
   deletionDialog(int index) => showDialog(
         context: context,

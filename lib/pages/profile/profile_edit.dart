@@ -4,6 +4,7 @@ import 'package:sportmen_in_gym/models/sportsman.dart';
 
 import '../../controllers/http_controller.dart';
 import '../../helpers/constants.dart';
+import '../widgets/my_text_field.dart';
 
 class ProfileEdit extends StatefulWidget {
   final Sportsman sportsman;
@@ -20,6 +21,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   final DBController _dbController = DBController.instance;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  late ValueNotifier<bool> _nameValidator;
   final List<String> _dropdownItems = ['male', 'female'];
   late String _dropdownValue;
 
@@ -31,7 +33,15 @@ class _ProfileEditState extends State<ProfileEdit> {
 
     _nameController.text = sportsman.firstName;
     _phoneController.text = sportsman.phone;
+    _nameValidator = ValueNotifier(true);
     _dropdownValue = sportsman.gender ? _dropdownItems[0] : _dropdownItems[1];
+  }
+
+  @override
+  void dispose() {
+    _nameValidator.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -52,11 +62,10 @@ class _ProfileEditState extends State<ProfileEdit> {
                         child: Text('Name:', style: TextStyle(fontSize: 16))
                     ),
                     Flexible(
-                      child: TextField(
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
+                      child: MyTextField(
                         controller: _nameController,
+                        validation: _nameValidator,
+                        fontSize: 18,
                       ),
                     ),
                   ],
@@ -114,13 +123,16 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                     ),
                     onPressed: () async {
-                      sportsman.firstName = _nameController.text.trim();
-                      sportsman.phone = _phoneController.text.trim();
-                      bool success = await _httpController.putSportsman(sportsman);
-                      if (success) {
-                        _dbController.saveOrUpdateSportsman(sportsman);
+                      if (validateFields()) {
+                        sportsman.firstName = _nameController.text.trim();
+                        sportsman.phone = _phoneController.text.trim();
+                        bool success = await _httpController.putSportsman(
+                            sportsman);
+                        if (success) {
+                          _dbController.saveOrUpdateSportsman(sportsman);
+                        }
+                        Navigator.pop(context);
                       }
-                      Navigator.pop(context);
                     },
                     child: const Text(
                       'Save',
@@ -136,5 +148,10 @@ class _ProfileEditState extends State<ProfileEdit> {
         ),
       ),
     );
+  }
+
+  bool validateFields() {
+    setState(() => _nameValidator.value = _nameController.text.isNotEmpty);
+    return _nameValidator.value;
   }
 }
