@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
+import '../../pages/login/widgets/login_button.dart';
 import '../../helpers/constants.dart';
 import '../../controllers/http_controller.dart';
 import '../../controllers/db_controller.dart';
@@ -23,7 +25,7 @@ class _LoginState extends State<Login> {
   late ValueNotifier<bool> _passwordValidation;
   Future<Sportsman>? _futureSportsman;
   final RegExp _regExpEmail = RegExp(
-      r"^[\w.%+-]+@[A-z0-9.-]+\.[A-z]{2,}$",
+      r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
       multiLine: false
   );
 
@@ -86,41 +88,16 @@ class _LoginState extends State<Login> {
                     obscureText: true,
                   ),
                   const SizedBox(
-                    height: 10,
-                  ),
-                  SizedBox(
-                    height: 50,
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.black12,
-                        side: const BorderSide(
-                            color: mainColor, width: 1),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                      ),
-                      onPressed: () => setState(() {
-                        if (validateFields()) {
-                          _futureSportsman = _httpController.getSportsman(
-                              _loginController.text.trim(),
-                              _passController.text);
-                        }
-                      }),
-                      child: const Text(
-                        'Log in',
-                        style: TextStyle(
-                          color: mainColor,
-                          fontSize: 19,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
                     height: 15,
                   ),
+                  LoginButton(
+                    onPressed: () => setState(() {
+                    if (validateFields()) {
+                      _futureSportsman = _httpController.getSportsman(
+                          _loginController.text.trim(),
+                          _passController.text);
+                    }
+                  })),
                   FutureBuilder<Sportsman>(
                       future: _futureSportsman,
                       builder: (context, snapshot) {
@@ -132,6 +109,9 @@ class _LoginState extends State<Login> {
                                 color: mainColor);
                           default:
                             if (snapshot.hasError) {
+                              if (snapshot.error! is SocketException) {
+                                return const Text('No connection');
+                              }
                               return const Text('Incorrect login or password');
                             }
                             if (snapshot.hasData) {
@@ -139,7 +119,7 @@ class _LoginState extends State<Login> {
                               WidgetsBinding.instance
                                   ?.addPostFrameCallback((_) {
                                 Navigator.pushReplacementNamed(context, 'home');
-                              }); //Сначала переход на страницу, а потом рисую, видимо это ошибка
+                              });
                               return const Icon(Icons.check, color: mainColor, size: 24);
                             } else {
                               return const Text('not found');
