@@ -10,8 +10,10 @@ class DBController {
 
   static DBController get instance => _instance;
 
-  void saveOrUpdateSportsman(Sportsman sportsman) {
-    _sportsmanDBService.put(sportsman);
+  void saveOrUpdateSportsman(Sportsman? sportsman) {
+    if (sportsman != null) {
+      _sportsmanDBService.put(sportsman);
+    }
   }
 
   Sportsman? getSportsman() {

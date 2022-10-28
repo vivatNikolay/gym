@@ -1,12 +1,5 @@
-import 'package:hive/hive.dart';
-
-part 'visit.g.dart';
-
-@HiveType(typeId:2)
 class Visit {
-  @HiveField(0)
   int id;
-  @HiveField(1)
   DateTime date;
 
   Visit({

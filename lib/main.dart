@@ -11,7 +11,6 @@ import 'pages/home.dart';
 import 'controllers/db_controller.dart';
 import 'models/sportsman.dart';
 import 'models/subscription.dart';
-import 'models/visit.dart';
 import 'pages/login/login.dart';
 import 'models/training.dart';
 import 'models/exercise.dart';
@@ -29,7 +28,6 @@ Future<void> hiveInitialization() async {
   await Hive.initFlutter();
   Hive.registerAdapter(SportsmanAdapter());
   Hive.registerAdapter(SubscriptionAdapter());
-  Hive.registerAdapter(VisitAdapter());
   Hive.registerAdapter(SystemSettingsAdapter());
   Hive.registerAdapter(TrainingSettingsAdapter());
   Hive.registerAdapter(TrainingAdapter());

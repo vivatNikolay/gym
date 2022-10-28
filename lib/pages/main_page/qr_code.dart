@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../models/sportsman.dart';
+import '../../services/http/subscription_http_service.dart';
 import '../../helpers/constants.dart';
 import '../../models/subscription.dart';
 import '../../controllers/db_controller.dart';
@@ -14,18 +16,28 @@ class QrCode extends StatefulWidget {
   State<QrCode> createState() => _QrCodeState();
 }
 
-class _QrCodeState extends State<QrCode> {
+class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
   final DBController _dbController = DBController.instance;
-  late String _subscriptionProgress;
+  final SubscriptionHttpService _httpService = SubscriptionHttpService();
+  Future<Subscription>? _futureSubscription;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
+  late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
 
-    _subscriptionProgress = getProgress();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
   }
 
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,14 +74,41 @@ class _QrCodeState extends State<QrCode> {
                     color: Colors.black
                   ),
                 ),
-                subtitle: Text(
-                  _subscriptionProgress,
-                  style: const TextStyle(
-                    fontSize: 17,
-                      color: Colors.black
-                  ),
-                ),
-                onTap: _dbController.getSportsman()!.subscription != null
+                subtitle: FutureBuilder<Subscription>(
+                  future: _futureSubscription,
+                  builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    WidgetsBinding.instance?.addPostFrameCallback((_) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('No connection'),
+                      ));
+                    });
+                  }
+                  if (snapshot.data != null) {
+                    Sportsman? s = _dbController.getSportsman();
+                    s?.subscription = snapshot.data;
+                    _dbController.saveOrUpdateSportsman(s);
+                  }
+                  return Text(
+                    getProgress(snapshot.data),
+                    style: const TextStyle(fontSize: 17, color: Colors.black),
+                  );
+                },
+              ),
+              trailing: IconButton(
+                onPressed: () {
+                  _animationController.forward(from: 0.0);
+                  setState(() {
+                    _futureSubscription = _httpService
+                        .getBySportsman(_dbController.getSportsman()!.id);
+                  });
+                },
+                icon: RotationTransition(
+                    turns: _animationController,
+                    child:
+                        const Icon(Icons.refresh, size: 32, color: mainColor)),
+              ),
+              onTap: _dbController.getSportsman()!.subscription != null
                   ? () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => const History()))
                   : null,
@@ -80,8 +119,8 @@ class _QrCodeState extends State<QrCode> {
     );
   }
 
-  String getProgress() {
-    Subscription? subscription = _dbController.getSportsman()!.subscription;
+  String getProgress(Subscription? subscription) {
+    subscription ??= _dbController.getSportsman()!.subscription;
     if (subscription != null) {
       return '${subscription.visitCounter}/${subscription.numberOfVisits} '
           'until ${formatterDate.format(subscription.dateOfEnd)}';
