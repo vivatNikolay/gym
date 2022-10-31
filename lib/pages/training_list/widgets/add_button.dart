@@ -15,7 +15,7 @@ class AddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Card(
-        color: Theme.of(context).primaryColor.withOpacity(0.8),
+        color: Theme.of(context).primaryColor.withOpacity(0.9),
         elevation: 2.0,
         child: ListTile(
           title: Row(

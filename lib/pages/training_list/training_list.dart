@@ -81,7 +81,7 @@ class _TrainingListState extends State<TrainingList> {
         itemCount: _trainings.length,
         itemBuilder: (_, index) {
           return Card(
-            color: Theme.of(context).primaryColor.withOpacity(0.8),
+            color: Theme.of(context).primaryColor.withOpacity(0.9),
             elevation: 2.0,
             child: ListTile(
               title: Text('${_trainings[index].name}',
