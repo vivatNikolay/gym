@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sportmen_in_gym/helpers/constants.dart';
 
+import '../../helpers/constants.dart';
 import '../../controllers/db_controller.dart';
 import '../../controllers/http_controller.dart';
 import '../../models/visit.dart';
@@ -30,7 +30,7 @@ class _HistoryOfSubState extends State<HistoryOfSub> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('History of Sub'),
+        title: const Text('History of Membership'),
       ),
       body: buildBody(),
     );

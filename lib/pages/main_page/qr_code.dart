@@ -69,7 +69,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                     const Icon(Icons.credit_card, size: 26, color: mainColor),
                 minLeadingWidth: 22,
                 title: const Text(
-                  'Subscription',
+                  'Membership',
                   style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
                 subtitle: FutureBuilder<Subscription?>(
