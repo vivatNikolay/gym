@@ -28,8 +28,8 @@ class HttpController {
     return success;
   }
 
-  Future<List<Visit>> getVisitsByDates(int sportsmanId, DateTime start, DateTime end) async {
-    List<Visit> visits = await _visitHttpService.getBySportsman(sportsmanId, start, end);
+  Future<List<Visit>> getVisitsByDates(int sportsmanId) async {
+    List<Visit> visits = await _visitHttpService.getBySubscription(sportsmanId);
     return visits;
   }
 }

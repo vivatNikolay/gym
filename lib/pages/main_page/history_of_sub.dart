@@ -6,14 +6,14 @@ import '../../controllers/db_controller.dart';
 import '../../controllers/http_controller.dart';
 import '../../models/visit.dart';
 
-class History extends StatefulWidget {
-  const History({Key? key}) : super(key: key);
+class HistoryOfSub extends StatefulWidget {
+  const HistoryOfSub({Key? key}) : super(key: key);
 
   @override
-  State<History> createState() => _HistoryState();
+  State<HistoryOfSub> createState() => _HistoryOfSubState();
 }
 
-class _HistoryState extends State<History> {
+class _HistoryOfSubState extends State<HistoryOfSub> {
   final DBController _dbController = DBController.instance;
   final HttpController _httpController = HttpController.instance;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
@@ -23,9 +23,7 @@ class _HistoryState extends State<History> {
   @override
   void initState() {
     super.initState();
-    _futureVisits = _httpController.getVisitsByDates(_dbController.getSportsman()!.id,
-      _dbController.getSportsman()!.subscription!.dateOfPurchase,
-        _dbController.getSportsman()!.subscription!.dateOfEnd);
+    _futureVisits = _httpController.getVisitsByDates(_dbController.getSportsman()!.id);
   }
 
   @override
