@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../helpers/constants.dart';
-import '../../controllers/db_controller.dart';
 import '../../controllers/http_controller.dart';
 import '../../models/visit.dart';
+import '../../services/db/sportsman_db_service.dart';
 
 class HistoryOfSub extends StatefulWidget {
   const HistoryOfSub({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class HistoryOfSub extends StatefulWidget {
 }
 
 class _HistoryOfSubState extends State<HistoryOfSub> {
-  final DBController _dbController = DBController.instance;
+  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
   final HttpController _httpController = HttpController.instance;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
   final DateFormat formatterWeekDay = DateFormat('E');
@@ -23,7 +23,7 @@ class _HistoryOfSubState extends State<HistoryOfSub> {
   @override
   void initState() {
     super.initState();
-    _futureVisits = _httpController.getVisitsByDates(_dbController.getSportsman()!.id);
+    _futureVisits = _httpController.getVisitsByDates(_sportsmanDBService.getFirst()!.id);
   }
 
   @override

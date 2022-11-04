@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
 
 import '../../pages/profile/profile_edit.dart';
-import '../../controllers/db_controller.dart';
 import '../../models/sportsman.dart';
+import '../../services/db/sportsman_db_service.dart';
 import 'settings/settings.dart';
 
 class Profile extends StatefulWidget {
@@ -14,14 +14,14 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  final DBController _dbController = DBController.instance;
+  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
   Sportsman? sportsman;
 
   @override
   void initState() {
     super.initState();
 
-    sportsman = _dbController.getSportsman();
+    sportsman = _sportsmanDBService.getFirst();
   }
 
   @override
@@ -54,15 +54,21 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 minLeadingWidth: 24,
-                title: Text(
-                    sportsman!.firstName,
-                    maxLines: 2,
-                    style:
-                        const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-                subtitle: Text(
-                    sportsman!.email,
-                    maxLines: 2,
-                    style: const TextStyle(fontSize: 19)),
+                title: Tooltip(
+                  message: sportsman!.firstName,
+                  child: Text(
+                      sportsman!.firstName,
+                      maxLines: 2,
+                      style:
+                          const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+                ),
+                subtitle: Tooltip(
+                  message: sportsman!.email,
+                  child: Text(
+                      sportsman!.email,
+                      maxLines: 2,
+                      style: const TextStyle(fontSize: 19)),
+                ),
                 trailing: IconButton(
                   icon: const Icon(Icons.edit, size: 28),
                   splashColor: mainColor,
@@ -72,9 +78,9 @@ class _ProfileState extends State<Profile> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                ProfileEdit(sportsman: sportsman!)));
+                                const ProfileEdit()));
                     setState(() {
-                      sportsman = _dbController.getSportsman();
+                      sportsman = _sportsmanDBService.getFirst();
                     });
                   },
                 ),
@@ -97,7 +103,7 @@ class _ProfileState extends State<Profile> {
               title: const Text('Exit', style: TextStyle(fontSize: 18)),
               onTap: () {
                 Navigator.pushReplacementNamed(context, 'login');
-                _dbController.deleteAll();
+                _sportsmanDBService.deleteAll();
               },
             ),
           ],

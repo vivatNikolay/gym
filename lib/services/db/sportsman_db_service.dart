@@ -8,8 +8,10 @@ class SportsmanDBService extends DBService<Sportsman> {
   final box = Hive.box<Sportsman>('sportsman');
 
   @override
-  void put(Sportsman sportsman) {
-    box.put(0, sportsman);
+  void put(Sportsman? sportsman) {
+    if (sportsman != null) {
+      box.put(0, sportsman);
+    }
   }
 
   @override

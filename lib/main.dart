@@ -5,10 +5,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'models/training_settings.dart';
+import 'services/db/sportsman_db_service.dart';
 import 'services/theme/theme_provider.dart';
 import 'models/system_settings.dart';
 import 'pages/home.dart';
-import 'controllers/db_controller.dart';
 import 'models/sportsman.dart';
 import 'models/subscription.dart';
 import 'pages/login/login.dart';
@@ -41,7 +41,7 @@ Future<void> hiveInitialization() async {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-  final DBController _dbController = DBController.instance;
+  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           final themeProvider = Provider.of<ThemeProvider>(context);
 
           String initialRoute = 'login';
-          if (_dbController.isHasSportsman()) {
+          if (_sportsmanDBService.getFirst() != null) {
             initialRoute = 'home';
           }
           return MaterialApp(

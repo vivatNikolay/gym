@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/sportsman.dart';
+import '../../services/db/sportsman_db_service.dart';
 import '../../services/http/subscription_http_service.dart';
 import '../../helpers/constants.dart';
 import '../../models/subscription.dart';
-import '../../controllers/db_controller.dart';
 import 'history_of_sub.dart';
 import 'widgets/qr_item.dart';
 
@@ -17,7 +17,7 @@ class QrCode extends StatefulWidget {
 }
 
 class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
-  final DBController _dbController = DBController.instance;
+  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
   final SubscriptionHttpService _httpService = SubscriptionHttpService();
   Future<Subscription?>? _futureSubscription;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
@@ -56,7 +56,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
           ),
         ),
         child: ListView(padding: const EdgeInsets.only(top: 30), children: [
-            QrItem(data: _dbController.getSportsman()!.email),
+            QrItem(data: _sportsmanDBService.getFirst()!.email),
             const SizedBox(height: 20),
           Card(
             elevation: 1,
@@ -83,9 +83,9 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                         ));
                       });
                     }
-                    Sportsman? s = _dbController.getSportsman();
+                    Sportsman? s = _sportsmanDBService.getFirst();
                     s?.subscription = snapshot.data;
-                    _dbController.saveOrUpdateSportsman(s);
+                    _sportsmanDBService.put(s);
                     return Text(
                       getProgress(snapshot.data),
                       style: const TextStyle(fontSize: 17, color: Colors.black),
@@ -97,7 +97,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                     _animationController.forward(from: 0.0);
                     setState(() {
                       _futureSubscription = _httpService
-                          .getBySportsman(_dbController.getSportsman()!.id);
+                          .getBySportsman(_sportsmanDBService.getFirst()!.id);
                     });
                   },
                   icon: RotationTransition(
@@ -108,9 +108,9 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                 onTap: () {
                   setState(() {
                     _futureSubscription = _httpService
-                        .getBySportsman(_dbController.getSportsman()!.id);
+                        .getBySportsman(_sportsmanDBService.getFirst()!.id);
                   });
-                  if (_dbController.getSportsman()!.subscription != null) {
+                  if (_sportsmanDBService.getFirst()!.subscription != null) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const HistoryOfSub()));
                   }
@@ -122,7 +122,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
   }
 
   String getProgress(Subscription? subscription) {
-    subscription ??= _dbController.getSportsman()!.subscription;
+    subscription ??= _sportsmanDBService.getFirst()!.subscription;
     if (subscription != null) {
       return '${subscription.visitCounter}/${subscription.numberOfVisits} '
           'until ${formatterDate.format(subscription.dateOfEnd)}';

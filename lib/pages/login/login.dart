@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../../pages/login/widgets/login_button.dart';
 import '../../helpers/constants.dart';
 import '../../controllers/http_controller.dart';
-import '../../controllers/db_controller.dart';
 import '../../models/sportsman.dart';
+import '../../services/db/sportsman_db_service.dart';
 import 'widgets/field_name.dart';
 import '../widgets/my_text_field.dart';
 
@@ -18,7 +18,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final HttpController _httpController = HttpController.instance;
-  final DBController _dbController = DBController.instance;
+  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   late ValueNotifier<bool> _loginValidation;
@@ -115,7 +115,7 @@ class _LoginState extends State<Login> {
                               return const Text('Incorrect login or password');
                             }
                             if (snapshot.hasData) {
-                              _dbController.saveOrUpdateSportsman(snapshot.data!);
+                              _sportsmanDBService.put(snapshot.data!);
                               WidgetsBinding.instance
                                   ?.addPostFrameCallback((_) {
                                 Navigator.pushReplacementNamed(context, 'home');

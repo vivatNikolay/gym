@@ -1,45 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:sportmen_in_gym/controllers/db_controller.dart';
-import 'package:sportmen_in_gym/models/sportsman.dart';
 
+import '../../models/sportsman.dart';
 import '../../controllers/http_controller.dart';
 import '../../helpers/constants.dart';
+import '../../services/db/sportsman_db_service.dart';
 import '../widgets/my_text_field.dart';
 
 class ProfileEdit extends StatefulWidget {
-  final Sportsman sportsman;
 
-  const ProfileEdit({required this.sportsman, Key? key}) : super(key: key);
+  const ProfileEdit({Key? key}) : super(key: key);
 
   @override
-  State<ProfileEdit> createState() => _ProfileEditState(sportsman);
+  State<ProfileEdit> createState() => _ProfileEditState();
 }
 
 class _ProfileEditState extends State<ProfileEdit> {
-  final Sportsman sportsman;
+  late Sportsman _sportsman;
   final HttpController _httpController = HttpController.instance;
-  final DBController _dbController = DBController.instance;
+  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   late ValueNotifier<bool> _nameValidator;
-  final List<String> _dropdownItems = ['male', 'female'];
-  late String _dropdownValue;
+  late ValueNotifier<bool> _phoneValidator;
+  late bool _gender;
 
-  _ProfileEditState(this.sportsman);
+  _ProfileEditState();
 
   @override
   void initState() {
     super.initState();
 
-    _nameController.text = sportsman.firstName;
-    _phoneController.text = sportsman.phone;
+    _sportsman = _sportsmanDBService.getFirst()!;
+    _nameController.text = _sportsman.firstName;
+    _phoneController.text = _sportsman.phone;
     _nameValidator = ValueNotifier(true);
-    _dropdownValue = sportsman.gender ? _dropdownItems[0] : _dropdownItems[1];
+    _phoneValidator = ValueNotifier(true);
+    _gender = _sportsman.gender;
   }
 
   @override
   void dispose() {
     _nameValidator.dispose();
+    _phoneValidator.dispose();
 
     super.dispose();
   }
@@ -58,7 +60,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 Row(
                   children: [
                     const SizedBox(
-                        width: 60,
+                        width: 65,
                         child: Text('Name:', style: TextStyle(fontSize: 16))
                     ),
                     Flexible(
@@ -70,47 +72,53 @@ class _ProfileEditState extends State<ProfileEdit> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 5),
                 Row(
                   children: [
                     const SizedBox(
-                      width: 60,
+                      width: 65,
                       child: Text('Phone:', style: TextStyle(fontSize: 16))
                     ),
                     Flexible(
-                      child: TextField(
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
+                      child: MyTextField(
                         controller: _phoneController,
+                        validation: _phoneValidator,
+                        fontSize: 18,
                       ),
                     ),
                   ],
                 ),
+                const SizedBox(height: 5),
                 Row(
-                  children: [
-                    const SizedBox(
-                        width: 60,
-                        child: Text('Gender:', style: TextStyle(fontSize: 16))
-                    ),
-                    DropdownButton(
-                      elevation: 2,
-                      value: _dropdownValue,
-                      items: _dropdownItems.map((String item) {
-                        return DropdownMenuItem(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
+                children: [
+                  const SizedBox(
+                      width: 65,
+                      child: Text('Gender:', style: TextStyle(fontSize: 16))),
+                  Radio(
+                      activeColor: mainColor,
+                      value: 'male',
+                      groupValue: _gender ? 'male' : 'female',
                       onChanged: (String? newValue) {
                         setState(() {
-                          _dropdownValue = newValue!;
-                          sportsman.gender = newValue == 'male';
+                          _gender = newValue == 'male';
                         });
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
+                      }),
+                  const Text("Male", style: TextStyle(fontSize: 18)),
+                  Radio(
+                      activeColor: mainColor,
+                      value: 'female',
+                      groupValue: _gender ? 'male' : 'female',
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _gender = newValue == 'male';
+                        });
+                      }),
+                  const Text(
+                      "Female", style: TextStyle(fontSize: 18)
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -123,18 +131,23 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                     ),
                     onPressed: () async {
-                      if (validateFields()) {
-                        sportsman.firstName = _nameController.text.trim();
-                        sportsman.phone = _phoneController.text.trim();
-                        bool success = await _httpController.putSportsman(
-                            sportsman);
-                        if (success) {
-                          _dbController.saveOrUpdateSportsman(sportsman);
-                        }
-                        Navigator.pop(context);
+                    if (validateFields()) {
+                      bool success =
+                          await _httpController.putSportsman(
+                              Sportsman(id: _sportsman.id, email: _sportsman.email,
+                                  password: _sportsman.password, phone: _phoneController.text.trim(),
+                                  firstName: _nameController.text.trim(), gender: _gender,
+                                  dateOfBirth: _sportsman.dateOfBirth));
+                      if (success) {
+                        _sportsman.firstName = _nameController.text.trim();
+                        _sportsman.phone = _phoneController.text.trim();
+                        _sportsman.gender = _gender;
+                        _sportsmanDBService.put(_sportsman);
                       }
-                    },
-                    child: const Text(
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text(
                       'Save',
                       style: TextStyle(
                         fontSize: 22,
@@ -151,7 +164,10 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   bool validateFields() {
-    setState(() => _nameValidator.value = _nameController.text.isNotEmpty);
-    return _nameValidator.value;
+    setState(() {
+      _nameValidator.value = _nameController.text.isNotEmpty;
+      _phoneValidator.value = _phoneController.text.isNotEmpty;
+    });
+    return _nameValidator.value && _phoneValidator.value;
   }
 }
