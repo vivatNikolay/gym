@@ -19,7 +19,7 @@ class QrCode extends StatefulWidget {
 class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
   final SportsmanDBService _sportsmanDBService = SportsmanDBService();
   final SubscriptionHttpService _httpService = SubscriptionHttpService();
-  Future<Subscription?>? _futureSubscription;
+  Future<List<Subscription>>? _futureSubscription;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
   late AnimationController _animationController;
 
@@ -72,7 +72,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                   'Membership',
                   style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
-                subtitle: FutureBuilder<Subscription?>(
+                subtitle: FutureBuilder<List<Subscription>>(
                   future: _futureSubscription,
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
@@ -83,11 +83,13 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                         ));
                       });
                     }
-                    Sportsman? s = _sportsmanDBService.getFirst();
-                    s?.subscription = snapshot.data;
-                    _sportsmanDBService.put(s);
+                    if (snapshot.hasData) {
+                      Sportsman? s = _sportsmanDBService.getFirst();
+                      s?.subscriptions = snapshot.data!;
+                      _sportsmanDBService.put(s);
+                    }
                     return Text(
-                      getProgress(snapshot.data),
+                      getProgress(snapshot.data ?? _sportsmanDBService.getFirst()!.subscriptions),
                       style: const TextStyle(fontSize: 17, color: Colors.black),
                     );
                   },
@@ -110,7 +112,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                     _futureSubscription = _httpService
                         .getBySportsman(_sportsmanDBService.getFirst()!.id);
                   });
-                  if (_sportsmanDBService.getFirst()!.subscription != null) {
+                  if (_sportsmanDBService.getFirst()!.subscriptions.isNotEmpty) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const HistoryOfSub()));
                   }
@@ -121,13 +123,20 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
     );
   }
 
-  String getProgress(Subscription? subscription) {
-    subscription ??= _sportsmanDBService.getFirst()!.subscription;
-    if (subscription != null) {
-      return '${subscription.visitCounter}/${subscription.numberOfVisits} '
-          'until ${formatterDate.format(subscription.dateOfEnd)}';
-    } else {
-      return '(no)';
+  String getProgress(List<Subscription> subscriptions) {
+    Subscription? subscription;
+    if (subscriptions.isNotEmpty) {
+      subscription = subscriptions.last;
     }
+    if (subscription != null) {
+      if (subscription.dateOfEnd
+          .isBefore(DateTime.now().add(const Duration(days: 1)))) {
+        return 'has been expired in ${formatterDate.format(subscription.dateOfEnd)}';
+      } else {
+        return '${subscription.visitCounter}/${subscription.numberOfVisits} '
+            'until ${formatterDate.format(subscription.dateOfEnd)}';
+      }
+    }
+    return 'hasn\'t been added';
   }
 }

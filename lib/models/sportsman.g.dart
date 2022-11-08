@@ -24,7 +24,7 @@ class SportsmanAdapter extends TypeAdapter<Sportsman> {
       firstName: fields[4] as String,
       gender: fields[5] as bool,
       dateOfBirth: fields[6] as DateTime,
-      subscription: fields[7] as Subscription?,
+      subscriptions: (fields[7] as List).cast<Subscription>(),
     );
   }
 
@@ -47,7 +47,7 @@ class SportsmanAdapter extends TypeAdapter<Sportsman> {
       ..writeByte(6)
       ..write(obj.dateOfBirth)
       ..writeByte(7)
-      ..write(obj.subscription);
+      ..write(obj.subscriptions);
   }
 
   @override

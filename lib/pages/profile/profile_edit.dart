@@ -134,10 +134,15 @@ class _ProfileEditState extends State<ProfileEdit> {
                     if (validateFields()) {
                       bool success =
                           await _httpController.putSportsman(
-                              Sportsman(id: _sportsman.id, email: _sportsman.email,
-                                  password: _sportsman.password, phone: _phoneController.text.trim(),
-                                  firstName: _nameController.text.trim(), gender: _gender,
-                                  dateOfBirth: _sportsman.dateOfBirth));
+                          Sportsman(
+                              id: _sportsman.id,
+                              email: _sportsman.email,
+                              password: _sportsman.password,
+                              phone: _phoneController.text.trim(),
+                              firstName: _nameController.text.trim(),
+                              gender: _gender,
+                              dateOfBirth: _sportsman.dateOfBirth,
+                              subscriptions: _sportsman.subscriptions));
                       if (success) {
                         _sportsman.firstName = _nameController.text.trim();
                         _sportsman.phone = _phoneController.text.trim();

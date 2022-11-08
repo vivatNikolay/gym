@@ -20,7 +20,7 @@ class Sportsman extends HiveObject{
   @HiveField(6)
   DateTime dateOfBirth;
   @HiveField(7)
-  Subscription? subscription;
+  List<Subscription> subscriptions = List.empty();
 
   Sportsman({
     required this.id,
@@ -30,14 +30,13 @@ class Sportsman extends HiveObject{
     required this.firstName,
     required this.gender,
     required this.dateOfBirth,
-    this.subscription
+    required this.subscriptions
   });
 
   factory Sportsman.fromJson(Map<String, dynamic> json) {
-    Subscription? subscription;
-    if (json["subscription"] != null) {
-      subscription = Subscription.fromJson(json["subscription"]);
-    }
+    List<Subscription> subscriptions = (List.from(json["subscriptions"]))
+        .map((i) => Subscription.fromJson(i))
+        .toList();
 
     return Sportsman(
         id: json["id"],
@@ -47,7 +46,7 @@ class Sportsman extends HiveObject{
         firstName: json["firstName"],
         gender: json["gender"],
         dateOfBirth: DateTime.parse(json["dateOfBirth"].toString()),
-        subscription: subscription
+        subscriptions: subscriptions
     );
   }
 
@@ -59,7 +58,7 @@ class Sportsman extends HiveObject{
       'firstName': firstName,
       'gender': gender,
       'dateOfBirth': dateOfBirth.toString().substring(0, 10),
-      'subscription': subscription?.toJson()
+      'subscriptions': subscriptions.map((e) => e.toJson()).toList()
   };
 
   @override
@@ -67,7 +66,7 @@ class Sportsman extends HiveObject{
     return 'Sportsman{'
         'id: $id, email: $email, password: $password, phone: $phone, '
         'firstName: $firstName, gender: $gender, dateOfBirth: $dateOfBirth, '
-        'subscription: $subscription'
+        'subscription: $subscriptions'
         '}';
   }
 }

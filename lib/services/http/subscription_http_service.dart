@@ -1,23 +1,29 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';
+import 'package:sportmen_in_gym/services/db/sportsman_db_service.dart';
 
+import '../../models/sportsman.dart';
 import '../../models/subscription.dart';
 import 'http_service.dart';
 
 class SubscriptionHttpService extends HttpService<Subscription>{
 
-  Future<Subscription?> getBySportsman(int id) async {
+  final SportsmanDBService _dbService = SportsmanDBService();
+
+  Future<List<Subscription>> getBySportsman(int id) async {
     final uri = Uri.http(url, '/subscription/$id');
     try {
       Response res = await get(uri);
       print(res.body);
+      List<Subscription> subscriptions;
       switch (res.statusCode) {
         case 200:
-          if (res.body.isEmpty) {
-            return null;
-          }
-          return Subscription.fromJson(jsonDecode(res.body));
+          subscriptions = (jsonDecode(res.body) as List).map((e) => Subscription.fromJson(e)).toList();
+          Sportsman? sportsman = _dbService.getFirst();
+          sportsman!.subscriptions = subscriptions;
+          _dbService.put(sportsman);
+          return subscriptions;
         default:
           throw Exception(res.reasonPhrase);
       }
