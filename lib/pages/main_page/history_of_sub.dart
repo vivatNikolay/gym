@@ -48,7 +48,7 @@ class _HistoryOfSubState extends State<HistoryOfSub> {
               );
             default:
               if (snapshot.hasError) {
-                throw snapshot.error!;
+                return noConnectionMess();
               }
               if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                 return listView(snapshot.data!);
@@ -83,6 +83,14 @@ class _HistoryOfSubState extends State<HistoryOfSub> {
     return const Center(
         child: Text(
       'History is empty',
+      style: TextStyle(fontSize: 23.0),
+    ));
+  }
+
+  Center noConnectionMess() {
+    return const Center(
+        child: Text(
+      'No connection',
       style: TextStyle(fontSize: 23.0),
     ));
   }

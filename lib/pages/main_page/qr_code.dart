@@ -47,6 +47,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
       body: Container(
         width: double.infinity,
         height: double.infinity,
+        padding: const EdgeInsets.only(top: 30),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(gantelImage),
@@ -55,7 +56,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
             opacity: 0.5,
           ),
         ),
-        child: ListView(padding: const EdgeInsets.only(top: 30), children: [
+        child: Column(children: [
             QrItem(data: _sportsmanDBService.getFirst()!.email),
             const SizedBox(height: 20),
           Card(

@@ -30,84 +30,98 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         title: const Text('My Profile'),
       ),
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          children: [
-            const SizedBox(height: 5),
-            Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(13.0),
+      body: Column(
+        children: [
+          Container(
+            height: 140,
+            decoration: BoxDecoration(
+              color: Colors.transparent.withOpacity(0.58),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomCenter,
+                colors: [mainColor, Color(0xFF413278)],
               ),
-              child: ListTile(
-                leading: Container(
-                  width: 70.0,
-                  height: 70.0,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(sportsman!.gender ? manImage : womanImage),
-                      fit: BoxFit.cover,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 15, 0),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 50.0,
+                        child:
+                            Image.asset(sportsman!.gender ? manImage : womanImage),
+                      ),
                     ),
-                    borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Tooltip(
+                          message: sportsman!.firstName,
+                          child: Text(sportsman!.firstName,
+                              maxLines: 2,
+                              style: const TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                        ),
+                        Tooltip(
+                          message: sportsman!.email,
+                          child: Text(sportsman!.email,
+                              maxLines: 2,
+                              style: const TextStyle(
+                                  fontSize: 19, color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: IconButton(
+                    icon: const Icon(Icons.edit, size: 30, color: Colors.white),
+                    splashColor: Colors.white,
+                    splashRadius: 30,
+                    onPressed: () async {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                              const ProfileEdit()));
+                      setState(() {
+                        sportsman = _sportsmanDBService.getFirst();
+                      });
+                    },
                   ),
                 ),
-                minLeadingWidth: 24,
-                title: Tooltip(
-                  message: sportsman!.firstName,
-                  child: Text(
-                      sportsman!.firstName,
-                      maxLines: 2,
-                      style:
-                          const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-                ),
-                subtitle: Tooltip(
-                  message: sportsman!.email,
-                  child: Text(
-                      sportsman!.email,
-                      maxLines: 2,
-                      style: const TextStyle(fontSize: 19)),
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit, size: 28),
-                  splashColor: mainColor,
-                  splashRadius: 26,
-                  onPressed: ()  async {
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const ProfileEdit()));
-                    setState(() {
-                      sportsman = _sportsmanDBService.getFirst();
-                    });
-                  },
-                ),
-              ),
+              ],
             ),
-            const SizedBox(height: 15),
-            ListTile(
-              leading: const Icon(Icons.settings_outlined,
-                  color: mainColor),
-              minLeadingWidth: 24,
-              title: const Text('Settings', style: TextStyle(fontSize: 18)),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Settings()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout, color: mainColor),
-              minLeadingWidth: 24,
-              title: const Text('Exit', style: TextStyle(fontSize: 18)),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, 'login');
-                _sportsmanDBService.deleteAll();
-              },
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 15),
+          ListTile(
+            leading: const Icon(Icons.settings_outlined,
+                color: mainColor),
+            minLeadingWidth: 24,
+            title: const Text('Settings', style: TextStyle(fontSize: 18)),
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Settings()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout, color: mainColor),
+            minLeadingWidth: 24,
+            title: const Text('Exit', style: TextStyle(fontSize: 18)),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, 'login');
+              _sportsmanDBService.deleteAll();
+            },
+          ),
+        ],
       ),
     );
   }
