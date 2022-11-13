@@ -91,7 +91,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                     }
                     return Text(
                       getProgress(snapshot.data ?? _sportsmanDBService.getFirst()!.subscriptions),
-                      style: const TextStyle(fontSize: 17, color: Colors.black),
+                      style: const TextStyle(fontSize: 17, color: Colors.black, fontStyle: FontStyle.italic),
                     );
                   },
                 ),
@@ -130,14 +130,14 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
       subscription = subscriptions.last;
     }
     if (subscription != null) {
-      if (subscription.dateOfEnd
-          .isBefore(DateTime.now().add(const Duration(days: 1)))) {
-        return 'has been expired in ${formatterDate.format(subscription.dateOfEnd)}';
+      if (subscription.dateOfEnd.add(const Duration(days: 1))
+          .isBefore(DateTime.now())) {
+        return 'Expired in ${formatterDate.format(subscription.dateOfEnd)}';
       } else {
         return '${subscription.visitCounter}/${subscription.numberOfVisits} '
             'until ${formatterDate.format(subscription.dateOfEnd)}';
       }
     }
-    return 'hasn\'t been added';
+    return 'No added';
   }
 }
