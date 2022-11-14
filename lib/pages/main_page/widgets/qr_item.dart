@@ -58,8 +58,6 @@ class QrItem extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      ScreenBrightness()
-                          .setScreenBrightness(currentBrightness);
                       Navigator.pop(context);
                     },
                     child: const Text(
@@ -74,7 +72,8 @@ class QrItem extends StatelessWidget {
               ),
             ),
           ),
-        );
+        ).then((value) => ScreenBrightness()
+            .setScreenBrightness(currentBrightness));
       },
     );
   }
