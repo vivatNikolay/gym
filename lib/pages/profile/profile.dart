@@ -43,45 +43,44 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 15, 0),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 50.0,
-                        child:
-                            Image.asset(sportsman!.gender ? manImage : womanImage),
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Tooltip(
-                          message: sportsman!.firstName,
-                          child: Text(sportsman!.firstName,
-                              maxLines: 2,
-                              style: const TextStyle(
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                        ),
-                        Tooltip(
-                          message: sportsman!.email,
-                          child: Text(sportsman!.email,
-                              maxLines: 2,
-                              style: const TextStyle(
-                                  fontSize: 19, color: Colors.white)),
-                        ),
-                      ],
-                    ),
-                  ],
+                Expanded(
+                  flex: 4,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 50.0,
+                    child:
+                        Image.asset(sportsman!.gender ? manImage : womanImage),
+                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
+                Expanded(
+                  flex: 7,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Tooltip(
+                        message: sportsman!.firstName,
+                        child: Text(sportsman!.firstName,
+                            maxLines: 2,
+                            style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ),
+                      Tooltip(
+                        message: sportsman!.email,
+                        child: Text(sportsman!.email,
+                            maxLines: 2,
+                            style: const TextStyle(
+                                fontSize: 19, color: Colors.white)),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
                   child: IconButton(
                     icon: const Icon(Icons.edit, size: 30, color: Colors.white),
                     splashColor: Colors.white,
