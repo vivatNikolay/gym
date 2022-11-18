@@ -36,7 +36,7 @@ class ThemeProvider extends ChangeNotifier {
 
 class MyThemes {
   static final light = ThemeData(
-    colorScheme: const ColorScheme.light(secondary: mainColor),
+    colorScheme: const ColorScheme.light(primary: mainColor, secondary: mainColor),
     brightness: Brightness.light,
     primaryColor: Colors.white,
     backgroundColor: const Color(0xFFF3F3F8),
@@ -61,7 +61,7 @@ class MyThemes {
   );
 
   static final dark = ThemeData(
-    colorScheme: const ColorScheme.dark(secondary: mainColor),
+    colorScheme: const ColorScheme.dark(primary: mainColor, secondary: mainColor),
     brightness: Brightness.dark,
     backgroundColor: const Color(0xFF2C2D2F),
     appBarTheme: const AppBarTheme(

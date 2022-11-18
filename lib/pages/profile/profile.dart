@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
 
-import '../../pages/profile/profile_edit.dart';
+import 'profile_edit/profile_edit.dart';
 import '../../models/sportsman.dart';
 import '../../services/db/sportsman_db_service.dart';
 import 'settings/settings.dart';
@@ -51,7 +51,7 @@ class _ProfileState extends State<Profile> {
                     backgroundColor: Colors.white,
                     radius: 50.0,
                     child:
-                        Image.asset(sportsman!.gender ? manImage : womanImage),
+                        Image.asset('images/profileImg${sportsman!.iconNum}.png'),
                   ),
                 ),
                 Expanded(

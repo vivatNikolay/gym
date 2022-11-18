@@ -76,13 +76,16 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                 subtitle: FutureBuilder<List<Subscription>>(
                   future: _futureSubscription,
                   builder: (context, snapshot) {
+                    WidgetsBinding.instance?.addPostFrameCallback((_) =>
+                      ScaffoldMessenger.of(context).clearSnackBars()
+                    );
                     if (snapshot.hasError) {
-                      WidgetsBinding.instance?.addPostFrameCallback((_) {
+                      WidgetsBinding.instance?.addPostFrameCallback((_) =>
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text('No connection'),
-                        ));
-                      });
+                        ))
+                      );
                     }
                     if (snapshot.hasData) {
                       Sportsman? s = _sportsmanDBService.getFirst();

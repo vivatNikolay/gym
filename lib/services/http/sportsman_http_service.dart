@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart';
 
 import '../../models/sportsman.dart';
@@ -19,13 +20,17 @@ class SportsmanHttpService extends HttpService<Sportsman>{
 
   Future<bool> putByEmail(String email, Sportsman sportsman) async {
     final uri = Uri.http(url, '/sportsman/$email');
-    Response res = await put(uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(sportsman.toJson()));
-    if (res.statusCode == 200) {
-      return true;
+    try {
+      Response res = await put(uri,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(sportsman.toJson()));
+      if (res.statusCode == 200) {
+        return true;
+      }
+    } on Exception {
+      return false;
     }
     return false;
   }

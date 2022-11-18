@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sportmen_in_gym/helpers/constants.dart';
-import 'package:sportmen_in_gym/models/training_settings.dart';
-import 'package:sportmen_in_gym/pages/profile/settings/widgets/setting_name.dart';
-import 'package:sportmen_in_gym/pages/profile/settings/widgets/setting_pack.dart';
-import 'package:sportmen_in_gym/pages/profile/settings/widgets/setting_title.dart';
-import 'package:sportmen_in_gym/services/db/training_settings_db_service.dart';
+import 'package:sportmen_in_gym/pages/profile/settings/password_changer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
+import '../../../helpers/constants.dart';
+import '../../../models/training_settings.dart';
+import '../../../pages/profile/settings/widgets/setting_name.dart';
+import '../../../pages/profile/settings/widgets/setting_pack.dart';
+import '../../../pages/profile/settings/widgets/setting_title.dart';
+import '../../../services/db/training_settings_db_service.dart';
 import '../../../services/theme/theme_provider.dart';
 
 class Settings extends StatefulWidget {
@@ -97,6 +98,22 @@ class _SettingsState extends State<Settings> {
                 ),
                 const SizedBox(height: 15),
               ]),
+              SettingTitle(text: 'Security'),
+              SettingPack(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.lock_outline),
+                      minLeadingWidth: 24,
+                      title: const Text('Change password'),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const PasswordChanger()));
+                      },
+                    ),
+                  ])
             ],
           ),
         ),

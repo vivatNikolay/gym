@@ -8,6 +8,7 @@ class MyTextField extends StatelessWidget {
   bool obscureText;
   bool autofocus;
   double? fontSize;
+  TextAlign? textAlign;
 
   MyTextField({
     required this.controller,
@@ -17,6 +18,7 @@ class MyTextField extends StatelessWidget {
     this.obscureText = false,
     this.autofocus = false,
     this.fontSize,
+    this.textAlign,
     Key? key}) : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class MyTextField extends StatelessWidget {
       style: TextStyle(
         fontSize: fontSize,
       ),
+      textAlign: textAlign ?? TextAlign.start,
       decoration: InputDecoration(
         counterText: '',
         hintText: hintText,
