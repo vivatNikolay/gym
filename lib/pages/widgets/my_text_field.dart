@@ -9,10 +9,12 @@ class MyTextField extends StatelessWidget {
   bool autofocus;
   double? fontSize;
   TextAlign? textAlign;
+  bool inBox;
 
   MyTextField({
     required this.controller,
     required this.validation,
+    required this.inBox,
     this.errorText,
     this.hintText,
     this.obscureText = false,
@@ -23,23 +25,31 @@ class MyTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      maxLength: 255,
-      controller: controller,
-      style: TextStyle(
-        fontSize: fontSize,
+    return Container(
+      decoration: inBox ? BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+        color: Theme.of(context).primaryColor,
+      ) : null,
+      child: TextField(
+        maxLength: 255,
+        controller: controller,
+        style: TextStyle(
+          fontSize: fontSize,
+        ),
+        textAlign: textAlign ?? TextAlign.start,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+          enabledBorder: inBox ? InputBorder.none : null,
+          counterText: '',
+          hintText: hintText,
+          errorText: validation.value ? null
+              : controller.text.isEmpty
+                ? 'Field is empty'
+                : errorText,
+        ),
+        obscureText: obscureText,
+        autofocus: autofocus,
       ),
-      textAlign: textAlign ?? TextAlign.start,
-      decoration: InputDecoration(
-        counterText: '',
-        hintText: hintText,
-        errorText: validation.value ? null
-            : controller.text.isEmpty
-              ? 'Field is empty'
-              : errorText,
-      ),
-      obscureText: obscureText,
-      autofocus: autofocus,
     );
   }
 }

@@ -69,6 +69,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                   autofocus: _exerciseController.text.isEmpty,
                   controller: _exerciseController,
                   validation: _exerciseValidation,
+                  inBox: false,
                 ),
               ),
               const SizedBox(height: 15),

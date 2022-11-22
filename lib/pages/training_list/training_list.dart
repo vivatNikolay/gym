@@ -123,6 +123,7 @@ class _TrainingListState extends State<TrainingList> {
                 hintText: 'Name',
                 controller: _nameController,
                 validation: _nameValidator,
+                inBox: false,
               ),
               backgroundColor: Theme.of(context).backgroundColor,
               actions: [

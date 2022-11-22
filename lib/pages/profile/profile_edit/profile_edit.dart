@@ -9,7 +9,6 @@ import '../../widgets/my_text_field.dart';
 import '../widgets/circle_image.dart';
 
 class ProfileEdit extends StatefulWidget {
-
   const ProfileEdit({Key? key}) : super(key: key);
 
   @override
@@ -57,82 +56,79 @@ class _ProfileEditState extends State<ProfileEdit> {
         title: const Text('My Profile'),
         actions: [
           IconButton(
-              padding: const EdgeInsets.only(right: 12),
-              icon: const Icon(Icons.check, size: 28),
-              onPressed: () async {
-                ScaffoldMessenger.of(context).clearSnackBars();
-                if (validateFields()) {
-                  bool success = await _httpController.putSportsman(
-                      Sportsman(
-                          id: _sportsman.id,
-                          email: _sportsman.email,
-                          password: _sportsman.password,
-                          phone: _phoneController.text.trim(),
-                          firstName: _nameController.text.trim(),
-                          gender: _gender.value,
-                          iconNum: _iconNum.value,
-                          dateOfBirth: _sportsman.dateOfBirth,
-                          subscriptions: _sportsman.subscriptions));
-                  if (success) {
-                    _sportsman.firstName = _nameController.text.trim();
-                    _sportsman.phone = _phoneController.text.trim();
-                    _sportsman.gender = _gender.value;
-                    _sportsman.iconNum = _iconNum.value;
-                    _sportsmanDBService.put(_sportsman);
-                    Navigator.pop(context);
-                  } else {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(
-                      content: Text('No connection'),
-                    ));
-                  }
+            padding: const EdgeInsets.only(right: 12),
+            icon: const Icon(Icons.check, size: 28),
+            onPressed: () async {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              if (validateFields()) {
+                bool success = await _httpController.putSportsman(Sportsman(
+                    id: _sportsman.id,
+                    email: _sportsman.email,
+                    password: _sportsman.password,
+                    phone: _phoneController.text.trim(),
+                    firstName: _nameController.text.trim(),
+                    gender: _gender.value,
+                    iconNum: _iconNum.value,
+                    dateOfBirth: _sportsman.dateOfBirth,
+                    subscriptions: _sportsman.subscriptions));
+                if (success) {
+                  _sportsman.firstName = _nameController.text.trim();
+                  _sportsman.phone = _phoneController.text.trim();
+                  _sportsman.gender = _gender.value;
+                  _sportsman.iconNum = _iconNum.value;
+                  _sportsmanDBService.put(_sportsman);
+                  Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('No connection'),
+                  ));
                 }
-              },
+              }
+            },
           )
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50).copyWith(top: 20),
-          child: Column(
-            children: [
-              CircleImage(
-                  image: AssetImage('images/profileImg${_iconNum.value}.png'),
-                  icon: Icons.edit,
-                  onTap: () async {
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                            ImageSelector(iconNum: _iconNum)));
-                    setState(() {
-                      _iconNum.value;
-                    });
-                  }),
-              const SizedBox(height: 10),
-              MyTextField(
-                controller: _nameController,
-                validation: _nameValidator,
-                fontSize: 21,
-                hintText: 'Name',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 5),
-              MyTextField(
-                controller: _phoneController,
-                validation: _phoneValidator,
-                fontSize: 20,
-                hintText: 'Phone',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              GenderSwitcher(
-                  gender: _gender,
-                  onPressedMale: () => setState(() => _gender.value = true),
-                  onPressedFemale: () => setState(() => _gender.value = false)
-              ),
-            ],
-          ),
+        padding: const EdgeInsets.symmetric(horizontal: 50).copyWith(top: 20),
+        child: Column(
+          children: [
+            CircleImage(
+                image: AssetImage('images/profileImg${_iconNum.value}.png'),
+                icon: Icons.edit,
+                onTap: () async {
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ImageSelector(iconNum: _iconNum)));
+                  setState(() {
+                    _iconNum.value;
+                  });
+                }),
+            const SizedBox(height: 10),
+            MyTextField(
+              controller: _nameController,
+              validation: _nameValidator,
+              fontSize: 21,
+              hintText: 'Name',
+              textAlign: TextAlign.center,
+              inBox: false,
+            ),
+            const SizedBox(height: 5),
+            MyTextField(
+              controller: _phoneController,
+              validation: _phoneValidator,
+              fontSize: 20,
+              hintText: 'Phone',
+              textAlign: TextAlign.center,
+              inBox: false,
+            ),
+            const SizedBox(height: 10),
+            GenderSwitcher(
+                gender: _gender,
+                onPressedMale: () => setState(() => _gender.value = true),
+                onPressedFemale: () => setState(() => _gender.value = false)),
+          ],
         ),
       ),
     );
