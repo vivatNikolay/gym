@@ -103,7 +103,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                     _animationController.forward(from: 0.0);
                     setState(() {
                       _futureSubscription = _httpService
-                          .getBySportsman(_sportsmanDBService.getFirst()!.id);
+                          .getBySportsman(_sportsmanDBService.getFirst()!);
                     });
                   },
                   icon: RotationTransition(
@@ -114,7 +114,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
                 onTap: () {
                   setState(() {
                     _futureSubscription = _httpService
-                        .getBySportsman(_sportsmanDBService.getFirst()!.id);
+                        .getBySportsman(_sportsmanDBService.getFirst()!);
                   });
                   if (_sportsmanDBService.getFirst()!.subscriptions.isNotEmpty) {
                     Navigator.of(context).push(MaterialPageRoute(

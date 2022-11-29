@@ -7,9 +7,12 @@ import 'http_service.dart';
 
 class SportsmanHttpService extends HttpService<Sportsman>{
 
-  Future<Sportsman> getByEmail(String email) async {
+  Future<Sportsman> getByEmail(String email, String pass) async {
     final uri = Uri.http(url, '/sportsman/$email');
-    Response res = await get(uri);
+    Response res = await get(uri, headers: <String, String>{
+      HttpHeaders.authorizationHeader: basicAuth(email, pass)
+    });
+    print(res.body);
     if (res.statusCode == 200) {
       Sportsman sportsman = Sportsman.fromJson(jsonDecode(res.body));
       return sportsman;
@@ -18,12 +21,13 @@ class SportsmanHttpService extends HttpService<Sportsman>{
     }
   }
 
-  Future<bool> putByEmail(String email, Sportsman sportsman) async {
-    final uri = Uri.http(url, '/sportsman/$email');
+  Future<bool> putByEmail(Sportsman sportsman) async {
+    final uri = Uri.http(url, '/sportsman/${sportsman.email}');
     try {
       Response res = await put(uri,
           headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
+            HttpHeaders.authorizationHeader: basicAuth(sportsman.email, sportsman.password),
+            HttpHeaders.contentTypeHeader: 'application/json',
           },
           body: jsonEncode(sportsman.toJson()));
       if (res.statusCode == 200) {

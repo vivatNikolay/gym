@@ -23,7 +23,7 @@ class _HistoryOfSubState extends State<HistoryOfSub> {
   @override
   void initState() {
     super.initState();
-    _futureVisits = _httpController.getVisitsByDates(_sportsmanDBService.getFirst()!.id);
+    _futureVisits = _httpController.getVisitsByDates(_sportsmanDBService.getFirst()!);
   }
 
   @override
