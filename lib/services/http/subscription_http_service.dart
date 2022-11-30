@@ -12,7 +12,7 @@ class SubscriptionHttpService extends HttpService<Subscription>{
   final SportsmanDBService _dbService = SportsmanDBService();
 
   Future<List<Subscription>> getBySportsman(Sportsman sportsman) async {
-    final uri = Uri.http(url, '/subscription/${sportsman.id}');
+    final uri = Uri.http(url, '/sportsmanDetails/subscriptions/${sportsman.id}');
     try {
       Response res = await get(uri, headers: <String, String>{
         HttpHeaders.authorizationHeader: basicAuth(sportsman.email, sportsman.password)

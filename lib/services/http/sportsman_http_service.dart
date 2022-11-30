@@ -7,8 +7,8 @@ import 'http_service.dart';
 
 class SportsmanHttpService extends HttpService<Sportsman>{
 
-  Future<Sportsman> getByEmail(String email, String pass) async {
-    final uri = Uri.http(url, '/sportsman/$email');
+  Future<Sportsman> login(String email, String pass) async {
+    final uri = Uri.http(url, '/account/login');
     Response res = await get(uri, headers: <String, String>{
       HttpHeaders.authorizationHeader: basicAuth(email, pass)
     });
@@ -21,8 +21,8 @@ class SportsmanHttpService extends HttpService<Sportsman>{
     }
   }
 
-  Future<bool> putByEmail(Sportsman sportsman) async {
-    final uri = Uri.http(url, '/sportsman/${sportsman.email}');
+  Future<bool> update(Sportsman sportsman) async {
+    final uri = Uri.http(url, '/account/update');
     try {
       Response res = await put(uri,
           headers: <String, String>{

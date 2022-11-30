@@ -15,7 +15,7 @@ class HttpController {
   static HttpController get instance => _instance;
 
   Future<Sportsman> getSportsman(String email, String pass) async {
-    Sportsman sportsman = await _sportsmanHttpService.getByEmail(email, pass);
+    Sportsman sportsman = await _sportsmanHttpService.login(email, pass);
     if (pass == sportsman.password) {
       return sportsman;
     } else {
@@ -24,7 +24,7 @@ class HttpController {
   }
 
   Future<bool> putSportsman(Sportsman sportsman) async {
-    bool success = await _sportsmanHttpService.putByEmail(sportsman);
+    bool success = await _sportsmanHttpService.update(sportsman);
     return success;
   }
 
