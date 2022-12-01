@@ -1,12 +1,12 @@
 import 'package:sportmen_in_gym/services/http/visit_http_service.dart';
 
-import '../models/sportsman.dart';
+import '../models/account.dart';
 import '../models/visit.dart';
-import '../services/http/sportsman_http_service.dart';
+import '../services/http/account_http_service.dart';
 
 class HttpController {
 
-  final SportsmanHttpService _sportsmanHttpService = SportsmanHttpService();
+  final AccountHttpService _accountHttpService = AccountHttpService();
   final VisitHttpService _visitHttpService = VisitHttpService();
 
   HttpController._privateConstructor();
@@ -14,22 +14,22 @@ class HttpController {
 
   static HttpController get instance => _instance;
 
-  Future<Sportsman> getSportsman(String email, String pass) async {
-    Sportsman sportsman = await _sportsmanHttpService.login(email, pass);
-    if (pass == sportsman.password) {
-      return sportsman;
+  Future<Account> getAccount(String email, String pass) async {
+    Account account = await _accountHttpService.login(email, pass);
+    if (pass == account.password) {
+      return account;
     } else {
       throw "Incorrect password";
     }
   }
 
-  Future<bool> putSportsman(Sportsman sportsman) async {
-    bool success = await _sportsmanHttpService.update(sportsman);
+  Future<bool> putAccount(Account account) async {
+    bool success = await _accountHttpService.update(account);
     return success;
   }
 
-  Future<List<Visit>> getVisitsByDates(Sportsman sportsman) async {
-    List<Visit> visits = await _visitHttpService.getBySubscription(sportsman);
+  Future<List<Visit>> getVisitsByDates(Account account) async {
+    List<Visit> visits = await _visitHttpService.getBySubscription(account);
     return visits;
   }
 }

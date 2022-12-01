@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../helpers/constants.dart';
 import '../../controllers/http_controller.dart';
 import '../../models/visit.dart';
-import '../../services/db/sportsman_db_service.dart';
+import '../../services/db/account_db_service.dart';
 
 class HistoryOfSub extends StatefulWidget {
   const HistoryOfSub({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class HistoryOfSub extends StatefulWidget {
 }
 
 class _HistoryOfSubState extends State<HistoryOfSub> {
-  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
+  final AccountDBService _accountDBService = AccountDBService();
   final HttpController _httpController = HttpController.instance;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
   final DateFormat formatterWeekDay = DateFormat('E');
@@ -23,7 +23,7 @@ class _HistoryOfSubState extends State<HistoryOfSub> {
   @override
   void initState() {
     super.initState();
-    _futureVisits = _httpController.getVisitsByDates(_sportsmanDBService.getFirst()!);
+    _futureVisits = _httpController.getVisitsByDates(_accountDBService.getFirst()!);
   }
 
   @override

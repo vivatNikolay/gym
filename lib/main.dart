@@ -5,11 +5,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'models/training_settings.dart';
-import 'services/db/sportsman_db_service.dart';
+import 'services/db/account_db_service.dart';
 import 'services/theme/theme_provider.dart';
 import 'models/system_settings.dart';
 import 'pages/home.dart';
-import 'models/sportsman.dart';
+import 'models/account.dart';
 import 'models/subscription.dart';
 import 'pages/login/login.dart';
 import 'models/training.dart';
@@ -26,13 +26,13 @@ void main() async {
 Future<void> hiveInitialization() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.registerAdapter(SportsmanAdapter());
+  Hive.registerAdapter(AccountAdapter());
   Hive.registerAdapter(SubscriptionAdapter());
   Hive.registerAdapter(SystemSettingsAdapter());
   Hive.registerAdapter(TrainingSettingsAdapter());
   Hive.registerAdapter(TrainingAdapter());
   Hive.registerAdapter(ExerciseAdapter());
-  await Hive.openBox<Sportsman>('sportsman');
+  await Hive.openBox<Account>('account');
   await Hive.openBox<SystemSettings>('system_settings');
   await Hive.openBox<TrainingSettings>('training_settings');
   await Hive.openBox<Training>('training');
@@ -41,7 +41,7 @@ Future<void> hiveInitialization() async {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
+  final AccountDBService _accountDBService = AccountDBService();
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           final themeProvider = Provider.of<ThemeProvider>(context);
 
           String initialRoute = 'login';
-          if (_sportsmanDBService.getFirst() != null) {
+          if (_accountDBService.getFirst() != null) {
             initialRoute = 'home';
           }
           return MaterialApp(

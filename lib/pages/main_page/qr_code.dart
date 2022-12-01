@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sportmen_in_gym/pages/main_page/sportsman_qr.dart';
 
-import '../../models/sportsman.dart';
-import '../../services/db/sportsman_db_service.dart';
-import '../../services/http/subscription_http_service.dart';
+import '../../services/db/account_db_service.dart';
 import '../../helpers/constants.dart';
-import '../../models/subscription.dart';
-import 'history_of_sub.dart';
-import 'widgets/qr_item.dart';
 
 class QrCode extends StatefulWidget {
   const QrCode({Key? key}) : super(key: key);
@@ -18,7 +12,7 @@ class QrCode extends StatefulWidget {
 }
 
 class _QrCodeState extends State<QrCode> {
-  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
+  final AccountDBService _accountDBService = AccountDBService();
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +32,20 @@ class _QrCodeState extends State<QrCode> {
             opacity: 0.5,
           ),
         ),
-        child: const SportsmanQr(),
+        child: switcherByRole(),
       ),
     );
+  }
+
+  Widget switcherByRole() {
+    switch (_accountDBService.getFirst()!.role) {
+      case 'MANAGER': {
+        break;
+      }
+      case 'ADMIN': {
+        break;
+      }
+    }
+    return const SportsmanQr();
   }
 }

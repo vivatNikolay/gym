@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 
-import '../../models/sportsman.dart';
+import '../../models/account.dart';
 import '../../models/visit.dart';
 import 'http_service.dart';
 
 class VisitHttpService extends HttpService<Visit>{
 
-  Future<List<Visit>> getBySportsman(Sportsman sportsman) async {
-    final uri = Uri.http(url, '/sportsmanDetails/visits/${sportsman.id}');
+  Future<List<Visit>> getByAccount(Account account) async {
+    final uri = Uri.http(url, '/sportsmanDetails/visits/${account.id}');
     Response res = await get(uri,
         headers: <String, String>{
-          'authorization' : basicAuth(sportsman.email, sportsman.password)
+          'authorization' : basicAuth(account.email, account.password)
         });
     print(res.body);
     if (res.statusCode == 200) {
@@ -22,11 +22,11 @@ class VisitHttpService extends HttpService<Visit>{
     }
   }
 
-  Future<List<Visit>> getBySubscription(Sportsman sportsman) async {
-    final uri = Uri.http(url, '/sportsmanDetails/visitsBySubscription/${sportsman.id}');
+  Future<List<Visit>> getBySubscription(Account account) async {
+    final uri = Uri.http(url, '/sportsmanDetails/visitsBySubscription/${account.id}');
     Response res = await get(uri,
         headers: <String, String>{
-          'authorization' : basicAuth(sportsman.email, sportsman.password)
+          'authorization' : basicAuth(account.email, account.password)
         });
     print(res.body);
     if (res.statusCode == 200) {

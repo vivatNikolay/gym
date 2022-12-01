@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../helpers/constants.dart';
-import '../../models/sportsman.dart';
+import '../../models/account.dart';
 import '../../models/subscription.dart';
-import '../../services/db/sportsman_db_service.dart';
+import '../../services/db/account_db_service.dart';
 import '../../services/http/subscription_http_service.dart';
 import 'history_of_sub.dart';
 import 'widgets/qr_item.dart';
@@ -17,7 +17,7 @@ class SportsmanQr extends StatefulWidget {
 }
 
 class _SportsmanQrState extends State<SportsmanQr> with SingleTickerProviderStateMixin {
-  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
+  final AccountDBService _accountDBService = AccountDBService();
   final SubscriptionHttpService _httpService = SubscriptionHttpService();
   Future<List<Subscription>>? _futureSubscription;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
@@ -42,7 +42,7 @@ class _SportsmanQrState extends State<SportsmanQr> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      QrItem(data: _sportsmanDBService.getFirst()!.email),
+      QrItem(data: _accountDBService.getFirst()!.email),
       const SizedBox(height: 20),
       Card(
         color: Colors.white,
@@ -69,12 +69,12 @@ class _SportsmanQrState extends State<SportsmanQr> with SingleTickerProviderStat
                   );
                 }
                 if (snapshot.hasData) {
-                  Sportsman? s = _sportsmanDBService.getFirst();
+                  Account? s = _accountDBService.getFirst();
                   s?.subscriptions = snapshot.data!;
-                  _sportsmanDBService.put(s);
+                  _accountDBService.put(s);
                 }
                 return Text(
-                  getProgress(snapshot.data ?? _sportsmanDBService.getFirst()!.subscriptions),
+                  getProgress(snapshot.data ?? _accountDBService.getFirst()!.subscriptions),
                   style: const TextStyle(fontSize: 17, color: Colors.black, fontStyle: FontStyle.italic),
                 );
               },
@@ -84,7 +84,7 @@ class _SportsmanQrState extends State<SportsmanQr> with SingleTickerProviderStat
                 _animationController.forward(from: 0.0);
                 setState(() {
                   _futureSubscription = _httpService
-                      .getBySportsman(_sportsmanDBService.getFirst()!);
+                      .getByAccount(_accountDBService.getFirst()!);
                 });
               },
               icon: RotationTransition(
@@ -95,9 +95,9 @@ class _SportsmanQrState extends State<SportsmanQr> with SingleTickerProviderStat
             onTap: () {
               setState(() {
                 _futureSubscription = _httpService
-                    .getBySportsman(_sportsmanDBService.getFirst()!);
+                    .getByAccount(_accountDBService.getFirst()!);
               });
-              if (_sportsmanDBService.getFirst()!.subscriptions.isNotEmpty) {
+              if (_accountDBService.getFirst()!.subscriptions.isNotEmpty) {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const HistoryOfSub()));
               }

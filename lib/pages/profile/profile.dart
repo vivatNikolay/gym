@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sportmen_in_gym/helpers/constants.dart';
 
 import 'profile_edit/profile_edit.dart';
-import '../../models/sportsman.dart';
-import '../../services/db/sportsman_db_service.dart';
+import '../../models/account.dart';
+import '../../services/db/account_db_service.dart';
 import 'settings/settings.dart';
 
 class Profile extends StatefulWidget {
@@ -14,14 +14,14 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
-  Sportsman? sportsman;
+  final AccountDBService _accountDBService = AccountDBService();
+  Account? account;
 
   @override
   void initState() {
     super.initState();
 
-    sportsman = _sportsmanDBService.getFirst();
+    account = _accountDBService.getFirst();
   }
 
   @override
@@ -51,7 +51,7 @@ class _ProfileState extends State<Profile> {
                     backgroundColor: Colors.white,
                     radius: 50.0,
                     child:
-                        Image.asset('images/profileImg${sportsman!.iconNum}.png'),
+                        Image.asset('images/profileImg${account!.iconNum}.png'),
                   ),
                 ),
                 Expanded(
@@ -61,8 +61,8 @@ class _ProfileState extends State<Profile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Tooltip(
-                        message: sportsman!.firstName,
-                        child: Text(sportsman!.firstName,
+                        message: account!.firstName,
+                        child: Text(account!.firstName,
                             maxLines: 2,
                             style: const TextStyle(
                                 fontSize: 28,
@@ -70,8 +70,8 @@ class _ProfileState extends State<Profile> {
                                 color: Colors.white)),
                       ),
                       Tooltip(
-                        message: sportsman!.email,
-                        child: Text(sportsman!.email,
+                        message: account!.email,
+                        child: Text(account!.email,
                             maxLines: 2,
                             style: const TextStyle(
                                 fontSize: 19, color: Colors.white)),
@@ -92,7 +92,7 @@ class _ProfileState extends State<Profile> {
                               builder: (context) =>
                               const ProfileEdit()));
                       setState(() {
-                        sportsman = _sportsmanDBService.getFirst();
+                        account = _accountDBService.getFirst();
                       });
                     },
                   ),
@@ -117,7 +117,7 @@ class _ProfileState extends State<Profile> {
             title: const Text('Exit', style: TextStyle(fontSize: 18)),
             onTap: () {
               Navigator.pushReplacementNamed(context, 'login');
-              _sportsmanDBService.deleteAll();
+              _accountDBService.deleteAll();
             },
           ),
         ],

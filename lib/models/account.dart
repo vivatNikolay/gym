@@ -1,10 +1,10 @@
 import 'package:hive/hive.dart';
 import 'package:sportmen_in_gym/models/subscription.dart';
 
-part 'sportsman.g.dart';
+part 'account.g.dart';
 
 @HiveType(typeId:0)
-class Sportsman extends HiveObject{
+class Account extends HiveObject{
   @HiveField(0)
   int id;
   @HiveField(1)
@@ -23,8 +23,10 @@ class Sportsman extends HiveObject{
   DateTime dateOfBirth;
   @HiveField(8)
   List<Subscription> subscriptions = List.empty();
+  @HiveField(9)
+  String role;
 
-  Sportsman({
+  Account({
     required this.id,
     required this.email,
     required this.password,
@@ -33,15 +35,16 @@ class Sportsman extends HiveObject{
     required this.gender,
     required this.iconNum,
     required this.dateOfBirth,
-    required this.subscriptions
+    required this.subscriptions,
+    required this.role
   });
 
-  factory Sportsman.fromJson(Map<String, dynamic> json) {
+  factory Account.fromJson(Map<String, dynamic> json) {
     List<Subscription> subscriptions = (List.from(json["subscriptions"]))
         .map((i) => Subscription.fromJson(i))
         .toList();
 
-    return Sportsman(
+    return Account(
         id: json["id"],
         email: json["email"],
         password: json["password"],
@@ -50,7 +53,8 @@ class Sportsman extends HiveObject{
         gender: json["gender"],
         iconNum: json["iconNum"],
         dateOfBirth: DateTime.parse(json["dateOfBirth"].toString()),
-        subscriptions: subscriptions
+        subscriptions: subscriptions,
+        role: json["role"]
     );
   }
 
@@ -63,14 +67,16 @@ class Sportsman extends HiveObject{
       'gender': gender,
       'iconNum': iconNum,
       'dateOfBirth': dateOfBirth.toString().substring(0, 10),
-      'subscriptions': subscriptions.map((e) => e.toJson()).toList()
+      'subscriptions': subscriptions.map((e) => e.toJson()).toList(),
+      'role': role
   };
 
   @override
   String toString() {
-    return 'Sportsman{'
+    return 'Account{'
         'id: $id, email: $email, password: $password, phone: $phone, '
         'firstName: $firstName, gender: $gender, iconNum: $iconNum,'
-        ' dateOfBirth: $dateOfBirth, subscription: $subscriptions}';
+        ' dateOfBirth: $dateOfBirth, subscription: $subscriptions},'
+        'role: $role';
   }
 }

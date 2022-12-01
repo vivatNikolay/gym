@@ -3,8 +3,8 @@ import 'package:sportmen_in_gym/pages/profile/settings/widgets/setting_pack.dart
 import 'package:sportmen_in_gym/pages/widgets/my_text_field.dart';
 
 import '../../../controllers/http_controller.dart';
-import '../../../models/sportsman.dart';
-import '../../../services/db/sportsman_db_service.dart';
+import '../../../models/account.dart';
+import '../../../services/db/account_db_service.dart';
 
 class PasswordChanger extends StatefulWidget {
   const PasswordChanger({Key? key}) : super(key: key);
@@ -14,9 +14,9 @@ class PasswordChanger extends StatefulWidget {
 }
 
 class _PasswordChangerState extends State<PasswordChanger> {
-  late Sportsman _sportsman;
+  late Account _account;
   final HttpController _httpController = HttpController.instance;
-  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
+  final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _oldPassController = TextEditingController();
   final TextEditingController _newPass1Controller = TextEditingController();
   final TextEditingController _newPass2Controller = TextEditingController();
@@ -28,7 +28,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
   initState() {
     super.initState();
 
-    _sportsman = _sportsmanDBService.getFirst()!;
+    _account = _accountDBService.getFirst()!;
     _oldPassValidator = ValueNotifier(true);
     _newPass1Validator = ValueNotifier(true);
     _newPass2Validator = ValueNotifier(true);
@@ -55,19 +55,20 @@ class _PasswordChangerState extends State<PasswordChanger> {
             onPressed: () async {
               ScaffoldMessenger.of(context).clearSnackBars();
               if (validateFields()) {
-                bool success = await _httpController.putSportsman(Sportsman(
-                    id: _sportsman.id,
-                    email: _sportsman.email,
+                bool success = await _httpController.putAccount(Account(
+                    id: _account.id,
+                    email: _account.email,
                     password: _newPass2Controller.text,
-                    phone: _sportsman.phone,
-                    firstName: _sportsman.firstName,
-                    gender: _sportsman.gender,
-                    iconNum: _sportsman.iconNum,
-                    dateOfBirth: _sportsman.dateOfBirth,
-                    subscriptions: _sportsman.subscriptions));
+                    phone: _account.phone,
+                    firstName: _account.firstName,
+                    gender: _account.gender,
+                    iconNum: _account.iconNum,
+                    dateOfBirth: _account.dateOfBirth,
+                    subscriptions: _account.subscriptions,
+                    role: _account.role));
                 if (success) {
-                  _sportsman.password = _newPass2Controller.text;
-                  _sportsmanDBService.put(_sportsman);
+                  _account.password = _newPass2Controller.text;
+                  _accountDBService.put(_account);
                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -137,7 +138,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
       _newPass1Validator.value = _newPass1Controller.text.isNotEmpty;
       _newPass2Validator.value = _newPass2Controller.text.isNotEmpty;
     });
-    if (_oldPassController.text != _sportsman.password) {
+    if (_oldPassController.text != _account.password) {
       _oldPassValidator.value = false;
     }
     if (_newPass1Controller.text != _newPass2Controller.text) {

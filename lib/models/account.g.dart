@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sportsman.dart';
+part of 'account.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SportsmanAdapter extends TypeAdapter<Sportsman> {
+class AccountAdapter extends TypeAdapter<Account> {
   @override
   final int typeId = 0;
 
   @override
-  Sportsman read(BinaryReader reader) {
+  Account read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Sportsman(
+    return Account(
       id: fields[0] as int,
       email: fields[1] as String,
       password: fields[2] as String,
@@ -26,13 +26,14 @@ class SportsmanAdapter extends TypeAdapter<Sportsman> {
       iconNum: fields[6] as int,
       dateOfBirth: fields[7] as DateTime,
       subscriptions: (fields[8] as List).cast<Subscription>(),
+      role: fields[9] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Sportsman obj) {
+  void write(BinaryWriter writer, Account obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class SportsmanAdapter extends TypeAdapter<Sportsman> {
       ..writeByte(7)
       ..write(obj.dateOfBirth)
       ..writeByte(8)
-      ..write(obj.subscriptions);
+      ..write(obj.subscriptions)
+      ..writeByte(9)
+      ..write(obj.role);
   }
 
   @override
@@ -59,7 +62,7 @@ class SportsmanAdapter extends TypeAdapter<Sportsman> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SportsmanAdapter &&
+      other is AccountAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

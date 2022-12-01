@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../../pages/login/widgets/login_button.dart';
 import '../../helpers/constants.dart';
 import '../../controllers/http_controller.dart';
-import '../../models/sportsman.dart';
-import '../../services/db/sportsman_db_service.dart';
+import '../../models/account.dart';
+import '../../services/db/account_db_service.dart';
 import 'widgets/field_name.dart';
 import '../widgets/my_text_field.dart';
 
@@ -18,12 +18,12 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final HttpController _httpController = HttpController.instance;
-  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
+  final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   late ValueNotifier<bool> _loginValidation;
   late ValueNotifier<bool> _passwordValidation;
-  Future<Sportsman>? _futureSportsman;
+  Future<Account>? _futureAccount;
   final RegExp _regExpEmail = RegExp(
       r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
       multiLine: false
@@ -95,13 +95,13 @@ class _LoginState extends State<Login> {
                   LoginButton(
                     onPressed: () => setState(() {
                     if (validateFields()) {
-                      _futureSportsman = _httpController.getSportsman(
+                      _futureAccount = _httpController.getAccount(
                           _loginController.text.trim(),
                           _passController.text);
                     }
                   })),
-                  FutureBuilder<Sportsman>(
-                      future: _futureSportsman,
+                  FutureBuilder<Account>(
+                      future: _futureAccount,
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
@@ -117,7 +117,7 @@ class _LoginState extends State<Login> {
                               return const Text('Incorrect login or password');
                             }
                             if (snapshot.hasData) {
-                              _sportsmanDBService.put(snapshot.data!);
+                              _accountDBService.put(snapshot.data!);
                               WidgetsBinding.instance
                                   ?.addPostFrameCallback((_) {
                                 Navigator.pushReplacementNamed(context, 'home');

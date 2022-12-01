@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sportmen_in_gym/pages/profile/profile_edit/image_selector.dart';
 import 'package:sportmen_in_gym/pages/profile/profile_edit/widgets/gender_switcher.dart';
 
-import '../../../models/sportsman.dart';
+import '../../../models/account.dart';
 import '../../../controllers/http_controller.dart';
-import '../../../services/db/sportsman_db_service.dart';
+import '../../../services/db/account_db_service.dart';
 import '../../widgets/my_text_field.dart';
 import '../widgets/circle_image.dart';
 
@@ -16,9 +16,9 @@ class ProfileEdit extends StatefulWidget {
 }
 
 class _ProfileEditState extends State<ProfileEdit> {
-  late Sportsman _sportsman;
+  late Account _account;
   final HttpController _httpController = HttpController.instance;
-  final SportsmanDBService _sportsmanDBService = SportsmanDBService();
+  final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   late ValueNotifier<bool> _nameValidator;
@@ -32,13 +32,13 @@ class _ProfileEditState extends State<ProfileEdit> {
   void initState() {
     super.initState();
 
-    _sportsman = _sportsmanDBService.getFirst()!;
-    _nameController.text = _sportsman.firstName;
-    _phoneController.text = _sportsman.phone;
+    _account = _accountDBService.getFirst()!;
+    _nameController.text = _account.firstName;
+    _phoneController.text = _account.phone;
     _nameValidator = ValueNotifier(true);
     _phoneValidator = ValueNotifier(true);
-    _gender = ValueNotifier(_sportsman.gender);
-    _iconNum = ValueNotifier(_sportsman.iconNum);
+    _gender = ValueNotifier(_account.gender);
+    _iconNum = ValueNotifier(_account.iconNum);
   }
 
   @override
@@ -61,22 +61,23 @@ class _ProfileEditState extends State<ProfileEdit> {
             onPressed: () async {
               ScaffoldMessenger.of(context).clearSnackBars();
               if (validateFields()) {
-                bool success = await _httpController.putSportsman(Sportsman(
-                    id: _sportsman.id,
-                    email: _sportsman.email,
-                    password: _sportsman.password,
+                bool success = await _httpController.putAccount(Account(
+                    id: _account.id,
+                    email: _account.email,
+                    password: _account.password,
                     phone: _phoneController.text.trim(),
                     firstName: _nameController.text.trim(),
                     gender: _gender.value,
                     iconNum: _iconNum.value,
-                    dateOfBirth: _sportsman.dateOfBirth,
-                    subscriptions: _sportsman.subscriptions));
+                    dateOfBirth: _account.dateOfBirth,
+                    subscriptions: _account.subscriptions,
+                    role: _account.role));
                 if (success) {
-                  _sportsman.firstName = _nameController.text.trim();
-                  _sportsman.phone = _phoneController.text.trim();
-                  _sportsman.gender = _gender.value;
-                  _sportsman.iconNum = _iconNum.value;
-                  _sportsmanDBService.put(_sportsman);
+                  _account.firstName = _nameController.text.trim();
+                  _account.phone = _phoneController.text.trim();
+                  _account.gender = _gender.value;
+                  _account.iconNum = _iconNum.value;
+                  _accountDBService.put(_account);
                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
