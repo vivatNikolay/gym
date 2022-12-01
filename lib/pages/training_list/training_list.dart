@@ -101,9 +101,6 @@ class _TrainingListState extends State<TrainingList> {
                 });
               },
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
           );
         });
   }

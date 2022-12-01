@@ -26,9 +26,6 @@ class AddButton extends StatelessWidget {
             ],
           ),
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
       ),
       onTap: onTap,
       highlightColor: highlightColor,

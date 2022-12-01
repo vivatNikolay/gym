@@ -58,6 +58,15 @@ class MyThemes {
     textSelectionTheme: const TextSelectionThemeData(
       cursorColor: mainColor,
     ),
+    inputDecorationTheme: const InputDecorationTheme(
+      focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: mainColor, width: 2)),
+    ),
+    cardTheme: CardTheme(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(13.0),
+      ),
+    ),
   );
 
   static final dark = ThemeData(
@@ -83,6 +92,11 @@ class MyThemes {
     inputDecorationTheme: const InputDecorationTheme(
       focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: mainColor, width: 2)),
+    ),
+    cardTheme: CardTheme(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(13.0),
+      ),
     ),
   );
 }

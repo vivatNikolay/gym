@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:sportmen_in_gym/models/sportsman.dart';
 
+import '../../models/sportsman.dart';
 import '../../models/visit.dart';
 import 'http_service.dart';
 

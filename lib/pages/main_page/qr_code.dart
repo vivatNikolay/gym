@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sportmen_in_gym/pages/main_page/sportsman_qr.dart';
 
 import '../../models/sportsman.dart';
 import '../../services/db/sportsman_db_service.dart';
@@ -16,28 +17,9 @@ class QrCode extends StatefulWidget {
   State<QrCode> createState() => _QrCodeState();
 }
 
-class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
+class _QrCodeState extends State<QrCode> {
   final SportsmanDBService _sportsmanDBService = SportsmanDBService();
-  final SubscriptionHttpService _httpService = SubscriptionHttpService();
-  Future<List<Subscription>>? _futureSubscription;
-  final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
-  late AnimationController _animationController;
 
-  @override
-  void initState() {
-    super.initState();
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,91 +38,8 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
             opacity: 0.5,
           ),
         ),
-        child: Column(children: [
-            QrItem(data: _sportsmanDBService.getFirst()!.email),
-            const SizedBox(height: 20),
-          Card(
-            elevation: 1,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(13.0),
-            ),
-            color: Colors.white,
-            child: ListTile(
-                leading:
-                    const Icon(Icons.credit_card, size: 26, color: mainColor),
-                minLeadingWidth: 22,
-                title: const Text(
-                  'Membership',
-                  style: TextStyle(fontSize: 20, color: Colors.black),
-                ),
-                subtitle: FutureBuilder<List<Subscription>>(
-                  future: _futureSubscription,
-                  builder: (context, snapshot) {
-                    WidgetsBinding.instance?.addPostFrameCallback((_) =>
-                      ScaffoldMessenger.of(context).clearSnackBars()
-                    );
-                    if (snapshot.hasError) {
-                      WidgetsBinding.instance?.addPostFrameCallback((_) =>
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('No connection'),
-                        ))
-                      );
-                    }
-                    if (snapshot.hasData) {
-                      Sportsman? s = _sportsmanDBService.getFirst();
-                      s?.subscriptions = snapshot.data!;
-                      _sportsmanDBService.put(s);
-                    }
-                    return Text(
-                      getProgress(snapshot.data ?? _sportsmanDBService.getFirst()!.subscriptions),
-                      style: const TextStyle(fontSize: 17, color: Colors.black, fontStyle: FontStyle.italic),
-                    );
-                  },
-                ),
-                trailing: IconButton(
-                  onPressed: () {
-                    _animationController.forward(from: 0.0);
-                    setState(() {
-                      _futureSubscription = _httpService
-                          .getBySportsman(_sportsmanDBService.getFirst()!);
-                    });
-                  },
-                  icon: RotationTransition(
-                      turns: _animationController,
-                      child: const Icon(Icons.refresh,
-                          size: 32, color: mainColor)),
-                ),
-                onTap: () {
-                  setState(() {
-                    _futureSubscription = _httpService
-                        .getBySportsman(_sportsmanDBService.getFirst()!);
-                  });
-                  if (_sportsmanDBService.getFirst()!.subscriptions.isNotEmpty) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const HistoryOfSub()));
-                  }
-                }),
-          ),
-        ]),
+        child: const SportsmanQr(),
       ),
     );
-  }
-
-  String getProgress(List<Subscription> subscriptions) {
-    Subscription? subscription;
-    if (subscriptions.isNotEmpty) {
-      subscription = subscriptions.last;
-    }
-    if (subscription != null) {
-      if (subscription.dateOfEnd.add(const Duration(days: 1))
-          .isBefore(DateTime.now())) {
-        return 'Expired in ${formatterDate.format(subscription.dateOfEnd)}';
-      } else {
-        return '${subscription.visitCounter}/${subscription.numberOfVisits} '
-            'until ${formatterDate.format(subscription.dateOfEnd)}';
-      }
-    }
-    return 'No added';
   }
 }

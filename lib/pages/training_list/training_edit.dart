@@ -122,9 +122,6 @@ class _TrainingEditState extends State<TrainingEdit> {
                 });
               },
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
           );
         });
   }

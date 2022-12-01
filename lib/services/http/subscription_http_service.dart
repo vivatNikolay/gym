@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';
-import 'package:sportmen_in_gym/services/db/sportsman_db_service.dart';
 
 import '../../models/sportsman.dart';
 import '../../models/subscription.dart';
+import '../db/sportsman_db_service.dart';
 import 'http_service.dart';
 
 class SubscriptionHttpService extends HttpService<Subscription>{

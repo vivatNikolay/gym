@@ -72,9 +72,6 @@ class _HistoryOfSubState extends State<HistoryOfSub> {
               ),
               title: Text(formatterDate.format(visits[index].date)),
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
           );
         });
   }
