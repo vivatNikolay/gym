@@ -23,6 +23,7 @@ class _SettingsState extends State<Settings> {
   final TrainingSettingsDBService _dbService = TrainingSettingsDBService();
   late TrainingSettings _trainingSettings;
 
+  @override
   initState() {
     _trainingSettings = _dbService.getFirst();
   }
