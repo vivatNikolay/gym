@@ -33,7 +33,7 @@ class GenderSwitcher extends StatelessWidget {
                   color: gender.value
                       ? mainColor
                       : Theme.of(context).unselectedWidgetColor,
-                  width: gender.value ? 3 : 2),
+                  width: gender.value ? 3 : 1),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(30),
@@ -53,7 +53,7 @@ class GenderSwitcher extends StatelessWidget {
                   color: gender.value
                       ? Theme.of(context).unselectedWidgetColor
                       : mainColor,
-                  width: gender.value ? 2 : 3),
+                  width: gender.value ? 1 : 3),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(30),

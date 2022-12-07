@@ -90,7 +90,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 50).copyWith(top: 20),
+        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width/10).copyWith(top: 20),
         child: Column(
           children: [
             CircleImage(
