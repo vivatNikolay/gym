@@ -119,7 +119,7 @@ class _LoginState extends State<Login> {
                             if (snapshot.hasData) {
                               _accountDBService.put(snapshot.data!);
                               WidgetsBinding.instance
-                                  ?.addPostFrameCallback((_) {
+                                  .addPostFrameCallback((_) {
                                 Navigator.pushReplacementNamed(context, 'home');
                               });
                               return const Icon(Icons.check, color: mainColor, size: 24);

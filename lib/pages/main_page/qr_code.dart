@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sportmen_in_gym/pages/main_page/sportsman_qr_page.dart';
 
+import '../../pages/main_page/sportsman_qr_page.dart';
 import '../../services/db/account_db_service.dart';
 import '../../helpers/constants.dart';
 import 'manager_qr_page.dart';

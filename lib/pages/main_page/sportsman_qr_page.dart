@@ -57,11 +57,11 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
             subtitle: FutureBuilder<List<Subscription>>(
               future: _futureSubscription,
               builder: (context, snapshot) {
-                WidgetsBinding.instance?.addPostFrameCallback((_) =>
+                WidgetsBinding.instance.addPostFrameCallback((_) =>
                     ScaffoldMessenger.of(context).clearSnackBars()
                 );
                 if (snapshot.hasError) {
-                  WidgetsBinding.instance?.addPostFrameCallback((_) =>
+                  WidgetsBinding.instance.addPostFrameCallback((_) =>
                       ScaffoldMessenger.of(context)
                           .showSnackBar(const SnackBar(
                         content: Text('No connection'),

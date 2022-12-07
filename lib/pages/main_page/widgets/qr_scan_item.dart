@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:sportmen_in_gym/helpers/constants.dart';
+
+import '../../../helpers/constants.dart';
 
 class QrScanItem extends StatefulWidget {
   const QrScanItem({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sportmen_in_gym/pages/profile/profile_edit/image_selector.dart';
-import 'package:sportmen_in_gym/pages/profile/profile_edit/widgets/gender_switcher.dart';
 
+import '../../../pages/profile/profile_edit/image_selector.dart';
+import '../../../pages/profile/profile_edit/widgets/gender_switcher.dart';
 import '../../../models/account.dart';
 import '../../../controllers/http_controller.dart';
 import '../../../services/db/account_db_service.dart';

@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:sportmen_in_gym/models/subscription.dart';
+
+import '../models/subscription.dart';
 
 part 'account.g.dart';
 

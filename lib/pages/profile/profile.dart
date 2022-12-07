@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sportmen_in_gym/helpers/constants.dart';
 
-import 'profile_edit/profile_edit.dart';
+import '../../helpers/constants.dart';
 import '../../models/account.dart';
 import '../../services/db/account_db_service.dart';
+import 'profile_edit/profile_edit.dart';
 import 'settings/settings.dart';
 
 class Profile extends StatefulWidget {

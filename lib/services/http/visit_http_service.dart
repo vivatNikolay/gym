@@ -13,7 +13,6 @@ class VisitHttpService extends HttpService<Visit>{
         headers: <String, String>{
           'authorization' : basicAuth(account.email, account.password)
         });
-    print(res.body);
     if (res.statusCode == 200) {
       return (jsonDecode(res.body) as List).map((i) =>
       Visit.fromJson(i)).toList();
@@ -28,7 +27,6 @@ class VisitHttpService extends HttpService<Visit>{
         headers: <String, String>{
           'authorization' : basicAuth(account.email, account.password)
         });
-    print(res.body);
     if (res.statusCode == 200) {
       return (jsonDecode(res.body) as List).map((i) =>
           Visit.fromJson(i)).toList();

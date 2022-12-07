@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:sportmen_in_gym/models/system_settings.dart';
 
+import '../../models/system_settings.dart';
 import 'db_service.dart';
 
 class SystemSettingsDBService extends DBService<SystemSettings> {

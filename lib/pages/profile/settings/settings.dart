@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sportmen_in_gym/pages/profile/settings/password_changer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
+import '../../../pages/profile/settings/password_changer.dart';
 import '../../../helpers/constants.dart';
 import '../../../models/training_settings.dart';
 import '../../../pages/profile/settings/widgets/setting_name.dart';

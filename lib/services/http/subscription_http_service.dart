@@ -17,7 +17,6 @@ class SubscriptionHttpService extends HttpService<Subscription>{
       Response res = await get(uri, headers: <String, String>{
         HttpHeaders.authorizationHeader: basicAuth(account.email, account.password)
       });
-      print(res.body);
       List<Subscription> subscriptions;
       switch (res.statusCode) {
         case 200:
