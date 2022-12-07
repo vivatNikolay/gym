@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sportmen_in_gym/pages/main_page/sportsman_qr.dart';
+import 'package:sportmen_in_gym/pages/main_page/sportsman_qr_page.dart';
 
 import '../../services/db/account_db_service.dart';
 import '../../helpers/constants.dart';
+import 'manager_qr_page.dart';
 
 class QrCode extends StatefulWidget {
   const QrCode({Key? key}) : super(key: key);
@@ -40,12 +41,12 @@ class _QrCodeState extends State<QrCode> {
   Widget switcherByRole() {
     switch (_accountDBService.getFirst()!.role) {
       case 'MANAGER': {
-        break;
+        return const ManagerQrPage();
       }
       case 'ADMIN': {
         break;
       }
     }
-    return const SportsmanQr();
+    return const SportsmanQrPage();
   }
 }

@@ -41,12 +41,14 @@ dependencies:
   hive_flutter: ^1.0.0
 
   qr_flutter: ^4.0.0
+  qr_code_scanner: ^1.0.1
 
   screen_brightness: ^0.2.1
 
   provider: ^6.0.3
 
   intl: ^0.17.0
+
   syncfusion_flutter_sliders: ^20.2.50
 
 dev_dependencies:

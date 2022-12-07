@@ -9,14 +9,14 @@ import '../../services/http/subscription_http_service.dart';
 import 'history_of_sub.dart';
 import 'widgets/qr_item.dart';
 
-class SportsmanQr extends StatefulWidget {
-  const SportsmanQr({Key? key}) : super(key: key);
+class SportsmanQrPage extends StatefulWidget {
+  const SportsmanQrPage({Key? key}) : super(key: key);
 
   @override
-  State<SportsmanQr> createState() => _SportsmanQrState();
+  State<SportsmanQrPage> createState() => _SportsmanQrPageState();
 }
 
-class _SportsmanQrState extends State<SportsmanQr> with SingleTickerProviderStateMixin {
+class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProviderStateMixin {
   final AccountDBService _accountDBService = AccountDBService();
   final SubscriptionHttpService _httpService = SubscriptionHttpService();
   Future<List<Subscription>>? _futureSubscription;
