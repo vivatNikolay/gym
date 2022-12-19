@@ -37,4 +37,25 @@ class AccountHttpService extends HttpService<Account>{
     }
     return false;
   }
+
+  Future<List<Account>> getSportsmen(Account account, String? query) async {
+    final queryParameters = {
+      'query': query,
+    };
+    final uri = Uri.http(url, '/manager/sportsmen', queryParameters);
+    List<Account> accounts = List.empty();
+    try {
+      Response res = await get(uri, headers: <String, String>{
+        HttpHeaders.authorizationHeader: basicAuth(account.email, account.password),
+      });
+      if (res.statusCode == 200) {
+        accounts = (jsonDecode(res.body) as List)
+            .map((e) => Account.fromJson(e))
+            .toList();
+      }
+    } on Exception {
+      return List.empty();
+    }
+    return accounts;
+  }
 }

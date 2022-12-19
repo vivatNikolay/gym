@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
-class CustomSearchDelegate extends SearchDelegate {
-  // Demo list to show querying
-  List<String> searchTerms = [
-    "Apple",
-    "Banana",
-  ];
+import '../../../models/account.dart';
+import '../../../services/http/account_http_service.dart';
 
-  CustomSearchDelegate()
+class CustomSearchDelegate extends SearchDelegate {
+  AccountHttpService _accountHttpService = AccountHttpService();
+  final Account _account;
+
+  CustomSearchDelegate(this._account)
       : super(
           searchFieldLabel: 'Search sportsman',
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.search,
         );
 
-  // first overwrite to
-  // clear the search text
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -28,7 +26,6 @@ class CustomSearchDelegate extends SearchDelegate {
     ];
   }
 
-  // second overwrite to pop out of search menu
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
@@ -39,54 +36,32 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
-  // third overwrite to show query result
   @override
   Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    if (query.length > 1) {
-      for (var fruit in searchTerms) {
-        if (fruit.toLowerCase().contains(query.toLowerCase())) {
-          matchQuery.add(fruit);
-        }
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(matchQuery[index]),
-        );
-      },
-    );
+    return FutureBuilder<List<Account>>(
+        future: _accountHttpService.getSportsmen(_account, query),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          List<Account>? data = snapshot.data;
+          return ListView.builder(
+            itemCount: data?.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text('${data?[index].firstName}'),
+              );
+            },
+          );
+        });
   }
 
-  // last overwrite to show the
-  // querying process at the runtime
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [''];
-    if (query.length > 1) {
-      for (var fruit in searchTerms) {
-        if (fruit.toLowerCase().contains(query.toLowerCase())) {
-          matchQuery.add(fruit);
-        }
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return query.length > 1
-              ? Container()
-              : const Padding(
-                  padding: EdgeInsets.fromLTRB(7, 7, 0, 0),
-                  child: Text('Type at least 2 symbols'),
-                );
-        }
-        return ListTile(
-          title: Text(matchQuery[index]),
-        );
-      },
+    return const Center(
+      child: Text('Search User'),
     );
   }
 }

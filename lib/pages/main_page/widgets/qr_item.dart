@@ -13,14 +13,14 @@ class QrItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Container(
-        padding: const EdgeInsets.all(6),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(40),
         ),
         child: QrImage(
           data: data,
-          size: 200,
+          size: 190,
           backgroundColor: Colors.white,
         ),
       ),
