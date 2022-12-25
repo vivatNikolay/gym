@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../controllers/visit_http_controller.dart';
 import '../../helpers/constants.dart';
-import '../../controllers/http_controller.dart';
 import '../../models/visit.dart';
-import '../../services/db/account_db_service.dart';
 
 class HistoryOfSub extends StatefulWidget {
   const HistoryOfSub({Key? key}) : super(key: key);
@@ -14,8 +13,7 @@ class HistoryOfSub extends StatefulWidget {
 }
 
 class _HistoryOfSubState extends State<HistoryOfSub> {
-  final AccountDBService _accountDBService = AccountDBService();
-  final HttpController _httpController = HttpController.instance;
+  final VisitHttpController _visitHttpController = VisitHttpController.instance;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
   final DateFormat formatterWeekDay = DateFormat('E');
   late Future<List<Visit>> _futureVisits;
@@ -23,7 +21,7 @@ class _HistoryOfSubState extends State<HistoryOfSub> {
   @override
   void initState() {
     super.initState();
-    _futureVisits = _httpController.getVisitsByDates(_accountDBService.getFirst()!);
+    _futureVisits = _visitHttpController.getOwnVisitsByDates();
   }
 
   @override

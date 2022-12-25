@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../controllers/subscription_http_controller.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
 import '../../models/subscription.dart';
 import '../../services/db/account_db_service.dart';
-import '../../services/http/subscription_http_service.dart';
 import 'history_of_sub.dart';
 import 'widgets/qr_item.dart';
 
@@ -18,7 +18,7 @@ class SportsmanQrPage extends StatefulWidget {
 
 class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProviderStateMixin {
   final AccountDBService _accountDBService = AccountDBService();
-  final SubscriptionHttpService _httpService = SubscriptionHttpService();
+  final SubscriptionHttpController _subscriptionHttpController = SubscriptionHttpController.instance;
   Future<List<Subscription>>? _futureSubscription;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
   late AnimationController _animationController;
@@ -83,8 +83,8 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
               onPressed: () {
                 _animationController.forward(from: 0.0);
                 setState(() {
-                  _futureSubscription = _httpService
-                      .getByAccount(_accountDBService.getFirst()!);
+                  _futureSubscription = _subscriptionHttpController
+                      .getByAccount();
                 });
               },
               icon: RotationTransition(
@@ -94,8 +94,8 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
             ),
             onTap: () {
               setState(() {
-                _futureSubscription = _httpService
-                    .getByAccount(_accountDBService.getFirst()!);
+                _futureSubscription = _subscriptionHttpController
+                    .getByAccount();
               });
               if (_accountDBService.getFirst()!.subscriptions.isNotEmpty) {
                 Navigator.of(context).push(MaterialPageRoute(

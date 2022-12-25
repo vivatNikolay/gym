@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../controllers/account_http_controller.dart';
 import '../../../models/account.dart';
-import '../../../services/http/account_http_service.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
-  AccountHttpService _accountHttpService = AccountHttpService();
-  final Account _account;
+  final AccountHttpController _accountHttpController = AccountHttpController.instance;
 
-  CustomSearchDelegate(this._account)
+  CustomSearchDelegate()
       : super(
           searchFieldLabel: 'Search sportsman',
           keyboardType: TextInputType.text,
@@ -39,7 +38,7 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     return FutureBuilder<List<Account>>(
-        future: _accountHttpService.getSportsmen(_account, query),
+        future: _accountHttpController.getSportsmenByQuery(query),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(

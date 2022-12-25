@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:sportmen_in_gym/controllers/account_http_controller.dart';
 
 import '../../pages/login/widgets/login_button.dart';
 import '../../helpers/constants.dart';
-import '../../controllers/http_controller.dart';
 import '../../models/account.dart';
 import '../../services/db/account_db_service.dart';
 import 'widgets/field_name.dart';
@@ -17,7 +17,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final HttpController _httpController = HttpController.instance;
+  final AccountHttpController _accountHttpController = AccountHttpController.instance;
   final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
@@ -95,7 +95,7 @@ class _LoginState extends State<Login> {
                   LoginButton(
                     onPressed: () => setState(() {
                     if (validateFields()) {
-                      _futureAccount = _httpController.getAccount(
+                      _futureAccount = _accountHttpController.getAccount(
                           _loginController.text.trim(),
                           _passController.text);
                     }

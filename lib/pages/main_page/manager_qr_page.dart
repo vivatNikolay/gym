@@ -13,7 +13,6 @@ class ManagerQrPage extends StatefulWidget {
 }
 
 class _ManagerQrPageState extends State<ManagerQrPage> {
-  final AccountDBService _accountDBService = AccountDBService();
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
 
   @override
@@ -57,7 +56,7 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
                     showSearch(
                       context: context,
                       delegate:
-                          CustomSearchDelegate(_accountDBService.getFirst()!),
+                          CustomSearchDelegate(),
                     );
                   },
                   icon:

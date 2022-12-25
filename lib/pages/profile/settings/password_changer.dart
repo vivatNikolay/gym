@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sportmen_in_gym/controllers/account_http_controller.dart';
 
 import '../../../pages/profile/settings/widgets/setting_pack.dart';
 import '../../../pages/widgets/my_text_field.dart';
-import '../../../controllers/http_controller.dart';
 import '../../../models/account.dart';
 import '../../../services/db/account_db_service.dart';
 
@@ -15,7 +15,7 @@ class PasswordChanger extends StatefulWidget {
 
 class _PasswordChangerState extends State<PasswordChanger> {
   late Account _account;
-  final HttpController _httpController = HttpController.instance;
+  final AccountHttpController _accountHttpController = AccountHttpController.instance;
   final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _oldPassController = TextEditingController();
   final TextEditingController _newPass1Controller = TextEditingController();
@@ -55,7 +55,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
             onPressed: () async {
               ScaffoldMessenger.of(context).clearSnackBars();
               if (validateFields()) {
-                bool success = await _httpController.putAccount(Account(
+                bool success = await _accountHttpController.putAccount(Account(
                     id: _account.id,
                     email: _account.email,
                     password: _newPass2Controller.text,

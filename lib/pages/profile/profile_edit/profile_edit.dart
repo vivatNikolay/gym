@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../controllers/account_http_controller.dart';
 import '../../../pages/profile/profile_edit/image_selector.dart';
 import '../../../pages/profile/profile_edit/widgets/gender_switcher.dart';
 import '../../../models/account.dart';
-import '../../../controllers/http_controller.dart';
 import '../../../services/db/account_db_service.dart';
 import '../../widgets/my_text_field.dart';
 import '../widgets/circle_image.dart';
@@ -18,7 +18,7 @@ class ProfileEdit extends StatefulWidget {
 
 class _ProfileEditState extends State<ProfileEdit> {
   Account _account;
-  final HttpController _httpController = HttpController.instance;
+  final AccountHttpController _accountHttpController = AccountHttpController.instance;
   final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -61,7 +61,7 @@ class _ProfileEditState extends State<ProfileEdit> {
             onPressed: () async {
               ScaffoldMessenger.of(context).clearSnackBars();
               if (validateFields()) {
-                bool success = await _httpController.putAccount(Account(
+                bool success = await _accountHttpController.putAccount(Account(
                     id: _account.id,
                     email: _account.email,
                     password: _account.password,
