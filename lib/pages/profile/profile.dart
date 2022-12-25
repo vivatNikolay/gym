@@ -90,7 +90,7 @@ class _ProfileState extends State<Profile> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                              const ProfileEdit()));
+                              ProfileEdit(account: account!)));
                       setState(() {
                         account = _accountDBService.getFirst();
                       });

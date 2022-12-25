@@ -9,14 +9,15 @@ import '../../widgets/my_text_field.dart';
 import '../widgets/circle_image.dart';
 
 class ProfileEdit extends StatefulWidget {
-  const ProfileEdit({Key? key}) : super(key: key);
+  final Account account;
+  ProfileEdit({required this.account, Key? key}) : super(key: key);
 
   @override
-  State<ProfileEdit> createState() => _ProfileEditState();
+  State<ProfileEdit> createState() => _ProfileEditState(account);
 }
 
 class _ProfileEditState extends State<ProfileEdit> {
-  late Account _account;
+  Account _account;
   final HttpController _httpController = HttpController.instance;
   final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _nameController = TextEditingController();
@@ -26,13 +27,12 @@ class _ProfileEditState extends State<ProfileEdit> {
   late ValueNotifier<bool> _gender;
   late ValueNotifier<int> _iconNum;
 
-  _ProfileEditState();
+  _ProfileEditState(this._account);
 
   @override
   void initState() {
     super.initState();
 
-    _account = _accountDBService.getFirst()!;
     _nameController.text = _account.firstName;
     _phoneController.text = _account.phone;
     _nameValidator = ValueNotifier(true);
