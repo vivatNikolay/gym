@@ -5,7 +5,6 @@ import '../../../helpers/constants.dart';
 
 class QrItem extends StatelessWidget {
   final String data;
-  late double currentBrightness;
 
   QrItem({required this.data, Key? key}) : super(key: key);
 
@@ -24,10 +23,7 @@ class QrItem extends StatelessWidget {
           backgroundColor: Colors.white,
         ),
       ),
-      onTap: () async {
-        await ScreenBrightness()
-            .current
-            .then((value) => currentBrightness = value);
+      onTap: () {
         ScreenBrightness().setScreenBrightness(1);
         showDialog(
           context: context,
@@ -73,7 +69,7 @@ class QrItem extends StatelessWidget {
             ),
           ),
         ).then((value) => ScreenBrightness()
-            .setScreenBrightness(currentBrightness));
+            .resetScreenBrightness());
       },
     );
   }
