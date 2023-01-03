@@ -20,15 +20,16 @@ class AccountHttpService extends HttpService<Account>{
     }
   }
 
-  Future<bool> update(Account account) async {
+  Future<bool> update(Account ownAccount, Account newAccount) async {
     final uri = Uri.http(url, '/account/update');
     try {
       Response res = await put(uri,
           headers: <String, String>{
-            HttpHeaders.authorizationHeader: basicAuth(account.email, account.password),
+            HttpHeaders.authorizationHeader: basicAuth(ownAccount.email, ownAccount.password),
             HttpHeaders.contentTypeHeader: 'application/json',
           },
-          body: jsonEncode(account.toJson()));
+          body: jsonEncode(newAccount.toJson()));
+      print(res.statusCode);
       if (res.statusCode == 200) {
         return true;
       }

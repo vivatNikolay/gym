@@ -23,8 +23,8 @@ class AccountHttpController {
     }
   }
 
-  Future<bool> putAccount(Account account) async {
-    return await _httpService.update(account);
+  Future<bool> putAccount(Account newAccount) async {
+    return await _httpService.update(_accountDBService.getFirst()!, newAccount);
   }
 
   Future<List<Account>> getSportsmenByQuery(String query) async {
