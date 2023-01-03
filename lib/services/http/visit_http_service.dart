@@ -34,4 +34,18 @@ class VisitHttpService extends HttpService<Visit>{
       throw "Unable to retrieve visits.";
     }
   }
+
+  Future<bool> addVisitToSportsman(Account account, ownAccount) async {
+    final params = {"id": "${account.id}"};
+    final uri = Uri.http(url, '/manager/addVisit', params);
+    Response res = await post(uri,
+        headers: <String, String>{
+          'authorization' : basicAuth(ownAccount.email, ownAccount.password)
+        });
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

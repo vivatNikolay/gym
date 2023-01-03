@@ -1,44 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'subscription.dart';
+part of 'visit.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SubscriptionAdapter extends TypeAdapter<Subscription> {
+class VisitAdapter extends TypeAdapter<Visit> {
   @override
-  final int typeId = 1;
+  final int typeId = 7;
 
   @override
-  Subscription read(BinaryReader reader) {
+  Visit read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Subscription(
+    return Visit(
       id: fields[0] as int,
-      dateOfPurchase: fields[1] as DateTime,
-      dateOfEnd: fields[2] as DateTime,
-      numberOfVisits: fields[3] as int,
-      visits: (fields[4] as List).cast<Visit>(),
+      date: fields[1] as DateTime,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Subscription obj) {
+  void write(BinaryWriter writer, Visit obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.dateOfPurchase)
-      ..writeByte(2)
-      ..write(obj.dateOfEnd)
-      ..writeByte(3)
-      ..write(obj.numberOfVisits)
-      ..writeByte(4)
-      ..write(obj.visits);
+      ..write(obj.date);
   }
 
   @override
@@ -47,7 +38,7 @@ class SubscriptionAdapter extends TypeAdapter<Subscription> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SubscriptionAdapter &&
+      other is VisitAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

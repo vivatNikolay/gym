@@ -18,4 +18,9 @@ class VisitHttpController {
     List<Visit> visits = await _httpService.getBySubscription(_accountDBService.getFirst()!);
     return visits;
   }
+
+  Future<bool> addVisitToSportsman(Account account) async {
+    bool success = await _httpService.addVisitToSportsman(account, _accountDBService.getFirst()!);
+    return success;
+  }
 }

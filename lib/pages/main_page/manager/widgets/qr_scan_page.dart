@@ -2,7 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import '../../../helpers/constants.dart';
+import '../manager_profile.dart';
+import '../../../../helpers/constants.dart';
 
 class QrScanPage extends StatefulWidget {
   const QrScanPage({Key? key}) : super(key: key);
@@ -12,13 +13,13 @@ class QrScanPage extends StatefulWidget {
 }
 
 class _QrScanPageState extends State<QrScanPage> {
-  Barcode? result;
-  QRViewController? controller;
+  String? result;
+  QRViewController? qrController;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   @override
   void dispose() {
-    controller?.dispose();
+    qrController?.dispose();
     super.dispose();
   }
 
@@ -54,16 +55,17 @@ class _QrScanPageState extends State<QrScanPage> {
         color: Colors.white30
     ),
     child: Text(
-      result != null ? 'Result : ${result!.code}' : 'Scan QR code',
+      result != null ? 'Result : ${result!}' : 'Scan QR code',
       maxLines: 3,
       style: const TextStyle(color: Colors.white, fontSize: 18),
     ),
   );
 
   void _onQRViewCreated(QRViewController controller) {
-    setState(() => this.controller = controller);
+    setState(() => qrController = controller);
     controller.scannedDataStream.listen((scanData) {
-      setState(() => result = scanData);
+      setState(() => result = scanData.code!);
+      profileRoute();
     });
     controller.resumeCamera();
   }
@@ -73,8 +75,16 @@ class _QrScanPageState extends State<QrScanPage> {
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      controller!.pauseCamera();
+      qrController!.pauseCamera();
     }
-    controller!.resumeCamera();
+    qrController!.resumeCamera();
+  }
+
+  void profileRoute() async {
+    qrController?.pauseCamera();
+    await Navigator.push(context,
+        MaterialPageRoute(
+            builder: (context) => ManagerProfile(email: result!)))
+    .then((value) => qrController!.resumeCamera());
   }
 }

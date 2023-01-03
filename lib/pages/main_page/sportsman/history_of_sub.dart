@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../controllers/visit_http_controller.dart';
-import '../../helpers/constants.dart';
-import '../../models/visit.dart';
+import '../../../controllers/visit_http_controller.dart';
+import '../../../helpers/constants.dart';
+import '../../../models/visit.dart';
 
 class HistoryOfSub extends StatefulWidget {
   const HistoryOfSub({Key? key}) : super(key: key);

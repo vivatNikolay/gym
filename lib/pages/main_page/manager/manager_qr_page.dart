@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../services/db/account_db_service.dart';
 import 'widgets/custom_search_delegate.dart';
 import 'widgets/qr_scan_page.dart';
 

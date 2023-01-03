@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../controllers/subscription_http_controller.dart';
-import '../../helpers/constants.dart';
-import '../../models/account.dart';
-import '../../models/subscription.dart';
-import '../../services/db/account_db_service.dart';
+import '../../../controllers/subscription_http_controller.dart';
+import '../../../helpers/constants.dart';
+import '../../../models/account.dart';
+import '../../../models/subscription.dart';
+import '../../../services/db/account_db_service.dart';
 import 'history_of_sub.dart';
 import 'widgets/qr_item.dart';
 
@@ -26,6 +26,9 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
   @override
   void initState() {
     super.initState();
+
+    _futureSubscription = _subscriptionHttpController
+        .getByAccount();
 
     _animationController = AnimationController(
       vsync: this,
@@ -116,7 +119,7 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
           .isBefore(DateTime.now())) {
         return 'Expired in ${formatterDate.format(subscription.dateOfEnd)}';
       } else {
-        return '${subscription.visitCounter}/${subscription.numberOfVisits} '
+        return '${subscription.visits.length}/${subscription.numberOfVisits} '
             'until ${formatterDate.format(subscription.dateOfEnd)}';
       }
     }

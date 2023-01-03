@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import '../../../helpers/constants.dart';
+import '../../../../helpers/constants.dart';
 
 class QrItem extends StatelessWidget {
   final String data;
