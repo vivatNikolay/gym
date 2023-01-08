@@ -51,6 +51,7 @@ class CustomSearchDelegate extends SearchDelegate {
             itemCount: data?.length,
             itemBuilder: (context, index) {
               return Card(
+                color: Theme.of(context).primaryColor,
                 child: ListTile(
                   leading: Image.asset('images/profileImg${data?[index].iconNum}.png'),
                   title: Text('${data?[index].firstName}'),

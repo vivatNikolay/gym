@@ -20,4 +20,12 @@ class SubscriptionHttpController {
     _dbService.put(account);
     return subscriptions;
   }
+
+  Future<bool> addMembership(int accountId, DateTime dateOfPurchase,
+      DateTime dateOfEnd, String numberOfVisits) async {
+    bool success = await _httpService.addMembership(
+        _dbService.getFirst()!, accountId, dateOfPurchase.toString().substring(0, 10),
+        dateOfEnd.toString().substring(0, 10), numberOfVisits);
+    return success;
+  }
 }

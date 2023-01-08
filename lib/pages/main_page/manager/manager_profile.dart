@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sportmen_in_gym/controllers/visit_http_controller.dart';
 
+import '../../../controllers/visit_http_controller.dart';
 import '../../../controllers/account_http_controller.dart';
-import '../../../helpers/constants.dart';
+import '../../../models/subscription.dart';
 import '../../../models/account.dart';
+import '../../../helpers/constants.dart';
 
 class ManagerProfile extends StatefulWidget {
   final String email;
@@ -19,8 +20,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
   final String email;
   final AccountHttpController _accountHttpController =
       AccountHttpController.instance;
-  final VisitHttpController _visitHttpController =
-      VisitHttpController.instance;
+  final VisitHttpController _visitHttpController = VisitHttpController.instance;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
   late Future<Account> _futureAccount;
 
@@ -136,8 +136,12 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                     ),
                                   ),
                                 ),
-                                onPressed: () {
-                                  _visitHttpController.addVisitToSportsman(snapshot.data!);
+                                onPressed: () async {
+                                  await _visitHttpController.addVisitToSportsman(snapshot.data!)
+                                      .then((value) => value ? ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text('Visit added'),
+                                  )) : null);
                                 },
                                 icon: const Icon(Icons.add),
                                 label: const Text("Add visit"),
@@ -154,9 +158,13 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                 ),
                               ),
                             ),
-                            onPressed: () {
-                              //if membership is inactive
-                            },
+                            onPressed: isMembershipInactive(
+                                    snapshot.data!.subscriptions)
+                                ? () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) => AddMembership(snapshot.data!.id)));
+                            }
+                                : null,
                             icon: const Icon(Icons.add_card),
                             label: const Text("Add new membership"),
                           ),
@@ -176,5 +184,17 @@ class _ManagerProfileState extends State<ManagerProfile> {
       'No connection or not found',
       style: TextStyle(fontSize: 23.0),
     ));
+  }
+
+  bool isMembershipInactive(List<Subscription> subscriptions) {
+    if (subscriptions.isEmpty) {
+      return true;
+    }
+    Subscription subscription = subscriptions.last;
+    if (subscription.dateOfEnd.isBefore(DateTime.now()) ||
+        subscription.visits.length >= subscription.numberOfVisits) {
+      return true;
+    }
+    return false;
   }
 }

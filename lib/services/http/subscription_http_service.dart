@@ -6,7 +6,7 @@ import '../../models/account.dart';
 import '../../models/subscription.dart';
 import 'http_service.dart';
 
-class SubscriptionHttpService extends HttpService<Subscription>{
+class SubscriptionHttpService extends HttpService<Subscription> {
 
   Future<List<Subscription>> getByAccount(Account account) async {
     final uri = Uri.http(url, '/sportsmanDetails/subscriptions/${account.id}');
@@ -25,5 +25,30 @@ class SubscriptionHttpService extends HttpService<Subscription>{
     } on SocketException catch (_) {
       throw Exception('No connection');
     }
+  }
+
+  Future<bool> addMembership(Account ownAccount, int accountId,
+      String dateOfPurchase, String dateOfEnd, String numberOfVisits) async {
+    final params = {
+      "accountId": "$accountId",
+      "dateOfPurchase": dateOfPurchase,
+      "dateOfEnd": dateOfEnd,
+      "numberOfVisits": numberOfVisits
+    };
+    final uri = Uri.http(url, '/manager/addMembership', params);
+    try {
+      Response res = await post(uri,
+          headers: <String, String>{
+            HttpHeaders.authorizationHeader:
+                basicAuth(ownAccount.email, ownAccount.password),
+            HttpHeaders.contentTypeHeader: 'application/json',
+          });
+      if (res.statusCode == 200) {
+        return true;
+      }
+    } on Exception {
+      return false;
+    }
+    return false;
   }
 }
