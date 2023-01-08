@@ -6,6 +6,7 @@ import '../../../controllers/account_http_controller.dart';
 import '../../../models/subscription.dart';
 import '../../../models/account.dart';
 import '../../../helpers/constants.dart';
+import 'widgets/add_membership.dart';
 
 class ManagerProfile extends StatefulWidget {
   final String email;
