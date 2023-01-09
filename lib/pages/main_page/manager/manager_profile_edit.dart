@@ -4,22 +4,20 @@ import '../../../controllers/account_http_controller.dart';
 import '../../../pages/profile/profile_edit/image_selector.dart';
 import '../../../pages/profile/profile_edit/widgets/gender_switcher.dart';
 import '../../../models/account.dart';
-import '../../../services/db/account_db_service.dart';
+import '../../profile/widgets/circle_image.dart';
 import '../../widgets/my_text_field.dart';
-import '../widgets/circle_image.dart';
 
-class ProfileEdit extends StatefulWidget {
+class ManagerProfileEdit extends StatefulWidget {
   final Account account;
-  ProfileEdit({required this.account, Key? key}) : super(key: key);
+  ManagerProfileEdit({required this.account, Key? key}) : super(key: key);
 
   @override
-  State<ProfileEdit> createState() => _ProfileEditState(account);
+  State<ManagerProfileEdit> createState() => _ManagerProfileEditState(account);
 }
 
-class _ProfileEditState extends State<ProfileEdit> {
+class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   Account _account;
   final AccountHttpController _accountHttpController = AccountHttpController.instance;
-  final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   late ValueNotifier<bool> _nameValidator;
@@ -27,7 +25,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   late ValueNotifier<bool> _gender;
   late ValueNotifier<int> _iconNum;
 
-  _ProfileEditState(this._account);
+  _ManagerProfileEditState(this._account);
 
   @override
   void initState() {
@@ -61,7 +59,7 @@ class _ProfileEditState extends State<ProfileEdit> {
             onPressed: () async {
               ScaffoldMessenger.of(context).clearSnackBars();
               if (validateFields()) {
-                bool success = await _accountHttpController.editOwnAccount(Account(
+                bool success = await _accountHttpController.editAccount(Account(
                     id: _account.id,
                     email: _account.email,
                     password: _account.password,
@@ -73,11 +71,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                     subscriptions: _account.subscriptions,
                     role: _account.role));
                 if (success) {
-                  _account.firstName = _nameController.text.trim();
-                  _account.phone = _phoneController.text.trim();
-                  _account.gender = _gender.value;
-                  _account.iconNum = _iconNum.value;
-                  _accountDBService.put(_account);
                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

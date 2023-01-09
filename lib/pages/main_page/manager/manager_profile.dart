@@ -6,6 +6,7 @@ import '../../../controllers/account_http_controller.dart';
 import '../../../models/subscription.dart';
 import '../../../models/account.dart';
 import '../../../helpers/constants.dart';
+import 'manager_profile_edit.dart';
 import 'widgets/add_membership.dart';
 
 class ManagerProfile extends StatefulWidget {
@@ -122,6 +123,9 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                   ),
                                 ),
                                 onPressed: () async {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => ManagerProfileEdit(
+                                          account: snapshot.data!)));
                                 },
                                 icon: const Icon(Icons.edit),
                                 label: const Text("Edit profile"),

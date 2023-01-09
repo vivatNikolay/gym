@@ -39,6 +39,25 @@ class AccountHttpService extends HttpService<Account>{
     return false;
   }
 
+  Future<bool> edit(Account ownAccount, Account newAccount) async {
+    final uri = Uri.http(url, '/manager/edit');
+    try {
+      Response res = await put(uri,
+          headers: <String, String>{
+            HttpHeaders.authorizationHeader: basicAuth(ownAccount.email, ownAccount.password),
+            HttpHeaders.contentTypeHeader: 'application/json',
+          },
+          body: jsonEncode(newAccount.toJson()));
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        return true;
+      }
+    } on Exception {
+      return false;
+    }
+    return false;
+  }
+
   Future<List<Account>> getSportsmenByQuery(Account account, String query) async {
     final queryParameters = {
       'query': query,
