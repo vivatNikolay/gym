@@ -12,6 +12,7 @@ class AccountHttpService extends HttpService<Account>{
     Response res = await get(uri, headers: <String, String>{
       HttpHeaders.authorizationHeader: basicAuth(email, pass)
     });
+    print(res.body);
     if (res.statusCode == 200) {
       Account account = Account.fromJson(jsonDecode(res.body));
       return account;

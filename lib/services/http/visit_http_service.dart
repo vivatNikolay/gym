@@ -8,7 +8,7 @@ import 'http_service.dart';
 class VisitHttpService extends HttpService<Visit>{
 
   Future<List<Visit>> getByAccount(Account account) async {
-    final uri = Uri.http(url, '/sportsmanDetails/visits/${account.id}');
+    final uri = Uri.http(url, '/sportsmanDetails/visits/${account.email}');
     Response res = await get(uri,
         headers: <String, String>{
           'authorization' : basicAuth(account.email, account.password)
@@ -22,7 +22,7 @@ class VisitHttpService extends HttpService<Visit>{
   }
 
   Future<List<Visit>> getBySubscription(Account account) async {
-    final uri = Uri.http(url, '/sportsmanDetails/visitsBySubscription/${account.id}');
+    final uri = Uri.http(url, '/sportsmanDetails/visitsBySubscription/${account.email}');
     Response res = await get(uri,
         headers: <String, String>{
           'authorization' : basicAuth(account.email, account.password)
@@ -36,7 +36,7 @@ class VisitHttpService extends HttpService<Visit>{
   }
 
   Future<bool> addVisitToSportsman(Account account, ownAccount) async {
-    final params = {"id": "${account.id}"};
+    final params = {"email": account.email};
     final uri = Uri.http(url, '/manager/addVisit', params);
     Response res = await post(uri,
         headers: <String, String>{

@@ -7,9 +7,9 @@ part 'account.g.dart';
 @HiveType(typeId:0)
 class Account extends HiveObject{
   @HiveField(0)
-  int id;
-  @HiveField(1)
   String email;
+  @HiveField(1)
+  String lastName;
   @HiveField(2)
   String password;
   @HiveField(3)
@@ -28,8 +28,8 @@ class Account extends HiveObject{
   String role;
 
   Account({
-    required this.id,
     required this.email,
+    required this.lastName,
     required this.password,
     required this.phone,
     required this.firstName,
@@ -46,8 +46,8 @@ class Account extends HiveObject{
         .toList();
 
     return Account(
-        id: json["id"],
         email: json["email"],
+        lastName: 'json["lastName"]',
         password: json["password"],
         phone: json["phone"],
         firstName: json["firstName"],
@@ -60,8 +60,8 @@ class Account extends HiveObject{
   }
 
   Map<String, dynamic> toJson() => {
-      'id': id,
       'email': email,
+      'lastName': lastName,
       'password': password,
       'phone': phone,
       'firstName': firstName,
@@ -75,7 +75,7 @@ class Account extends HiveObject{
   @override
   String toString() {
     return 'Account{'
-        'id: $id, email: $email, password: $password, phone: $phone, '
+        'email: $email, lastName: $lastName, password: $password, phone: $phone, '
         'firstName: $firstName, gender: $gender, iconNum: $iconNum,'
         ' dateOfBirth: $dateOfBirth, subscription: $subscriptions},'
         'role: $role';

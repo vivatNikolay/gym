@@ -167,7 +167,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                     snapshot.data!.subscriptions)
                                 ? () {
                               Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => AddMembership(snapshot.data!.id)));
+                                  MaterialPageRoute(builder: (context) => AddMembership(snapshot.data!.email)));
                             }
                                 : null,
                             icon: const Icon(Icons.add_card),

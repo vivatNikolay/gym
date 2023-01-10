@@ -69,7 +69,9 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
                 borderRadius: BorderRadius.circular(18),
               ),
               child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+
+                  },
                   icon: const Icon(Icons.add, size: 34, color: Colors.black)),
             ),
           ],

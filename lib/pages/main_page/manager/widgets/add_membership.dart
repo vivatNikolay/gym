@@ -4,23 +4,23 @@ import 'package:intl/intl.dart';
 import '../../../../controllers/subscription_http_controller.dart';
 
 class AddMembership extends StatefulWidget {
-  final int _accountId;
-  const AddMembership(this._accountId, {Key? key}) : super(key: key);
+  final String email;
+  const AddMembership(this.email, {Key? key}) : super(key: key);
 
   @override
-  State<AddMembership> createState() => _AddMembershipState(_accountId);
+  State<AddMembership> createState() => _AddMembershipState(email);
 }
 
 class _AddMembershipState extends State<AddMembership> {
   final SubscriptionHttpController _subscriptionHttpController = SubscriptionHttpController.instance;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
-  final int _accountId;
+  final String _email;
   final TextEditingController _dateOfPurchaseController = TextEditingController();
   final TextEditingController _dateOfEndController = TextEditingController();
   final TextEditingController _numberOfVisitsController = TextEditingController();
   late ValueNotifier<bool> _numberOfVisitsValidation;
 
-  _AddMembershipState(this._accountId);
+  _AddMembershipState(this._email);
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _AddMembershipState extends State<AddMembership> {
             onPressed: () async {
               ScaffoldMessenger.of(context).clearSnackBars();
               bool success = await _subscriptionHttpController.addMembership(
-                  _accountId,
+                  _email,
                   formatterDate.parse(_dateOfPurchaseController.text),
                   formatterDate.parse(_dateOfEndController.text),
                   _numberOfVisitsController.text);

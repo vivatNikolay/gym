@@ -62,8 +62,8 @@ class _ProfileEditState extends State<ProfileEdit> {
               ScaffoldMessenger.of(context).clearSnackBars();
               if (validateFields()) {
                 bool success = await _accountHttpController.editOwnAccount(Account(
-                    id: _account.id,
                     email: _account.email,
+                    lastName: _account.lastName,
                     password: _account.password,
                     phone: _phoneController.text.trim(),
                     firstName: _nameController.text.trim(),

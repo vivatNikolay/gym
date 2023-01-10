@@ -56,8 +56,8 @@ class _PasswordChangerState extends State<PasswordChanger> {
               ScaffoldMessenger.of(context).clearSnackBars();
               if (validateFields()) {
                 bool success = await _accountHttpController.editOwnAccount(Account(
-                    id: _account.id,
                     email: _account.email,
+                    lastName: _account.lastName,
                     password: _newPass2Controller.text,
                     phone: _account.phone,
                     firstName: _account.firstName,

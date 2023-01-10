@@ -21,10 +21,10 @@ class SubscriptionHttpController {
     return subscriptions;
   }
 
-  Future<bool> addMembership(int accountId, DateTime dateOfPurchase,
+  Future<bool> addMembership(String email, DateTime dateOfPurchase,
       DateTime dateOfEnd, String numberOfVisits) async {
     bool success = await _httpService.addMembership(
-        _dbService.getFirst()!, accountId, dateOfPurchase.toString().substring(0, 10),
+        _dbService.getFirst()!, email, dateOfPurchase.toString().substring(0, 10),
         dateOfEnd.toString().substring(0, 10), numberOfVisits);
     return success;
   }

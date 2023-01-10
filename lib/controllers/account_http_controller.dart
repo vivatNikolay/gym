@@ -17,6 +17,7 @@ class AccountHttpController {
   Future<Account> getAccount(String email, String pass) async {
     Account account = await _httpService.login(email, pass);
     if (pass == account.password) {
+      print(account);
       return account;
     } else {
       throw "Incorrect password";

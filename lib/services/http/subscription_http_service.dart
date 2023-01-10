@@ -9,7 +9,7 @@ import 'http_service.dart';
 class SubscriptionHttpService extends HttpService<Subscription> {
 
   Future<List<Subscription>> getByAccount(Account account) async {
-    final uri = Uri.http(url, '/sportsmanDetails/subscriptions/${account.id}');
+    final uri = Uri.http(url, '/sportsmanDetails/subscriptions/${account.email}');
     try {
       Response res = await get(uri, headers: <String, String>{
         HttpHeaders.authorizationHeader: basicAuth(account.email, account.password)
@@ -27,10 +27,10 @@ class SubscriptionHttpService extends HttpService<Subscription> {
     }
   }
 
-  Future<bool> addMembership(Account ownAccount, int accountId,
+  Future<bool> addMembership(Account ownAccount, String email,
       String dateOfPurchase, String dateOfEnd, String numberOfVisits) async {
     final params = {
-      "accountId": "$accountId",
+      "email": email,
       "dateOfPurchase": dateOfPurchase,
       "dateOfEnd": dateOfEnd,
       "numberOfVisits": numberOfVisits
