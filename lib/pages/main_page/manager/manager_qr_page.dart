@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../models/account.dart';
+import 'manager_profile_edit.dart';
 import 'widgets/custom_search_delegate.dart';
 import 'widgets/qr_scan_page.dart';
 
@@ -70,7 +72,9 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
               ),
               child: IconButton(
                   onPressed: () {
-
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ManagerProfileEdit(
+                            account: Account.emptySportsman(), editEmail: true)));
                   },
                   icon: const Icon(Icons.add, size: 34, color: Colors.black)),
             ),

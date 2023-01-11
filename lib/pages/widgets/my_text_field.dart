@@ -10,17 +10,19 @@ class MyTextField extends StatelessWidget {
   double? fontSize;
   TextAlign? textAlign;
   bool inBox;
+  bool readOnly;
 
   MyTextField({
     required this.controller,
     required this.validation,
-    required this.inBox,
+    this.inBox = false,
     this.errorText,
     this.hintText,
     this.obscureText = false,
     this.autofocus = false,
     this.fontSize,
     this.textAlign,
+    this.readOnly = false,
     Key? key}) : super(key: key);
 
   @override
@@ -49,6 +51,7 @@ class MyTextField extends StatelessWidget {
         ),
         obscureText: obscureText,
         autofocus: autofocus,
+        readOnly: readOnly,
       ),
     );
   }

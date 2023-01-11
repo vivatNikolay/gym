@@ -40,6 +40,12 @@ class Account extends HiveObject{
     required this.role
   });
 
+  factory Account.emptySportsman() {
+    return Account(email: '', lastName: '', password: '1111', phone: '',
+        firstName: '', gender: true, iconNum: 1, dateOfBirth: DateTime.utc(2000),
+    subscriptions: List.empty(), role: 'USER');
+  }
+
   factory Account.fromJson(Map<String, dynamic> json) {
     List<Subscription> subscriptions = (List.from(json["subscriptions"]))
         .map((i) => Subscription.fromJson(i))
@@ -47,7 +53,7 @@ class Account extends HiveObject{
 
     return Account(
         email: json["email"],
-        lastName: 'json["lastName"]',
+        lastName: json["lastName"],
         password: json["password"],
         phone: json["phone"],
         firstName: json["firstName"],

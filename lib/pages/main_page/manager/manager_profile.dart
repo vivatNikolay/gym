@@ -125,7 +125,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                 onPressed: () async {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ManagerProfileEdit(
-                                          account: snapshot.data!)));
+                                          account: snapshot.data!, editEmail: false)));
                                 },
                                 icon: const Icon(Icons.edit),
                                 label: const Text("Edit profile"),
