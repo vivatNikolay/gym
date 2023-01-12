@@ -125,7 +125,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                 onPressed: () async {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ManagerProfileEdit(
-                                          account: snapshot.data!, editEmail: false)));
+                                          account: snapshot.data!, isEdit: true)));
                                 },
                                 icon: const Icon(Icons.edit),
                                 label: const Text("Edit profile"),
@@ -142,11 +142,12 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                   ),
                                 ),
                                 onPressed: () async {
-                                  await _visitHttpController.addVisitToSportsman(snapshot.data!)
-                                      .then((value) => value ? ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text('Visit added'),
-                                  )) : null);
+                                  bool success = await _visitHttpController
+                                      .addVisitToSportsman(snapshot.data!);
+                                  if (success) {
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                        content: Text('Visit added')));
+                                  }
                                 },
                                 icon: const Icon(Icons.add),
                                 label: const Text("Add visit"),

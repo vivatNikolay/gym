@@ -47,7 +47,7 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(2),
+              padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(18),
@@ -74,7 +74,7 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ManagerProfileEdit(
-                            account: Account.emptySportsman(), editEmail: true)));
+                            account: Account.emptySportsman(), isEdit: false)));
                   },
                   icon: const Icon(Icons.add, size: 34, color: Colors.black)),
             ),

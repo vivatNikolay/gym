@@ -11,18 +11,18 @@ import '../../widgets/my_text_field.dart';
 
 class ManagerProfileEdit extends StatefulWidget {
   final Account account;
-  final bool editEmail;
+  final bool isEdit;
 
-  const ManagerProfileEdit({required this.account, required this.editEmail, Key? key})
+  const ManagerProfileEdit({required this.account, required this.isEdit, Key? key})
       : super(key: key);
 
   @override
-  State<ManagerProfileEdit> createState() => _ManagerProfileEditState(account, editEmail);
+  State<ManagerProfileEdit> createState() => _ManagerProfileEditState(account, isEdit);
 }
 
 class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   final Account _account;
-  final bool _editEmail;
+  final bool _isEdit;
   final AccountHttpController _accountHttpController = AccountHttpController.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -37,7 +37,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   late ValueNotifier<int> _iconNum;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
 
-  _ManagerProfileEditState(this._account, this._editEmail);
+  _ManagerProfileEditState(this._account, this._isEdit);
 
   @override
   void initState() {
@@ -78,17 +78,36 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             onPressed: () async {
               ScaffoldMessenger.of(context).clearSnackBars();
               if (validateFields()) {
-                bool success = await _accountHttpController.editAccount(Account(
-                    email: _emailController.text.trim(),
-                    lastName: _lastNameController.text.trim(),
-                    password: _account.password == '' ? '1111' : _account.password,
-                    phone: _phoneController.text.trim(),
-                    firstName: _nameController.text.trim(),
-                    gender: _gender.value,
-                    iconNum: _iconNum.value,
-                    dateOfBirth: formatterDate.parse(_dateOfBirthController.text),
-                    subscriptions: _account.subscriptions,
-                    role: _account.role));
+                bool success;
+                if (_isEdit) {
+                  success = await _accountHttpController.editAccount(
+                      Account(
+                          email: _emailController.text.trim(),
+                          lastName: _lastNameController.text.trim(),
+                          password: _account.password,
+                          phone: _phoneController.text.trim(),
+                          firstName: _nameController.text.trim(),
+                          gender: _gender.value,
+                          iconNum: _iconNum.value,
+                          dateOfBirth: formatterDate.parse(
+                              _dateOfBirthController.text),
+                          subscriptions: _account.subscriptions,
+                          role: _account.role));
+                } else {
+                  success = await _accountHttpController.createAccount(
+                      Account(
+                          email: _emailController.text.trim(),
+                          lastName: _lastNameController.text.trim(),
+                          password: '1111',
+                          phone: _phoneController.text.trim(),
+                          firstName: _nameController.text.trim(),
+                          gender: _gender.value,
+                          iconNum: _iconNum.value,
+                          dateOfBirth: formatterDate.parse(
+                              _dateOfBirthController.text),
+                          subscriptions: _account.subscriptions,
+                          role: _account.role));
+                }
                 if (success) {
                   Navigator.pop(context);
                 } else {
@@ -125,7 +144,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               fontSize: 21,
               hintText: 'Email',
               textAlign: TextAlign.center,
-              readOnly: !_editEmail,
+              readOnly: _isEdit,
             ),
             const SizedBox(height: 5),
             MyTextField(

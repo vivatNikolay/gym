@@ -9,7 +9,7 @@ class Subscription {
   @HiveField(0)
   int id;
   @HiveField(1)
-  DateTime dateOfPurchase;
+  DateTime dateOfStart;
   @HiveField(2)
   DateTime dateOfEnd;
   @HiveField(3)
@@ -19,7 +19,7 @@ class Subscription {
 
   Subscription({
     required this.id,
-    required this.dateOfPurchase,
+    required this.dateOfStart,
     required this.dateOfEnd,
     required this.numberOfVisits,
     required this.visits
@@ -30,7 +30,7 @@ class Subscription {
 
     return Subscription(
       id : json["id"],
-      dateOfPurchase : DateTime.parse(json["dateOfPurchase"].toString()),
+      dateOfStart : DateTime.parse(json["dateOfStart"].toString()),
       dateOfEnd : DateTime.parse(json["dateOfEnd"].toString()),
       numberOfVisits : json["numberOfVisits"],
       visits: visits,
@@ -39,7 +39,7 @@ class Subscription {
 
   Map<String, dynamic> toJson() => {
       'id': id,
-      'dateOfPurchase': dateOfPurchase.toString().substring(0, 10),
+      'dateOfStart': dateOfStart.toString().substring(0, 10),
       'dateOfEnd': dateOfEnd.toString().substring(0, 10),
       'numberOfVisits': numberOfVisits,
       'visits': visits.map((e) => e.toJson()).toList(),
@@ -48,7 +48,7 @@ class Subscription {
   @override
   String toString() {
     return 'Subscription{'
-        'id: $id, dateOfPurchase: $dateOfPurchase, dateOfEnd: $dateOfEnd, '
+        'id: $id, dateOfStart: $dateOfStart, dateOfEnd: $dateOfEnd, '
         'numberOfVisits: $numberOfVisits, visitCounter: $visits'
         '}';
   }

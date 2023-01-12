@@ -32,6 +32,10 @@ class AccountHttpController {
     return await _httpService.edit(_accountDBService.getFirst()!, newAccount);
   }
 
+  Future<bool> createAccount(Account newAccount) async {
+    return await _httpService.create(_accountDBService.getFirst()!, newAccount);
+  }
+
   Future<List<Account>> getSportsmenByQuery(String query) async {
     return await _httpService.getSportsmenByQuery(_accountDBService.getFirst()!, query);
   }

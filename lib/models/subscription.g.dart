@@ -18,7 +18,7 @@ class SubscriptionAdapter extends TypeAdapter<Subscription> {
     };
     return Subscription(
       id: fields[0] as int,
-      dateOfPurchase: fields[1] as DateTime,
+      dateOfStart: fields[1] as DateTime,
       dateOfEnd: fields[2] as DateTime,
       numberOfVisits: fields[3] as int,
       visits: (fields[4] as List).cast<Visit>(),
@@ -32,7 +32,7 @@ class SubscriptionAdapter extends TypeAdapter<Subscription> {
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.dateOfPurchase)
+      ..write(obj.dateOfStart)
       ..writeByte(2)
       ..write(obj.dateOfEnd)
       ..writeByte(3)

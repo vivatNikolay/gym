@@ -41,7 +41,7 @@ class Account extends HiveObject{
   });
 
   factory Account.emptySportsman() {
-    return Account(email: '', lastName: '', password: '1111', phone: '',
+    return Account(email: '', lastName: '', password: '', phone: '',
         firstName: '', gender: true, iconNum: 1, dateOfBirth: DateTime.utc(2000),
     subscriptions: List.empty(), role: 'USER');
   }

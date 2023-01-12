@@ -28,10 +28,10 @@ class SubscriptionHttpService extends HttpService<Subscription> {
   }
 
   Future<bool> addMembership(Account ownAccount, String email,
-      String dateOfPurchase, String dateOfEnd, String numberOfVisits) async {
+      String dateOfStart, String dateOfEnd, String numberOfVisits) async {
     final params = {
       "email": email,
-      "dateOfPurchase": dateOfPurchase,
+      "dateOfStart": dateOfStart,
       "dateOfEnd": dateOfEnd,
       "numberOfVisits": numberOfVisits
     };

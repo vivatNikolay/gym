@@ -15,7 +15,7 @@ class _AddMembershipState extends State<AddMembership> {
   final SubscriptionHttpController _subscriptionHttpController = SubscriptionHttpController.instance;
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
   final String _email;
-  final TextEditingController _dateOfPurchaseController = TextEditingController();
+  final TextEditingController _dateOfStartController = TextEditingController();
   final TextEditingController _dateOfEndController = TextEditingController();
   final TextEditingController _numberOfVisitsController = TextEditingController();
   late ValueNotifier<bool> _numberOfVisitsValidation;
@@ -48,7 +48,7 @@ class _AddMembershipState extends State<AddMembership> {
               ScaffoldMessenger.of(context).clearSnackBars();
               bool success = await _subscriptionHttpController.addMembership(
                   _email,
-                  formatterDate.parse(_dateOfPurchaseController.text),
+                  formatterDate.parse(_dateOfStartController.text),
                   formatterDate.parse(_dateOfEndController.text),
                   _numberOfVisitsController.text);
               if (success) {
@@ -67,10 +67,10 @@ class _AddMembershipState extends State<AddMembership> {
         child: Column(
           children: [
             TextField(
-              controller: _dateOfPurchaseController,
+              controller: _dateOfStartController,
               decoration: const InputDecoration(
                 icon: Icon(Icons.calendar_today),
-                label: Text('Enter date of purchase'),
+                label: Text('Enter date of start'),
               ),
               readOnly: true,
               onTap: () async {
@@ -82,7 +82,7 @@ class _AddMembershipState extends State<AddMembership> {
                 );
                 if (pickedDate != null) {
                   setState(() =>
-                  _dateOfPurchaseController.text =
+                  _dateOfStartController.text =
                       formatterDate.format(pickedDate));
                 }
               },

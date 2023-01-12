@@ -17,18 +17,15 @@ class VisitAdapter extends TypeAdapter<Visit> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Visit(
-      id: fields[0] as int,
-      date: fields[1] as DateTime,
+      date: fields[0] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, Visit obj) {
     writer
-      ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.id)
       ..writeByte(1)
+      ..writeByte(0)
       ..write(obj.date);
   }
 
