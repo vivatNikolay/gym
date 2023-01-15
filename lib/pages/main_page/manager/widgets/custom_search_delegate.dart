@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../helpers/constants.dart';
 import '../../../../controllers/account_http_controller.dart';
 import '../../../../models/account.dart';
 import '../manager_profile.dart';
@@ -23,6 +24,20 @@ class CustomSearchDelegate extends SearchDelegate {
         },
         icon: const Icon(Icons.clear),
       ),
+      Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+          color: mainColor,
+        ),
+        child: IconButton(
+          onPressed: () {
+            showResults(context);
+          },
+          icon: const Icon(Icons.search, color: Colors.white,),
+        ),
+      ),
+      const SizedBox(width: 5,)
     ];
   }
 
@@ -38,8 +53,13 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    if (query.trim() == '') {
+      return const Center(
+        child: Text('Type something'),
+      );
+    }
     return FutureBuilder<List<Account>>(
-        future: _accountHttpController.getSportsmenByQuery(query),
+        future: _accountHttpController.getSportsmenByQuery(query.trim()),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -47,19 +67,24 @@ class CustomSearchDelegate extends SearchDelegate {
             );
           }
           List<Account>? data = snapshot.data;
+          if (data!.isEmpty) {
+            return const Center(
+              child: Text('Not found'),
+            );
+          }
           return ListView.builder(
-            itemCount: data?.length,
+            itemCount: data.length,
             itemBuilder: (context, index) {
               return Card(
                 color: Theme.of(context).primaryColor,
                 child: ListTile(
-                  leading: Image.asset('images/profileImg${data?[index].iconNum}.png'),
-                  title: Text('${data?[index].firstName}'),
-                  subtitle: Text('${data?[index].email}'),
+                  leading: Image.asset('images/profileImg${data[index].iconNum}.png'),
+                  title: Text('${data[index].firstName} ${data[index].lastName}'),
+                  subtitle: Text(data[index].email),
                   onTap: () async {
                     await Navigator.push(context,
                         MaterialPageRoute(
-                            builder: (context) => ManagerProfile(email: data![index].email)));
+                            builder: (context) => ManagerProfile(email: data[index].email)));
                   },
                 ),
               );
@@ -71,7 +96,7 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return const Center(
-      child: Text('Search User'),
+      child: Text('Search by first and last name'),
     );
   }
 }
