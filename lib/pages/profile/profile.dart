@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
 import '../../services/db/account_db_service.dart';
+import '../widgets/profile_row.dart';
 import 'profile_edit/profile_edit.dart';
 import 'settings/settings.dart';
 
@@ -39,65 +40,21 @@ class _ProfileState extends State<Profile> {
               gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomCenter,
-                colors: [mainColor, Color(0xFF413278)],
+                colors: [mainColor, Color(0xFF46377D)],
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 50.0,
-                    child:
-                        Image.asset('images/profileImg${account!.iconNum}.png'),
-                  ),
-                ),
-                Expanded(
-                  flex: 7,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Tooltip(
-                        message: account!.firstName,
-                        child: Text(account!.firstName,
-                            maxLines: 2,
-                            style: const TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                      ),
-                      Tooltip(
-                        message: account!.email,
-                        child: Text(account!.email,
-                            maxLines: 2,
-                            style: const TextStyle(
-                                fontSize: 19, color: Colors.white)),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: IconButton(
-                    icon: const Icon(Icons.edit, size: 30, color: Colors.white),
-                    splashColor: Colors.white,
-                    splashRadius: 30,
-                    onPressed: () async {
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                              ProfileEdit(account: account!)));
-                      setState(() {
-                        account = _accountDBService.getFirst();
-                      });
-                    },
-                  ),
-                ),
-              ],
+            child: ProfileRow(
+              account: account!,
+              onEdit: () async {
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ProfileEdit(account: account!)));
+                setState(() {
+                  account = _accountDBService.getFirst();
+                });
+              },
             ),
           ),
           const SizedBox(height: 15),

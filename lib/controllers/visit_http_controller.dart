@@ -14,13 +14,18 @@ class VisitHttpController {
 
   static VisitHttpController get instance => _instance;
 
-  Future<List<Visit>> getOwnVisitsByDates() async {
+  Future<List<Visit>> getOwnVisitsBySubscription() async {
     List<Visit> visits = await _httpService.getBySubscription(_accountDBService.getFirst()!);
     return visits;
   }
 
-  Future<bool> addVisitToSportsman(Account account) async {
-    bool success = await _httpService.addVisitToSportsman(account, _accountDBService.getFirst()!);
+  Future<bool> addSingleVisit(Account account) async {
+    bool success = await _httpService.addSingleVisit(account, _accountDBService.getFirst()!);
+    return success;
+  }
+
+  Future<bool> addVisitToMembership(Account account) async {
+    bool success = await _httpService.addVisitToMembership(account, _accountDBService.getFirst()!);
     return success;
   }
 }

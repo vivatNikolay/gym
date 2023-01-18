@@ -6,6 +6,7 @@ import '../../pages/training_list/widgets/add_button.dart';
 import '../../services/db/training_db_service.dart';
 import '../../models/training.dart';
 import '../widgets/my_text_field.dart';
+import '../widgets/confirm_dialog.dart';
 
 class TrainingList extends StatefulWidget {
   const TrainingList({Key? key}) : super(key: key);
@@ -152,30 +153,15 @@ class _TrainingListState extends State<TrainingList> {
 
   deletionDialog(int index) => showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Confirmation'),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0)),
-          content: const Text('Are you sure?'),
-          backgroundColor: Theme.of(context).backgroundColor,
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('No',
-                  style: TextStyle(color: mainColor, fontSize: 18)),
-            ),
-            TextButton(
-              onPressed: () async {
-                _dbService.delete(_trainings[index]);
-                setState(() {
-                  _trainings = _dbService.getAll();
-                });
-                Navigator.pop(context);
-              },
-              child: const Text('Yes',
-                  style: TextStyle(color: mainColor, fontSize: 18)),
-            ),
-          ],
+        builder: (context) => ConfirmDialog(
+          onNo: () => Navigator.pop(context),
+          onYes: () async {
+            _dbService.delete(_trainings[index]);
+            setState(() {
+              _trainings = _dbService.getAll();
+            });
+            Navigator.pop(context);
+          },
         ),
       );
 }

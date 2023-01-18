@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sportmen_in_gym/pages/home.dart';
 
 import '../../../controllers/visit_http_controller.dart';
 import '../../../controllers/account_http_controller.dart';
 import '../../../models/subscription.dart';
 import '../../../models/account.dart';
 import '../../../helpers/constants.dart';
+import '../../widgets/confirm_dialog.dart';
+import '../../widgets/profile_row.dart';
 import 'manager_profile_edit.dart';
 import 'widgets/add_membership.dart';
 
@@ -68,7 +69,6 @@ class _ManagerProfileState extends State<ManagerProfile> {
                       return Container(
                         padding: const EdgeInsets.all(2),
                         margin: const EdgeInsets.symmetric(vertical: 2),
-                        height: 210,
                         decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(15.0)),
@@ -76,109 +76,118 @@ class _ManagerProfileState extends State<ManagerProfile> {
                         ),
                         child: Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 4,
-                                  child: CircleAvatar(
-                                    backgroundColor:
-                                        Theme.of(context).backgroundColor,
-                                    radius: 50.0,
-                                    child: Image.asset(
-                                        'images/profileImg${snapshot.data!.iconNum}.png'),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 7,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Tooltip(
-                                        message: snapshot.data!.firstName,
-                                        child: Text(snapshot.data!.firstName,
-                                            maxLines: 2,
-                                            style: const TextStyle(
-                                                fontSize: 28,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                      Tooltip(
-                                        message: snapshot.data!.email,
-                                        child: Text(snapshot.data!.email,
-                                            maxLines: 2,
-                                            style: const TextStyle(fontSize: 19)),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                            ProfileRow(
+                              account: snapshot.data!,
+                              onEdit: () async {
+                                await Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => ManagerProfileEdit(
+                                        account: snapshot.data!, isEdit: true)));
+                                setState(() {
+
+                                });
+                              },
                             ),
                             const SizedBox(height: 4),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(
-                                    fixedSize: const Size.fromWidth(140),
-                                    backgroundColor: mainColor,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => ManagerProfileEdit(
-                                            account: snapshot.data!, isEdit: true)));
-                                  },
-                                  icon: const Icon(Icons.edit),
-                                  label: const Text("Edit profile"),
+                            Card(
+                              elevation: 2,
+                              color: Theme.of(context).backgroundColor,
+                              child: ListTile(
+                                leading: const Icon(Icons.credit_card,
+                                    size: 26, color: mainColor),
+                                minLeadingWidth: 22,
+                                title: const Text(
+                                  'Membership',
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black),
                                 ),
-                                const SizedBox(width: 20),
-                                ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(
-                                    fixedSize: const Size.fromWidth(140),
-                                    backgroundColor: mainColor,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    bool success = await _visitHttpController
-                                        .addVisitToSportsman(snapshot.data!);
-                                    if (success) {
-                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                          content: Text('Visit added')));
+                                subtitle: Text(
+                                  getProgress(snapshot.data!.subscriptions),
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.add,
+                                      size: 32, color: mainColor),
+                                  onPressed: () {
+                                    if (isMembershipInactive(
+                                        snapshot.data!.subscriptions)) {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddMembership(
+                                                      snapshot.data!.email)));
+                                    } else {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => ConfirmDialog(
+                                          textConfirmation: 'Add a visit to membership?',
+                                          onNo: () => Navigator.pop(context),
+                                          onYes: () async {
+                                            bool success =
+                                                await _visitHttpController
+                                                    .addVisitToMembership(
+                                                        snapshot.data!);
+                                            if (success) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      content: Text(
+                                                          'Visit added to membership')));
+                                            }
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      );
                                     }
                                   },
-                                  icon: const Icon(Icons.add),
-                                  label: const Text("Add visit"),
                                 ),
-                              ],
-                            ),
-                            ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                fixedSize: const Size.fromWidth(300),
-                                backgroundColor: mainColor,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
+                                onTap: () async {
+                                  //show visits of membership
+                                },
                               ),
-                              onPressed: isMembershipInactive(
-                                      snapshot.data!.subscriptions)
-                                  ? () {
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(builder: (context) => AddMembership(snapshot.data!.email)));
-                              }
-                                  : null,
-                              icon: const Icon(Icons.add_card),
-                              label: const Text("Add new membership"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Adding single visit',
+                                    style: TextStyle(fontSize: 17),
+                                  ),
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: mainColor,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => ConfirmDialog(
+                                          textConfirmation: 'Add a single visit?',
+                                          onNo: () => Navigator.pop(context),
+                                          onYes: () async {
+                                            bool success =
+                                                await _visitHttpController
+                                                    .addSingleVisit(
+                                                        snapshot.data!);
+                                            if (success) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      content: Text(
+                                                          'Single visit added')));
+                                            }
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.add),
+                                    label: const Text(' Add '),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -209,5 +218,22 @@ class _ManagerProfileState extends State<ManagerProfile> {
       return true;
     }
     return false;
+  }
+
+  String getProgress(List<Subscription> subscriptions) {
+    Subscription? subscription;
+    if (subscriptions.isNotEmpty) {
+      subscription = subscriptions.last;
+    }
+    if (subscription != null) {
+      if (subscription.dateOfEnd.add(const Duration(days: 1))
+          .isBefore(DateTime.now())) {
+        return 'Expired in ${formatterDate.format(subscription.dateOfEnd)}';
+      } else {
+        return '${subscription.visits.length}/${subscription.numberOfVisits} '
+            'until ${formatterDate.format(subscription.dateOfEnd)}';
+      }
+    }
+    return 'No added';
   }
 }

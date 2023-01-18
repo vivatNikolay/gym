@@ -21,7 +21,7 @@ class _HistoryOfSubState extends State<HistoryOfSub> {
   @override
   void initState() {
     super.initState();
-    _futureVisits = _visitHttpController.getOwnVisitsByDates();
+    _futureVisits = _visitHttpController.getOwnVisitsBySubscription();
   }
 
   @override

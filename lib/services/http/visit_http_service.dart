@@ -35,9 +35,23 @@ class VisitHttpService extends HttpService<Visit>{
     }
   }
 
-  Future<bool> addVisitToSportsman(Account account, ownAccount) async {
+  Future<bool> addSingleVisit(Account account, ownAccount) async {
     final params = {"email": account.email};
-    final uri = Uri.http(url, '/manager/addVisit', params);
+    final uri = Uri.http(url, '/manager/addSingleVisit', params);
+    Response res = await post(uri,
+        headers: <String, String>{
+          'authorization' : basicAuth(ownAccount.email, ownAccount.password)
+        });
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> addVisitToMembership(Account account, ownAccount) async {
+    final params = {"email": account.email};
+    final uri = Uri.http(url, '/manager/addVisitToMembership', params);
     Response res = await post(uri,
         headers: <String, String>{
           'authorization' : basicAuth(ownAccount.email, ownAccount.password)
