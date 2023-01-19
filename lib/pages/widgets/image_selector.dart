@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/circle_image.dart';
+import 'circle_image.dart';
 
 class ImageSelector extends StatelessWidget {
   ValueNotifier<int> iconNum;

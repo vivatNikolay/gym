@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../helpers/constants.dart';
+import '../../helpers/constants.dart';
 
 class CircleImage extends StatelessWidget {
   final ImageProvider image;
@@ -31,27 +31,30 @@ class CircleImage extends StatelessWidget {
           fit: BoxFit.cover,
           width: 140,
           height: 140,
-          child: InkWell(
-            onTap: onTap,
-          ),
         ),
       ),
     );
   }
 
   Widget buildIcon(Color color) {
-    return buildCircle(
-        padding: 3,
-        color: Colors.white,
-        child: buildCircle(
-          padding: 8,
-          color: color,
-          child: Icon(
-            icon,
-            size: 20,
-            color: Colors.white,
-          ),
-        ));
+    return InkWell(
+      onTap: onTap,
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      child: buildCircle(
+          padding: 3,
+          color: Colors.white,
+          child: buildCircle(
+            padding: 8,
+            color: color,
+            child: Icon(
+              icon,
+              size: 20,
+              color: Colors.white,
+            ),
+          )),
+    );
   }
 
   Widget buildCircle({
