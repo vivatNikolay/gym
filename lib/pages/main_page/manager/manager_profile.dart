@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
+import '../../../../helpers/subscription_progress.dart';
 import '../../../controllers/visit_http_controller.dart';
 import '../../../controllers/account_http_controller.dart';
 import '../../../models/subscription.dart';
@@ -8,6 +8,7 @@ import '../../../models/account.dart';
 import '../../../helpers/constants.dart';
 import '../../widgets/confirm_dialog.dart';
 import '../../widgets/profile_row.dart';
+import '../../widgets/visits_list.dart';
 import 'manager_profile_edit.dart';
 import 'widgets/add_membership.dart';
 
@@ -25,7 +26,6 @@ class _ManagerProfileState extends State<ManagerProfile> {
   final AccountHttpController _accountHttpController =
       AccountHttpController.instance;
   final VisitHttpController _visitHttpController = VisitHttpController.instance;
-  final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
   late Future<Account> _futureAccount;
 
   _ManagerProfileState(this.email);
@@ -83,7 +83,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                     builder: (context) => ManagerProfileEdit(
                                         account: snapshot.data!, isEdit: true)));
                                 setState(() {
-
+                                  _futureAccount = _accountHttpController.getSportsmenByEmail(email);
                                 });
                               },
                             ),
@@ -101,7 +101,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                       fontSize: 20, color: Colors.black),
                                 ),
                                 subtitle: Text(
-                                  getProgress(snapshot.data!.subscriptions),
+                                  SubscriptionProgress.getString(snapshot.data!.subscriptions),
                                 ),
                                 trailing: IconButton(
                                   icon: const Icon(Icons.add,
@@ -114,6 +114,9 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                               builder: (context) =>
                                                   AddMembership(
                                                       snapshot.data!.email)));
+                                      setState(() {
+                                        _futureAccount = _accountHttpController.getSportsmenByEmail(email);
+                                      });
                                     } else {
                                       showDialog(
                                         context: context,
@@ -130,6 +133,9 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                                   .showSnackBar(const SnackBar(
                                                       content: Text(
                                                           'Visit added to membership')));
+                                              setState(() {
+                                                _futureAccount = _accountHttpController.getSportsmenByEmail(email);
+                                              });
                                             }
                                             Navigator.pop(context);
                                           },
@@ -139,7 +145,15 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                   },
                                 ),
                                 onTap: () async {
-                                  //show visits of membership
+                                  if (snapshot.data!.subscriptions.isNotEmpty) {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) => VisitsList(
+                                                  visits: snapshot.data!
+                                                      .subscriptions.last.visits,
+                                                  title: 'History of Membership',
+                                                )));
+                                  }
                                 },
                               ),
                             ),
@@ -177,6 +191,9 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                                   .showSnackBar(const SnackBar(
                                                       content: Text(
                                                           'Single visit added')));
+                                              setState(() {
+                                                _futureAccount = _accountHttpController.getSportsmenByEmail(email);
+                                              });
                                             }
                                             Navigator.pop(context);
                                           },
@@ -218,22 +235,5 @@ class _ManagerProfileState extends State<ManagerProfile> {
       return true;
     }
     return false;
-  }
-
-  String getProgress(List<Subscription> subscriptions) {
-    Subscription? subscription;
-    if (subscriptions.isNotEmpty) {
-      subscription = subscriptions.last;
-    }
-    if (subscription != null) {
-      if (subscription.dateOfEnd.add(const Duration(days: 1))
-          .isBefore(DateTime.now())) {
-        return 'Expired in ${formatterDate.format(subscription.dateOfEnd)}';
-      } else {
-        return '${subscription.visits.length}/${subscription.numberOfVisits} '
-            'until ${formatterDate.format(subscription.dateOfEnd)}';
-      }
-    }
-    return 'No added';
   }
 }

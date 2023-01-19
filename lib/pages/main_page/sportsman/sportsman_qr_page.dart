@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
+import '../../../../helpers/subscription_progress.dart';
 import '../../../controllers/subscription_http_controller.dart';
 import '../../../helpers/constants.dart';
 import '../../../models/account.dart';
 import '../../../models/subscription.dart';
 import '../../../services/db/account_db_service.dart';
-import 'history_of_sub.dart';
+import '../../widgets/visits_list.dart';
 import 'widgets/qr_item.dart';
 
 class SportsmanQrPage extends StatefulWidget {
@@ -20,7 +20,6 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
   final AccountDBService _accountDBService = AccountDBService();
   final SubscriptionHttpController _subscriptionHttpController = SubscriptionHttpController.instance;
   Future<List<Subscription>>? _futureSubscription;
-  final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
   late AnimationController _animationController;
 
   @override
@@ -77,8 +76,12 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
                   _accountDBService.put(s);
                 }
                 return Text(
-                  getProgress(snapshot.data ?? _accountDBService.getFirst()!.subscriptions),
-                  style: const TextStyle(fontSize: 17, color: Colors.black, fontStyle: FontStyle.italic),
+                  SubscriptionProgress.getString(snapshot.data ??
+                      _accountDBService.getFirst()!.subscriptions),
+                  style: const TextStyle(
+                      fontSize: 17,
+                      color: Colors.black,
+                      fontStyle: FontStyle.italic),
                 );
               },
             ),
@@ -97,32 +100,19 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
             ),
             onTap: () {
               setState(() {
-                _futureSubscription = _subscriptionHttpController
-                    .getByAccount();
+                _futureSubscription =
+                    _subscriptionHttpController.getByAccount();
               });
               if (_accountDBService.getFirst()!.subscriptions.isNotEmpty) {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const HistoryOfSub()));
+                    builder: (context) => VisitsList(
+                          visits: _accountDBService.getFirst()!
+                              .subscriptions.last.visits,
+                          title: 'History of Membership',
+                        )));
               }
             }),
       ),
     ]);
-  }
-
-  String getProgress(List<Subscription> subscriptions) {
-    Subscription? subscription;
-    if (subscriptions.isNotEmpty) {
-      subscription = subscriptions.last;
-    }
-    if (subscription != null) {
-      if (subscription.dateOfEnd.add(const Duration(days: 1))
-          .isBefore(DateTime.now())) {
-        return 'Expired in ${formatterDate.format(subscription.dateOfEnd)}';
-      } else {
-        return '${subscription.visits.length}/${subscription.numberOfVisits} '
-            'until ${formatterDate.format(subscription.dateOfEnd)}';
-      }
-    }
-    return 'No added';
   }
 }

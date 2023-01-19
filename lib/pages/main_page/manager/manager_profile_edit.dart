@@ -3,10 +3,10 @@ import 'package:intl/intl.dart';
 
 import '../../../controllers/account_http_controller.dart';
 import '../../../helpers/constants.dart';
-import '../../../pages/profile/profile_edit/image_selector.dart';
-import '../../../pages/profile/profile_edit/widgets/gender_switcher.dart';
+import '../../widgets/image_selector.dart';
+import '../../widgets/gender_switcher.dart';
 import '../../../models/account.dart';
-import '../../profile/widgets/circle_image.dart';
+import '../../widgets/circle_image.dart';
 import '../../widgets/my_text_field.dart';
 
 class ManagerProfileEdit extends StatefulWidget {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../models/account.dart';
 import 'manager_profile_edit.dart';
@@ -14,7 +13,6 @@ class ManagerQrPage extends StatefulWidget {
 }
 
 class _ManagerQrPageState extends State<ManagerQrPage> {
-  final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
 
   @override
   Widget build(BuildContext context) {
