@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import '../models/subscription.dart';
 
 class SubscriptionProgress {
-  static final DateFormat _formatterDate = DateFormat('dd-MM-yyyy');
+  static final DateFormat _formatterDate = DateFormat('dd.MM.yyyy');
 
   static getString(List<Subscription> subscriptions) {
     Subscription? subscription;

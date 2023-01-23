@@ -40,12 +40,10 @@ class MyThemes {
     brightness: Brightness.light,
     primaryColor: Colors.white,
     backgroundColor: const Color(0xFFF3F3F8),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.white70,
-      foregroundColor: Colors.black87,
-      titleTextStyle: TextStyle(
+    appBarTheme: AppBarTheme(
+      backgroundColor: mainColor.withOpacity(0.8),
+      titleTextStyle: const TextStyle(
           fontSize: 22,
-          color: Colors.black87,
           fontFamily: 'Raleway',
           fontWeight: FontWeight.bold),
       titleSpacing: 18,
@@ -73,9 +71,9 @@ class MyThemes {
     colorScheme: const ColorScheme.dark(primary: mainColor, secondary: mainColor),
     brightness: Brightness.dark,
     backgroundColor: const Color(0xFF2C2D2F),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.black45,
-      titleTextStyle: TextStyle(
+    appBarTheme: AppBarTheme(
+      backgroundColor: mainColor.withOpacity(0.8),
+      titleTextStyle: const TextStyle(
           fontSize: 22,
           fontFamily: 'Raleway',
           fontWeight: FontWeight.bold),

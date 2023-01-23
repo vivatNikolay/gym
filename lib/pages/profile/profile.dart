@@ -36,11 +36,10 @@ class _ProfileState extends State<Profile> {
           Container(
             height: 140,
             decoration: BoxDecoration(
-              color: Colors.transparent.withOpacity(0.58),
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomCenter,
-                colors: [mainColor, Color(0xFF46377D)],
+                colors: [mainColor.withOpacity(0.9), mainColor.withOpacity(0.8)],
               ),
             ),
             child: ProfileRow(

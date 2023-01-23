@@ -36,15 +36,15 @@ class _HomeState extends State<Home> {
         selectedItemColor: mainColor,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code),
+            icon: Icon(Icons.qr_code, size: 28),
             label: 'QR',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.sticky_note_2_outlined),
+            icon: Icon(Icons.sticky_note_2_outlined, size: 28),
             label: 'Training List',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(Icons.account_circle, size: 28),
             label: 'Profile',
           ),
         ],

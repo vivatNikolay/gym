@@ -28,14 +28,14 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _dateOfBirthController = TextEditingController();
+  late DateTime _pickedDate;
   late ValueNotifier<bool> _emailValidator;
   late ValueNotifier<bool> _nameValidator;
   late ValueNotifier<bool> _lastNameValidator;
   late ValueNotifier<bool> _phoneValidator;
   late ValueNotifier<bool> _gender;
   late ValueNotifier<int> _iconNum;
-  final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
+  final DateFormat formatterDate = DateFormat('dd.MM.yyyy');
 
   _ManagerProfileEditState(this._account, this._isEdit);
 
@@ -47,7 +47,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
     _nameController.text = _account.firstName;
     _lastNameController.text = _account.lastName;
     _phoneController.text = _account.phone;
-    _dateOfBirthController.text = formatterDate.format(_account.dateOfBirth);
+    _pickedDate = _account.dateOfBirth;
     _emailValidator = ValueNotifier(true);
     _nameValidator = ValueNotifier(true);
     _lastNameValidator = ValueNotifier(true);
@@ -89,8 +89,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                           firstName: _nameController.text.trim(),
                           gender: _gender.value,
                           iconNum: _iconNum.value,
-                          dateOfBirth: formatterDate.parse(
-                              _dateOfBirthController.text),
+                          dateOfBirth: _pickedDate,
                           subscriptions: _account.subscriptions,
                           role: _account.role));
                 } else {
@@ -103,8 +102,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                           firstName: _nameController.text.trim(),
                           gender: _gender.value,
                           iconNum: _iconNum.value,
-                          dateOfBirth: formatterDate.parse(
-                              _dateOfBirthController.text),
+                          dateOfBirth: _pickedDate,
                           subscriptions: _account.subscriptions,
                           role: _account.role));
                 }
@@ -170,25 +168,31 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               hintText: 'Phone',
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 5),
-            TextField(
-              controller: _dateOfBirthController,
-              textAlign: TextAlign.center,
-              decoration: const InputDecoration(
-                hintText: 'Date of birth',
+            const SizedBox(height: 10),
+            InkWell(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: Theme.of(context).disabledColor)),
+                ),
+                child: Text(
+                  formatterDate.format(_pickedDate),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
+                  ),
+                ),
               ),
-              readOnly: true,
               onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
+                DateTime? newPickedDate = await showDatePicker(
                   context: context,
                   initialDate: _account.dateOfBirth,
                   firstDate: DateTime(1950),
-                  lastDate: DateTime(2040),
+                  lastDate: DateTime.now(),
                 );
-                if (pickedDate != null) {
-                  setState(() =>
-                  _dateOfBirthController.text =
-                      formatterDate.format(pickedDate));
+                if (newPickedDate != null) {
+                  setState(() => _pickedDate = newPickedDate);
                 }
               },
             ),

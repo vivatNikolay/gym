@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../controllers/subscription_http_controller.dart';
+import '../../../../helpers/constants.dart';
 
 class AddMembership extends StatefulWidget {
   final String email;
@@ -13,10 +14,12 @@ class AddMembership extends StatefulWidget {
 
 class _AddMembershipState extends State<AddMembership> {
   final SubscriptionHttpController _subscriptionHttpController = SubscriptionHttpController.instance;
-  final DateFormat formatterDate = DateFormat('dd-MM-yyyy');
+  final DateFormat formatterDate = DateFormat('dd.MM.yyyy');
   final String _email;
-  final TextEditingController _dateOfStartController = TextEditingController();
-  final TextEditingController _dateOfEndController = TextEditingController();
+  DateTimeRange _dateRange = DateTimeRange(
+      start: DateTime.now(),
+      end: DateTime.now().add(const Duration(days: 60)),
+  );
   final TextEditingController _numberOfVisitsController = TextEditingController();
   late ValueNotifier<bool> _numberOfVisitsValidation;
 
@@ -48,8 +51,8 @@ class _AddMembershipState extends State<AddMembership> {
               ScaffoldMessenger.of(context).clearSnackBars();
               bool success = await _subscriptionHttpController.addMembership(
                   _email,
-                  formatterDate.parse(_dateOfStartController.text),
-                  formatterDate.parse(_dateOfEndController.text),
+                  _dateRange.start,
+                  _dateRange.end,
                   _numberOfVisitsController.text);
               if (success) {
                 Navigator.pop(context);
@@ -66,47 +69,33 @@ class _AddMembershipState extends State<AddMembership> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Column(
           children: [
-            TextField(
-              controller: _dateOfStartController,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.calendar_today),
-                label: Text('Enter date of start'),
-              ),
-              readOnly: true,
-              onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2022),
-                  lastDate: DateTime(2070),
-                );
-                if (pickedDate != null) {
-                  setState(() =>
-                  _dateOfStartController.text =
-                      formatterDate.format(pickedDate));
-                }
-              },
-            ),
-            TextField(
-              controller: _dateOfEndController,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.calendar_today),
-                label: Text('Enter date of end'),
-              ),
-              readOnly: true,
-              onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2022),
-                  lastDate: DateTime(2070),
-                );
-                if (pickedDate != null) {
-                  setState(() =>
-                  _dateOfEndController.text =
-                      formatterDate.format(pickedDate));
-                }
-              },
+            Row(
+              children: [
+                Text(
+                  'Start date: ${formatterDate.format(_dateRange.start)}\n'
+                  'End date: ${formatterDate.format(_dateRange.end)}',
+                  style: const TextStyle(fontSize: 20),
+                ),
+                ElevatedButton(
+                  child: const Icon(Icons.calendar_today, size: 28),
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: mainColor,
+                  ),
+                  onPressed: () async {
+                    DateTimeRange? newDateRange = await showDateRangePicker(
+                      context: context,
+                      initialDateRange: _dateRange,
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now().add(const Duration(days: 731)),
+                    );
+                    if (newDateRange != null) {
+                      setState(() => _dateRange = newDateRange);
+                    }
+                  },
+                ),
+              ],
             ),
             TextField(
               controller: _numberOfVisitsController,

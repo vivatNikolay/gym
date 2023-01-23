@@ -90,23 +90,22 @@ class _ManagerProfileState extends State<ManagerProfile> {
                             const SizedBox(height: 4),
                             Card(
                               elevation: 2,
-                              color: Theme.of(context).backgroundColor,
                               child: ListTile(
                                 leading: const Icon(Icons.credit_card,
                                     size: 26, color: mainColor),
                                 minLeadingWidth: 22,
                                 title: const Text(
                                   'Membership',
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.black),
+                                  style: TextStyle(fontSize: 20),
                                 ),
                                 subtitle: Text(
-                                  SubscriptionProgress.getString(snapshot.data!.subscriptions),
+                                  SubscriptionProgress.getString(
+                                      snapshot.data!.subscriptions),
                                 ),
                                 trailing: IconButton(
                                   icon: const Icon(Icons.add,
                                       size: 32, color: mainColor),
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (isMembershipInactive(
                                         snapshot.data!.subscriptions)) {
                                       Navigator.of(context).push(
