@@ -10,7 +10,7 @@ import '../../widgets/confirm_dialog.dart';
 import '../../widgets/profile_row.dart';
 import '../../widgets/visits_list.dart';
 import 'manager_profile_edit.dart';
-import 'widgets/add_membership.dart';
+import 'widgets/add_membership_dialog.dart';
 
 class ManagerProfile extends StatefulWidget {
   final String email;
@@ -108,11 +108,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                   onPressed: () async {
                                     if (isMembershipInactive(
                                         snapshot.data!.subscriptions)) {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AddMembership(
-                                                      snapshot.data!.email)));
+                                      await showDialog(context: context,
+                                          builder: (context) => AddMembershipDialog(snapshot.data!.email));
                                       setState(() {
                                         _futureAccount = _accountHttpController.getSportsmenByEmail(email);
                                       });
