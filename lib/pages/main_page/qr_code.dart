@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'sportsman/sportsman_qr_page.dart';
-import '../../services/db/account_db_service.dart';
 import '../../helpers/constants.dart';
-import 'manager/manager_qr_page.dart';
 
-class QrCode extends StatefulWidget {
-  const QrCode({Key? key}) : super(key: key);
-
-  @override
-  State<QrCode> createState() => _QrCodeState();
-}
-
-class _QrCodeState extends State<QrCode> {
-  final AccountDBService _accountDBService = AccountDBService();
+class QrCode extends StatelessWidget {
+  final Widget child;
+  const QrCode(this.child, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,20 +24,8 @@ class _QrCodeState extends State<QrCode> {
             opacity: 0.5,
           ),
         ),
-        child: switcherByRole(),
+        child: child,
       ),
     );
-  }
-
-  Widget switcherByRole() {
-    switch (_accountDBService.getFirst()!.role) {
-      case 'MANAGER': {
-        return const ManagerQrPage();
-      }
-      case 'ADMIN': {
-        break;
-      }
-    }
-    return const SportsmanQrPage();
   }
 }
