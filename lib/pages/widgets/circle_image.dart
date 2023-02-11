@@ -31,6 +31,9 @@ class CircleImage extends StatelessWidget {
           fit: BoxFit.cover,
           width: 140,
           height: 140,
+          child: InkWell(
+            onTap: onTap,
+          ),
         ),
       ),
     );
