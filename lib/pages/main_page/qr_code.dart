@@ -20,7 +20,6 @@ class QrCode extends StatelessWidget {
           image: DecorationImage(
             image: AssetImage(gantelImage),
             fit: BoxFit.cover,
-            alignment: Alignment.bottomLeft,
             opacity: 0.5,
           ),
         ),

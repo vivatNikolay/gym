@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-const mainColor = Color(0xFF536C98);
-const trainingListImage = 'images/training_list.jpg';
-const gantelImage = 'images/gantel.jpg';
+const mainColor = Color(0xFFF1550E);
+const trainingListImage = 'images/smoke.png';
+const gantelImage = 'images/gantel.png';
