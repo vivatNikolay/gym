@@ -55,7 +55,7 @@ class _QrScanPageState extends State<QrScanPage> {
         color: Colors.white30
     ),
     child: Text(
-      result != null ? 'Result : ${result!}' : 'Scan QR code',
+      result != null ? 'Результат : ${result!}' : 'Отсканируйте QR-код',
       maxLines: 3,
       style: const TextStyle(color: Colors.white, fontSize: 18),
     ),

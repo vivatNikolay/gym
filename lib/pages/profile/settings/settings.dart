@@ -34,7 +34,7 @@ class _SettingsState extends State<Settings> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text('Настройки'),
       ),
       body: Container(
         width: double.infinity,
@@ -44,14 +44,14 @@ class _SettingsState extends State<Settings> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              SettingTitle(text: 'General'),
+              SettingTitle(text: 'Главные'),
               SettingPack(children: [
                 ListTile(
                   leading: const Icon(Icons.dark_mode_outlined),
                   minLeadingWidth: 24,
-                  title: const Text('Dark mode'),
+                  title: const Text('Темная тема'),
                   subtitle:
-                      Text(themeProvider.isDarkMode ? 'enabled' : 'disabled'),
+                      Text(themeProvider.isDarkMode ? 'включено' : 'выключено'),
                   trailing: Switch(
                     value: themeProvider.isDarkMode,
                     onChanged: (value) {
@@ -61,10 +61,10 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
               ]),
-              SettingTitle(text: 'Training'),
+              SettingTitle(text: 'Тренировки'),
               SettingPack(children: [
                 const SizedBox(height: 15),
-                SettingName(text: 'Default sets count:'),
+                SettingName(text: 'Стандартное кол-во подходов:'),
                 SfSlider(
                   min: 0,
                   max: 10,
@@ -81,7 +81,7 @@ class _SettingsState extends State<Settings> {
                   },
                 ),
                 const SizedBox(height: 15),
-                SettingName(text: 'Default reps count:'),
+                SettingName(text: 'Стандартное кол-во повторений:'),
                 SfSlider(
                   min: 0,
                   max: 30,
@@ -99,13 +99,13 @@ class _SettingsState extends State<Settings> {
                 ),
                 const SizedBox(height: 15),
               ]),
-              SettingTitle(text: 'Security'),
+              SettingTitle(text: 'Безопасность'),
               SettingPack(
                   children: [
                     ListTile(
                       leading: const Icon(Icons.lock_outline),
                       minLeadingWidth: 24,
-                      title: const Text('Change password'),
+                      title: const Text('Сменить пароль'),
                       onTap: () {
                         Navigator.push(
                             context,

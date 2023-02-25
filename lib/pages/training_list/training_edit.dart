@@ -61,7 +61,7 @@ class _TrainingEditState extends State<TrainingEdit> {
               children: [
                 buildList(context),
                 AddButton(
-                  text: 'Add exercise',
+                  text: 'Добавить упражнение',
                   onTap: () async {
                     ValueNotifier<Exercise> newExercise = ValueNotifier(Exercise(
                         name: '',

@@ -28,7 +28,7 @@ class LoginButton extends StatelessWidget {
         ),
         onPressed: onPressed,
         child: const Text(
-          'Log in',
+          'Войти',
           style: TextStyle(
             color: mainColor,
             fontSize: 19,

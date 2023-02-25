@@ -57,7 +57,7 @@ class _TrainingListState extends State<TrainingList> {
           children: [
             buildList(context),
             AddButton(
-              text: 'Add training',
+              text: 'Добавить тренировку',
               onTap: () => creationDialog(),
               highlightColor: Colors.black,
             ),
@@ -108,12 +108,12 @@ class _TrainingListState extends State<TrainingList> {
       context: context,
       builder: (context) => StatefulBuilder(
             builder: (context, setState) => AlertDialog(
-              title: const Text('Training'),
+              title: const Text('Тренировка'),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0)),
               content: MyTextField(
                 autofocus: true,
-                hintText: 'Name',
+                hintText: 'Название',
                 controller: _nameController,
                 validation: _nameValidator,
                 inBox: false,
@@ -121,7 +121,7 @@ class _TrainingListState extends State<TrainingList> {
               backgroundColor: Theme.of(context).backgroundColor,
               actions: [
                 TextButton(
-                  child: const Text('Add',
+                  child: const Text('Добавить',
                       style: TextStyle(color: mainColor, fontSize: 18)),
                   onPressed: () async {
                     setState(() =>

@@ -53,7 +53,7 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
             const Icon(Icons.credit_card, size: 26, color: mainColor),
             minLeadingWidth: 22,
             title: const Text(
-              'Membership',
+              'Абонемент',
               style: TextStyle(fontSize: 20, color: Colors.black),
             ),
             subtitle: FutureBuilder<List<Subscription>>(
@@ -66,7 +66,7 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
                   WidgetsBinding.instance.addPostFrameCallback((_) =>
                       ScaffoldMessenger.of(context)
                           .showSnackBar(const SnackBar(
-                        content: Text('No connection'),
+                        content: Text('Нет интернет соединения'),
                       ))
                   );
                 }
@@ -108,7 +108,7 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
                     builder: (context) => VisitsList(
                           visits: _accountDBService.getFirst()!
                               .subscriptions.last.visits,
-                          title: 'History of Membership',
+                          title: 'История абонемента',
                         )));
               }
             }),

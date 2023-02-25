@@ -70,7 +70,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Profile'),
+        title: const Text('Профиль'),
         actions: [
           IconButton(
             padding: const EdgeInsets.only(right: 12),
@@ -110,7 +110,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('No connection'),
+                    content: Text('Нет интернет соединения'),
                   ));
                 }
               }
@@ -149,7 +149,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               controller: _nameController,
               validation: _nameValidator,
               fontSize: 21,
-              hintText: 'Name',
+              hintText: 'Имя',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 5),
@@ -157,7 +157,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               controller: _lastNameController,
               validation: _nameValidator,
               fontSize: 21,
-              hintText: 'Last name',
+              hintText: 'Фамилия',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 5),
@@ -165,7 +165,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               controller: _phoneController,
               validation: _phoneValidator,
               fontSize: 20,
-              hintText: 'Phone',
+              hintText: 'Телефон',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
@@ -216,7 +216,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                 _account.password = '1111';
               },
               child: const Text(
-                'Reset password',
+                'Сбросить пароль',
                 style: TextStyle(
                   fontSize: 19,
                   color: Colors.white,

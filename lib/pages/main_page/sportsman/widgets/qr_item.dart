@@ -57,7 +57,7 @@ class QrItem extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     child: const Text(
-                      ' Close ',
+                      ' Закрыть ',
                       style: TextStyle(
                         fontSize: 19,
                         color: Colors.white,

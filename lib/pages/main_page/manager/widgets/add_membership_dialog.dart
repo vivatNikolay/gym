@@ -41,7 +41,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add membership'),
+      title: const Text('Добавить абонемент'),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0)),
       backgroundColor: Theme.of(context).backgroundColor,
@@ -50,14 +50,14 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text('Cancel',
+          child: const Text('Отмена',
               style: TextStyle(color: mainColor, fontSize: 18)),
         ),
         TextButton(
           onPressed: () async {
             await save(context);
           },
-          child: const Text('Save',
+          child: const Text('Сохранить',
               style: TextStyle(color: mainColor, fontSize: 18)),
         ),
       ],
@@ -67,8 +67,8 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
           Row(
             children: [
               Text(
-                'Start: ${formatterDate.format(_dateRange.start)}\n'
-                'End:   ${formatterDate.format(_dateRange.end)}',
+                'Начало: ${formatterDate.format(_dateRange.start)}\n'
+                'Конец:   ${formatterDate.format(_dateRange.end)}',
                 style: const TextStyle(fontSize: 20),
               ),
               ElevatedButton(
@@ -96,7 +96,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
             controller: _numberOfVisitsController,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
-              label: Text('Number of visits'),
+              label: Text('Кол-во посещений'),
               icon: Icon(Icons.numbers),
             ),
           ),
@@ -116,7 +116,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
       Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('No connection'),
+        content: Text('Нет интернет соединения'),
       ));
     }
   }

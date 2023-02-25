@@ -47,7 +47,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change password'),
+        title: const Text('Смена пароля'),
         actions: [
           IconButton(
             padding: const EdgeInsets.only(right: 12),
@@ -72,7 +72,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('No connection'),
+                    content: Text('Нет интернет соединения'),
                   ));
                 }
               }
@@ -92,11 +92,11 @@ class _PasswordChangerState extends State<PasswordChanger> {
                 MyTextField(
                   controller: _oldPassController,
                   validation: _oldPassValidator,
-                  hintText: 'Old password',
+                  hintText: 'Старый пароль',
                   textAlign: TextAlign.center,
                   fontSize: 18,
                   obscureText: true,
-                  errorText: 'Incorrect password',
+                  errorText: 'Некоректный пароль',
                   inBox: true,
                 ),
               ]),
@@ -105,7 +105,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
                 MyTextField(
                   controller: _newPass1Controller,
                   validation: _newPass1Validator,
-                  hintText: 'New password',
+                  hintText: 'Новый пароль',
                   textAlign: TextAlign.center,
                   fontSize: 18,
                   obscureText: true,
@@ -117,11 +117,11 @@ class _PasswordChangerState extends State<PasswordChanger> {
                 MyTextField(
                   controller: _newPass2Controller,
                   validation: _newPass2Validator,
-                  hintText: 'Repeat password',
+                  hintText: 'Повтор пароля',
                   textAlign: TextAlign.center,
                   fontSize: 18,
                   obscureText: true,
-                  errorText: 'Passwords are not equals',
+                  errorText: 'Повтор не совпадает',
                   inBox: true,
                 ),
               ]),

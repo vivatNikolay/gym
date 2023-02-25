@@ -45,7 +45,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Sportsman'),
+          title: const Text('Спортсмен'),
         ),
         body: Container(
           width: double.infinity,
@@ -95,7 +95,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                     size: 26, color: mainColor),
                                 minLeadingWidth: 22,
                                 title: const Text(
-                                  'Membership',
+                                  'Абонемент',
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 subtitle: Text(
@@ -117,7 +117,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                       showDialog(
                                         context: context,
                                         builder: (context) => ConfirmDialog(
-                                          textConfirmation: 'Add a visit to membership?',
+                                          textConfirmation: 'Добавить посещение в абонемент?',
                                           onNo: () => Navigator.pop(context),
                                           onYes: () async {
                                             bool success =
@@ -128,7 +128,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(const SnackBar(
                                                       content: Text(
-                                                          'Visit added to membership')));
+                                                          'Посещение добавлено в абонемент')));
                                               setState(() {
                                                 _futureAccount = _accountHttpController.getSportsmenByEmail(email);
                                               });
@@ -147,7 +147,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                             builder: (context) => VisitsList(
                                                   visits: snapshot.data!
                                                       .subscriptions.last.visits,
-                                                  title: 'History of Membership',
+                                                  title: 'История абонемента',
                                                 )));
                                   }
                                 },
@@ -159,7 +159,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
-                                    'Adding single visit',
+                                    'Разовое посещение',
                                     style: TextStyle(fontSize: 17),
                                   ),
                                   ElevatedButton.icon(
@@ -175,7 +175,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                       showDialog(
                                         context: context,
                                         builder: (context) => ConfirmDialog(
-                                          textConfirmation: 'Add a single visit?',
+                                          textConfirmation: 'Добавить разовое?',
                                           onNo: () => Navigator.pop(context),
                                           onYes: () async {
                                             bool success =
@@ -186,7 +186,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(const SnackBar(
                                                       content: Text(
-                                                          'Single visit added')));
+                                                          'Добавлено разовое посещение')));
                                               setState(() {
                                                 _futureAccount = _accountHttpController.getSportsmenByEmail(email);
                                               });
@@ -197,7 +197,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                       );
                                     },
                                     icon: const Icon(Icons.add),
-                                    label: const Text(' Add '),
+                                    label: const Text('Добавить'),
                                   ),
                                 ],
                               ),
@@ -216,7 +216,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
   Center noConnectionMess() {
     return const Center(
         child: Text(
-      'No connection or not found',
+      'Нет интернет соединения',
       style: TextStyle(fontSize: 23.0),
     ));
   }

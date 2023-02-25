@@ -51,7 +51,7 @@ class VisitsList extends StatelessWidget {
   Center emptyMess() {
     return const Center(
         child: Text(
-      'History is empty',
+      'Истрории нет',
       style: TextStyle(fontSize: 23.0),
     ));
   }

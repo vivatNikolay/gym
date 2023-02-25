@@ -46,7 +46,7 @@ class MyTextField extends StatelessWidget {
           hintText: hintText,
           errorText: validation.value ? null
               : controller.text.isEmpty
-                ? 'Field is empty'
+                ? 'Поле пустое'
                 : errorText,
         ),
         obscureText: obscureText,

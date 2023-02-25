@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
           return const [
             BottomNavigationBarItem(
               icon: Icon(Icons.qr_code, size: 28),
-              label: 'QR code',
+              label: 'QR-код',
             ),
           ];
         }
@@ -87,11 +87,11 @@ class _HomeState extends State<Home> {
     return const [
       BottomNavigationBarItem(
         icon: Icon(Icons.qr_code, size: 28),
-        label: 'QR code',
+        label: 'QR-код',
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.sticky_note_2_outlined, size: 28),
-        label: 'Training List',
+        label: 'Тренировки',
       ),
     ];
   }

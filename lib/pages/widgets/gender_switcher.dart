@@ -24,11 +24,11 @@ class GenderSwitcher extends StatelessWidget {
           OutlinedButton.icon(
             onPressed: onPressedMale,
             icon: const Icon(Icons.male),
-            label: const Text(" Male ",
+            label: const Text('Муж',
                 style: TextStyle(fontSize: 18, color: mainColor)),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(
-                  vertical: 13, horizontal: 25),
+                  vertical: 13, horizontal: 30),
               side: BorderSide(
                   color: gender.value
                       ? mainColor
@@ -44,11 +44,11 @@ class GenderSwitcher extends StatelessWidget {
           OutlinedButton.icon(
             onPressed: onPressedFemale,
             icon: const Icon(Icons.female),
-            label: const Text("Female",
+            label: const Text('Жен',
                 style: TextStyle(fontSize: 18, color: mainColor)),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(
-                  vertical: 13, horizontal: 25),
+                  vertical: 13, horizontal: 30),
               side: BorderSide(
                   color: gender.value
                       ? Theme.of(context).unselectedWidgetColor

@@ -53,7 +53,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Profile'),
+        title: const Text('Профиль'),
         actions: [
           IconButton(
             padding: const EdgeInsets.only(right: 12),
@@ -81,7 +81,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('No connection'),
+                    content: Text('Нет интернет соединения'),
                   ));
                 }
               }
@@ -111,7 +111,7 @@ class _ProfileEditState extends State<ProfileEdit> {
               controller: _nameController,
               validation: _nameValidator,
               fontSize: 21,
-              hintText: 'Name',
+              hintText: 'Имя',
               textAlign: TextAlign.center,
               inBox: false,
             ),
@@ -120,7 +120,7 @@ class _ProfileEditState extends State<ProfileEdit> {
               controller: _phoneController,
               validation: _phoneValidator,
               fontSize: 20,
-              hintText: 'Phone',
+              hintText: 'Телефон',
               textAlign: TextAlign.center,
               inBox: false,
             ),

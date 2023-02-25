@@ -8,7 +8,7 @@ class ConfirmDialog extends StatelessWidget {
   final String textConfirmation;
 
   const ConfirmDialog(
-      {this.textConfirmation = 'Are you sure?',
+      {this.textConfirmation = 'Вы уверены?',
       required this.onNo,
       required this.onYes,
       Key? key})
@@ -17,7 +17,7 @@ class ConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Confirmation'),
+      title: const Text('Подтверждение'),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0)),
       content: Text(textConfirmation),
@@ -25,12 +25,12 @@ class ConfirmDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: onNo,
-          child: const Text('No',
+          child: const Text('Нет',
               style: TextStyle(color: mainColor, fontSize: 18)),
         ),
         TextButton(
           onPressed: onYes,
-          child: const Text('Yes',
+          child: const Text('Да',
               style: TextStyle(color: mainColor, fontSize: 18)),
         ),
       ],

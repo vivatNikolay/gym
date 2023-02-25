@@ -23,7 +23,7 @@ class SubscriptionHttpService extends HttpService<Subscription> {
           throw Exception(res.reasonPhrase);
       }
     } on SocketException catch (_) {
-      throw Exception('No connection');
+      throw Exception('Нет интернет соединения');
     }
   }
 

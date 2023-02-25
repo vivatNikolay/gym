@@ -56,13 +56,13 @@ class _ExerciseEditState extends State<ExerciseEdit> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Exercise'),
+          title: const Text('Упражнение'),
         ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(top: 20),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text('Name:', style: TextStyle(fontSize: 15)),
+              const Text('Название:', style: TextStyle(fontSize: 15)),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: MyTextField(
@@ -73,7 +73,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                 ),
               ),
               const SizedBox(height: 15),
-              const Text('Sets count:', style: TextStyle(fontSize: 15)),
+              const Text('Кол-во подходов:', style: TextStyle(fontSize: 15)),
               SfSlider(
                 min: 0,
                 max: 10,
@@ -89,7 +89,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                 },
               ),
               const SizedBox(height: 15),
-              const Text('Reps count:', style: TextStyle(fontSize: 15)),
+              const Text('Кол-во повторений:', style: TextStyle(fontSize: 15)),
               SfSlider(
                 min: 0,
                 max: 30,

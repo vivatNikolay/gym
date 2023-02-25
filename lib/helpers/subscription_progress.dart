@@ -14,12 +14,12 @@ class SubscriptionProgress {
       if (subscription.dateOfEnd
           .add(const Duration(days: 1))
           .isBefore(DateTime.now())) {
-        return 'Expired in ${_formatterDate.format(subscription.dateOfEnd)}';
+        return 'Истекает ${_formatterDate.format(subscription.dateOfEnd)}';
       } else {
         return '${subscription.visits.length}/${subscription.numberOfVisits} '
-            'until ${_formatterDate.format(subscription.dateOfEnd)}';
+            'до ${_formatterDate.format(subscription.dateOfEnd)}';
       }
     }
-    return 'No added';
+    return 'Не добавлен';
   }
 }

@@ -30,8 +30,6 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
               children: [
                 Image.asset('images/qr_scan.png'),
                 const SizedBox(height: 5),
-                const Text('Scan qr code',
-                    style: TextStyle(fontSize: 22, color: Colors.black)),
               ],
             ),
           ),

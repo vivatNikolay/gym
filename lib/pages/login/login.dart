@@ -60,11 +60,11 @@ class _LoginState extends State<Login> {
               child: Column(
                 children: [
                   const Text(
-                    'Welcome',
+                    'Добро пожаловать',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'PT-Sans',
-                      fontSize: 50,
+                      fontSize: 46,
                       fontWeight: FontWeight.bold,
                       color: mainColor,
                     ),
@@ -72,17 +72,17 @@ class _LoginState extends State<Login> {
                   const SizedBox(
                     height: 45,
                   ),
-                  const FieldName(text: 'Login'),
+                  const FieldName(text: 'Логин'),
                   MyTextField(
                     controller: _loginController,
                     validation: _loginValidation,
-                    errorText: 'Invalid login',
+                    errorText: 'Неверный логин',
                     inBox: false,
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  const FieldName(text: 'Password'),
+                  const FieldName(text: 'Пароль'),
                   MyTextField(
                     controller: _passController,
                     validation: _passwordValidation,
@@ -112,9 +112,9 @@ class _LoginState extends State<Login> {
                           default:
                             if (snapshot.hasError) {
                               if (snapshot.error! is SocketException) {
-                                return const Text('No connection');
+                                return const Text('Нет интернет соединения');
                               }
-                              return const Text('Incorrect login or password');
+                              return const Text('Неверный логин или пароль');
                             }
                             if (snapshot.hasData) {
                               _accountDBService.put(snapshot.data!);
@@ -124,7 +124,7 @@ class _LoginState extends State<Login> {
                               });
                               return const Icon(Icons.check, color: mainColor, size: 24);
                             } else {
-                              return const Text('not found');
+                              return const Text('Неверный логин или пароль');
                             }
                         }
                       }),

@@ -11,7 +11,7 @@ class ImageSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Image'),
+        title: const Text('Выбрать аватар'),
       ),
       body: SingleChildScrollView(
         child: Padding(

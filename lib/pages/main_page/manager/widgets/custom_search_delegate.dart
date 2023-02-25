@@ -10,7 +10,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   CustomSearchDelegate()
       : super(
-          searchFieldLabel: 'Search sportsman',
+          searchFieldLabel: 'Поиск спортсмена',
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.search,
         );
@@ -55,7 +55,7 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     if (query.trim() == '') {
       return const Center(
-        child: Text('Type something'),
+        child: Text('Введите что-нибудь'),
       );
     }
     return FutureBuilder<List<Account>>(
@@ -69,7 +69,7 @@ class CustomSearchDelegate extends SearchDelegate {
           List<Account>? data = snapshot.data;
           if (data!.isEmpty) {
             return const Center(
-              child: Text('Not found'),
+              child: Text('Не найден'),
             );
           }
           return ListView.builder(
@@ -96,7 +96,7 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return const Center(
-      child: Text('Search by first and last name'),
+      child: Text('Поиск по имени и фамилии'),
     );
   }
 }
