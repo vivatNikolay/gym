@@ -27,39 +27,79 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Profile'),
-      ),
-      body: Column(
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
         children: [
-          Container(
-            height: 140,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomCenter,
-                colors: [mainColor.withOpacity(0.9), mainColor.withOpacity(0.8)],
+          SizedBox(
+            height: 238,
+            child: DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    mainColor.withOpacity(0.9),
+                    mainColor.withOpacity(0.8)
+                  ],
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: mainColor,
+                        radius: 50.0,
+                        child: Image.asset(
+                            'images/profileImg${account!.iconNum}.png'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProfileEdit(account: account!)));
+                          setState(() {
+                            account = _accountDBService.getFirst();
+                          });
+                        },
+                        child: const Icon(Icons.edit, color: mainColor, size: 28),
+                        style: ElevatedButton.styleFrom(
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(10),
+                          backgroundColor: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    '${account!.firstName ?? ''} ${account!.lastName}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22.0,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    account!.email ?? '',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: ProfileRow(
-              account: account!,
-              onEdit: () async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ProfileEdit(account: account!)));
-                setState(() {
-                  account = _accountDBService.getFirst();
-                });
-              },
-            ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 5),
           ListTile(
-            leading: const Icon(Icons.settings_outlined,
-                color: mainColor),
+            leading: const Icon(Icons.settings_outlined, color: mainColor),
             minLeadingWidth: 24,
             title: const Text('Settings', style: TextStyle(fontSize: 18)),
             onTap: () {

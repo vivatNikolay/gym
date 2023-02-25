@@ -40,33 +40,28 @@ class _TrainingListState extends State<TrainingList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Training List'),
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        padding: const EdgeInsets.only(top: 5),
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(trainingListImage),
-            fit: BoxFit.cover,
-            alignment: Alignment.centerRight,
-            opacity: 0.6,
-          ),
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      padding: const EdgeInsets.only(top: 5),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(trainingListImage),
+          fit: BoxFit.cover,
+          alignment: Alignment.centerRight,
+          opacity: 0.6,
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              buildList(context),
-              AddButton(
-                  text: 'Add training',
-                  onTap: () => creationDialog(),
-                  highlightColor: Colors.black,
-              ),
-            ],
-          ),
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildList(context),
+            AddButton(
+              text: 'Add training',
+              onTap: () => creationDialog(),
+              highlightColor: Colors.black,
+            ),
+          ],
         ),
       ),
     );

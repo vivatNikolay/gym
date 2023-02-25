@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sportmen_in_gym/models/account.dart';
 
+import '../../models/account.dart';
 import '../../helpers/constants.dart';
 
 class ProfileRow extends StatelessWidget {

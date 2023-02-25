@@ -28,18 +28,24 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(bottomItemsByRole()[_selectedIndex].label ?? ''),
+      ),
       body: Center(
         child: widgetsByRole().elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: mainColor,
-        items: bottomItemsByRole(),
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        showUnselectedLabels: false,
-        showSelectedLabels: false,
-        iconSize: 26,
-      ),
+      drawer: const Profile(),
+      bottomNavigationBar: widgetsByRole().length > 1
+          ? BottomNavigationBar(
+              selectedItemColor: mainColor,
+              items: bottomItemsByRole(),
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+              showUnselectedLabels: false,
+              showSelectedLabels: false,
+              iconSize: 26,
+            )
+          : null,
     );
   }
 
@@ -49,7 +55,6 @@ class _HomeState extends State<Home> {
         {
           return const [
             QrCode(ManagerQrPage()),
-            Profile(),
           ];
         }
       case 'ADMIN':
@@ -60,7 +65,6 @@ class _HomeState extends State<Home> {
     return const [
       QrCode(SportsmanQrPage()),
       TrainingList(),
-      Profile(),
     ];
   }
 
@@ -71,11 +75,7 @@ class _HomeState extends State<Home> {
           return const [
             BottomNavigationBarItem(
               icon: Icon(Icons.qr_code, size: 28),
-              label: 'QR',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle, size: 28),
-              label: 'Profile',
+              label: 'QR code',
             ),
           ];
         }
@@ -87,15 +87,11 @@ class _HomeState extends State<Home> {
     return const [
       BottomNavigationBarItem(
         icon: Icon(Icons.qr_code, size: 28),
-        label: 'QR',
+        label: 'QR code',
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.sticky_note_2_outlined, size: 28),
         label: 'Training List',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.account_circle, size: 28),
-        label: 'Profile',
       ),
     ];
   }
