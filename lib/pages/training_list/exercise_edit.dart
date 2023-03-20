@@ -11,28 +11,23 @@ class ExerciseEdit extends StatefulWidget {
   const ExerciseEdit({required this.exercise, Key? key}) : super(key: key);
 
   @override
-  State<ExerciseEdit> createState() => _ExerciseEditState(exercise);
+  State<ExerciseEdit> createState() => _ExerciseEditState();
 }
 
 class _ExerciseEditState extends State<ExerciseEdit> {
-  final ValueNotifier<Exercise> exercise;
+  late ValueNotifier<Exercise> exercise;
   final TextEditingController _exerciseController = TextEditingController();
-  late ValueNotifier<bool> _exerciseValidation;
-
-  _ExerciseEditState(this.exercise);
 
   @override
   void initState() {
     super.initState();
-
+    exercise = widget.exercise;
     _exerciseController.text = exercise.value.name;
-    _exerciseValidation = ValueNotifier(true);
     _exerciseController.addListener(_controllerListener);
   }
 
   void _controllerListener() {
-    _exerciseValidation.value = _exerciseController.text.isNotEmpty;
-    if (_exerciseValidation.value) {
+    if (_exerciseController.text.isNotEmpty) {
       setState(() {
         exercise.value.name = _exerciseController.text;
       });
@@ -42,7 +37,6 @@ class _ExerciseEditState extends State<ExerciseEdit> {
   @override
   void dispose() {
     _exerciseController.removeListener(_controllerListener);
-    _exerciseValidation.dispose();
 
     super.dispose();
   }
@@ -51,8 +45,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        setState(() => _exerciseValidation.value = _exerciseController.text.isNotEmpty);
-        return Future.value(_exerciseValidation.value);
+        return Future.value(true);
       },
       child: Scaffold(
         appBar: AppBar(
@@ -65,7 +58,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
               MyTextField(
                 autofocus: _exerciseController.text.isEmpty,
                 controller: _exerciseController,
-                validation: _exerciseValidation,
+                validation: ValueNotifier(true),
                 fieldName: 'Название',
               ),
               const SizedBox(height: 15),

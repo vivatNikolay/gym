@@ -73,7 +73,9 @@ class _TrainingEditState extends State<TrainingEdit> {
                             builder: (context) =>
                                 ExerciseEdit(exercise: newExercise)));
                     setState(() {
-                      _exercises.add(newExercise.value);
+                      if (newExercise.value.name.isNotEmpty) {
+                        _exercises.add(newExercise.value);
+                      }
                     });
                   },
                   highlightColor: Theme.of(context).primaryColor,
