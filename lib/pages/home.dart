@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../helpers/constants.dart';
 import '../services/db/account_db_service.dart';
 import 'main_page/manager/manager_qr_page.dart';
-import 'main_page/qr_code.dart';
 import 'main_page/sportsman/sportsman_qr_page.dart';
 import 'training_list/training_list.dart';
 import 'profile/profile.dart';
@@ -27,25 +26,47 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(bottomItemsByRole()[_selectedIndex].label ?? ''),
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image:
+              AssetImage(_selectedIndex == 0 ? gantelImage : trainingListImage),
+          fit: BoxFit.cover,
+          opacity: 0.6,
+        ),
+        color: Theme.of(context).backgroundColor,
       ),
-      body: Center(
-        child: widgetsByRole().elementAt(_selectedIndex),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(bottomItemsByRole()[_selectedIndex].label ?? ''),
+        ),
+        body: Column(
+          children: [
+            const SizedBox(height: 10),
+            widgetsByRole().elementAt(_selectedIndex),
+          ],
+        ),
+        drawer: const Profile(),
+        bottomNavigationBar: widgetsByRole().length > 1
+            ? ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(30.0),
+                  topLeft: Radius.circular(30.0),
+                ),
+                child: BottomNavigationBar(
+                  selectedItemColor: mainColor,
+                  items: bottomItemsByRole(),
+                  currentIndex: _selectedIndex,
+                  onTap: _onItemTapped,
+                  iconSize: 26,
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
+              )
+            : null,
       ),
-      drawer: const Profile(),
-      bottomNavigationBar: widgetsByRole().length > 1
-          ? BottomNavigationBar(
-              selectedItemColor: mainColor,
-              items: bottomItemsByRole(),
-              currentIndex: _selectedIndex,
-              onTap: _onItemTapped,
-              showUnselectedLabels: false,
-              showSelectedLabels: false,
-              iconSize: 26,
-            )
-          : null,
     );
   }
 
@@ -54,7 +75,7 @@ class _HomeState extends State<Home> {
       case 'MANAGER':
         {
           return const [
-            QrCode(ManagerQrPage()),
+            ManagerQrPage(),
           ];
         }
       case 'ADMIN':
@@ -63,7 +84,7 @@ class _HomeState extends State<Home> {
         }
     }
     return const [
-      QrCode(SportsmanQrPage()),
+      SportsmanQrPage(),
       TrainingList(),
     ];
   }
@@ -74,7 +95,7 @@ class _HomeState extends State<Home> {
         {
           return const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code, size: 28),
+              icon: Icon(Icons.qr_code),
               label: 'QR-код',
             ),
           ];
@@ -86,11 +107,11 @@ class _HomeState extends State<Home> {
     }
     return const [
       BottomNavigationBarItem(
-        icon: Icon(Icons.qr_code, size: 28),
+        icon: Icon(Icons.qr_code),
         label: 'QR-код',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.sticky_note_2_outlined, size: 28),
+        icon: Icon(Icons.sticky_note_2_outlined),
         label: 'Тренировки',
       ),
     ];

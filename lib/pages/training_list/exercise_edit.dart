@@ -62,15 +62,11 @@ class _ExerciseEditState extends State<ExerciseEdit> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(top: 20),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text('Название:', style: TextStyle(fontSize: 15)),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: MyTextField(
-                  autofocus: _exerciseController.text.isEmpty,
-                  controller: _exerciseController,
-                  validation: _exerciseValidation,
-                  inBox: false,
-                ),
+              MyTextField(
+                autofocus: _exerciseController.text.isEmpty,
+                controller: _exerciseController,
+                validation: _exerciseValidation,
+                fieldName: 'Название',
               ),
               const SizedBox(height: 15),
               const Text('Кол-во подходов:', style: TextStyle(fontSize: 15)),

@@ -36,7 +36,8 @@ class ThemeProvider extends ChangeNotifier {
 
 class MyThemes {
   static final light = ThemeData(
-    colorScheme: const ColorScheme.light(primary: mainColor, secondary: mainColor),
+    colorScheme:
+        const ColorScheme.light(primary: mainColor, secondary: mainColor),
     brightness: Brightness.light,
     primaryColor: Colors.white,
     backgroundColor: const Color(0xFFF3F3F8),
@@ -44,9 +45,9 @@ class MyThemes {
       backgroundColor: mainColor.withOpacity(0.8),
       titleTextStyle: const TextStyle(
           fontSize: 22,
-          fontFamily: 'Raleway',
           fontWeight: FontWeight.bold),
       titleSpacing: 18,
+      centerTitle: true,
     ),
     textTheme: const TextTheme(
       bodyMedium: TextStyle(
@@ -57,8 +58,10 @@ class MyThemes {
       cursorColor: mainColor,
     ),
     inputDecorationTheme: const InputDecorationTheme(
-      focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: mainColor, width: 2)),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: mainColor),
+        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+      ),
     ),
     cardTheme: CardTheme(
       shape: RoundedRectangleBorder(
@@ -68,16 +71,18 @@ class MyThemes {
   );
 
   static final dark = ThemeData(
-    colorScheme: const ColorScheme.dark(primary: mainColor, secondary: mainColor),
+    colorScheme:
+        const ColorScheme.dark(primary: mainColor, secondary: mainColor),
     brightness: Brightness.dark,
-    backgroundColor: const Color(0xFF2C2D2F),
+    backgroundColor: const Color(0xFF1C1C1E),
+    scaffoldBackgroundColor: const Color(0xFF1C1C1E),
     appBarTheme: AppBarTheme(
       backgroundColor: mainColor.withOpacity(0.8),
       titleTextStyle: const TextStyle(
           fontSize: 22,
-          fontFamily: 'Raleway',
           fontWeight: FontWeight.bold),
       titleSpacing: 18,
+      centerTitle: true,
     ),
     textTheme: const TextTheme(
       bodyMedium: TextStyle(
@@ -88,13 +93,18 @@ class MyThemes {
       cursorColor: mainColor,
     ),
     inputDecorationTheme: const InputDecorationTheme(
-      focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: mainColor, width: 2)),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: mainColor),
+        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+      ),
     ),
     cardTheme: CardTheme(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(13.0),
       ),
     ),
+    snackBarTheme: const SnackBarThemeData(
+      backgroundColor: Colors.white60,
+    )
   );
 }

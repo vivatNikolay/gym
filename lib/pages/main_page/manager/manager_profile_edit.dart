@@ -139,8 +139,8 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             MyTextField(
               controller: _emailController,
               validation: _emailValidator,
-              fontSize: 21,
-              hintText: 'Email',
+              fontSize: 20,
+              fieldName: 'Email',
               textAlign: TextAlign.center,
               readOnly: _isEdit,
             ),
@@ -148,16 +148,16 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             MyTextField(
               controller: _nameController,
               validation: _nameValidator,
-              fontSize: 21,
-              hintText: 'Имя',
+              fontSize: 20,
+              fieldName: 'Имя',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 5),
             MyTextField(
               controller: _lastNameController,
               validation: _nameValidator,
-              fontSize: 21,
-              hintText: 'Фамилия',
+              fontSize: 20,
+              fieldName: 'Фамилия',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 5),
@@ -165,25 +165,17 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               controller: _phoneController,
               validation: _phoneValidator,
               fontSize: 20,
-              hintText: 'Телефон',
+              fieldName: 'Телефон',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
-            InkWell(
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Theme.of(context).disabledColor)),
-                ),
-                child: Text(
-                  formatterDate.format(_pickedDate),
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Theme.of(context).textTheme.bodyLarge!.color,
-                  ),
-                ),
-              ),
+            MyTextField(
+              controller: TextEditingController()..text = formatterDate.format(_pickedDate),
+              validation: ValueNotifier(true),
+              fieldName: 'Дата рождения',
+              textAlign: TextAlign.center,
+              fontSize: 20,
+              readOnly: true,
               onTap: () async {
                 DateTime? newPickedDate = await showDatePicker(
                   context: context,
@@ -196,19 +188,19 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                 }
               },
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 5),
             GenderSwitcher(
                 gender: _gender,
                 onPressedMale: () => setState(() => _gender.value = true),
                 onPressedFemale: () => setState(() => _gender.value = false)),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                fixedSize: const Size.fromWidth(270),
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: MediaQuery.of(context).size.width/7),
                 backgroundColor: mainColor,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+                    Radius.circular(30),
                   ),
                 ),
               ),
@@ -218,7 +210,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               child: const Text(
                 'Сбросить пароль',
                 style: TextStyle(
-                  fontSize: 19,
+                  fontSize: 18,
                   color: Colors.white,
                 ),
               ),

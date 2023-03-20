@@ -8,11 +8,12 @@ class GenderSwitcher extends StatelessWidget {
   VoidCallback? onPressedMale;
   VoidCallback? onPressedFemale;
 
-  GenderSwitcher({
-    required this.gender,
-    this.onPressedMale,
-    this.onPressedFemale,
-    Key? key}) : super(key: key);
+  GenderSwitcher(
+      {required this.gender,
+      this.onPressedMale,
+      this.onPressedFemale,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +24,27 @@ class GenderSwitcher extends StatelessWidget {
         children: [
           OutlinedButton.icon(
             onPressed: onPressedMale,
-            icon: const Icon(Icons.male),
-            label: const Text('Муж',
-                style: TextStyle(fontSize: 18, color: mainColor)),
+            icon: Icon(
+              Icons.male,
+              color: gender.value
+                  ? mainColor
+                  : Theme.of(context).unselectedWidgetColor,
+              size: 26,
+            ),
+            label: Text('Муж',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: gender.value
+                      ? mainColor
+                      : Theme.of(context).unselectedWidgetColor,
+                )),
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 13, horizontal: 30),
+              padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 30),
               side: BorderSide(
                   color: gender.value
                       ? mainColor
                       : Theme.of(context).unselectedWidgetColor,
-                  width: gender.value ? 3 : 1),
+                  width: gender.value ? 2 : 1),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(30),
@@ -43,17 +54,27 @@ class GenderSwitcher extends StatelessWidget {
           ),
           OutlinedButton.icon(
             onPressed: onPressedFemale,
-            icon: const Icon(Icons.female),
-            label: const Text('Жен',
-                style: TextStyle(fontSize: 18, color: mainColor)),
+            icon: Icon(
+              Icons.female,
+              color: gender.value
+                  ? Theme.of(context).unselectedWidgetColor
+                  : mainColor,
+              size: 26,
+            ),
+            label: Text('Жен',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: gender.value
+                      ? Theme.of(context).unselectedWidgetColor
+                      : mainColor,
+                )),
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 13, horizontal: 30),
+              padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 30),
               side: BorderSide(
                   color: gender.value
                       ? Theme.of(context).unselectedWidgetColor
                       : mainColor,
-                  width: gender.value ? 1 : 3),
+                  width: gender.value ? 1 : 2),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(30),

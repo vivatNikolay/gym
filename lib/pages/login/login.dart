@@ -77,7 +77,6 @@ class _LoginState extends State<Login> {
                     controller: _loginController,
                     validation: _loginValidation,
                     errorText: 'Неверный логин',
-                    inBox: false,
                   ),
                   const SizedBox(
                     height: 15,
@@ -87,7 +86,6 @@ class _LoginState extends State<Login> {
                     controller: _passController,
                     validation: _passwordValidation,
                     obscureText: true,
-                    inBox: false,
                   ),
                   const SizedBox(
                     height: 15,

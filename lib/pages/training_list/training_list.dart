@@ -40,19 +40,7 @@ class _TrainingListState extends State<TrainingList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      padding: const EdgeInsets.only(top: 5),
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(trainingListImage),
-          fit: BoxFit.cover,
-          alignment: Alignment.centerRight,
-          opacity: 0.6,
-        ),
-      ),
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Column(
           children: [
             buildList(context),
@@ -63,7 +51,6 @@ class _TrainingListState extends State<TrainingList> {
             ),
           ],
         ),
-      ),
     );
   }
 
@@ -80,10 +67,11 @@ class _TrainingListState extends State<TrainingList> {
             color: Theme.of(context).primaryColor.withOpacity(0.9),
             elevation: 2.0,
             child: ListTile(
-              title: Text('${_trainings[index].name}',
+              title: Text(_trainings[index].name,
                   style: const TextStyle(fontSize: 19)),
+              subtitle: Text('${_trainings[index].exercises.length.toString()} упражнений'),
               trailing: IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.delete_outline),
                 onPressed: () => deletionDialog(index),
               ),
               onTap: () async {
@@ -113,10 +101,9 @@ class _TrainingListState extends State<TrainingList> {
                   borderRadius: BorderRadius.circular(12.0)),
               content: MyTextField(
                 autofocus: true,
-                hintText: 'Название',
+                fieldName: 'Название',
                 controller: _nameController,
                 validation: _nameValidator,
-                inBox: false,
               ),
               backgroundColor: Theme.of(context).backgroundColor,
               actions: [

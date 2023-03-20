@@ -101,8 +101,9 @@ class _TrainingEditState extends State<TrainingEdit> {
             child: ListTile(
               title: Text(_exercises[index].name,
                   style: const TextStyle(fontSize: 19)),
+              subtitle: Text('${_exercises[index].reps} / ${_exercises[index].sets}'),
               trailing: IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.delete_outline),
                 onPressed: () {
                   setState(() {
                     _exercises.remove(_exercises[index]);

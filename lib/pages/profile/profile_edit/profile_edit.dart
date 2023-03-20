@@ -110,19 +110,17 @@ class _ProfileEditState extends State<ProfileEdit> {
             MyTextField(
               controller: _nameController,
               validation: _nameValidator,
-              fontSize: 21,
-              hintText: 'Имя',
+              fontSize: 20,
+              fieldName: 'Имя',
               textAlign: TextAlign.center,
-              inBox: false,
             ),
             const SizedBox(height: 5),
             MyTextField(
               controller: _phoneController,
               validation: _phoneValidator,
               fontSize: 20,
-              hintText: 'Телефон',
+              fieldName: 'Телефон',
               textAlign: TextAlign.center,
-              inBox: false,
             ),
             const SizedBox(height: 10),
             GenderSwitcher(

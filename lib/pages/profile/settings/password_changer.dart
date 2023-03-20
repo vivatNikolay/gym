@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sportmen_in_gym/controllers/account_http_controller.dart';
 
-import '../../../pages/profile/settings/widgets/setting_pack.dart';
+import '../../../controllers/account_http_controller.dart';
 import '../../../pages/widgets/my_text_field.dart';
 import '../../../models/account.dart';
 import '../../../services/db/account_db_service.dart';
@@ -88,43 +87,34 @@ class _PasswordChangerState extends State<PasswordChanger> {
           padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
           child: Column(
             children: [
-              SettingPack(children: [
-                MyTextField(
-                  controller: _oldPassController,
-                  validation: _oldPassValidator,
-                  hintText: 'Старый пароль',
-                  textAlign: TextAlign.center,
-                  fontSize: 18,
-                  obscureText: true,
-                  errorText: 'Некоректный пароль',
-                  inBox: true,
-                ),
-              ]),
+              MyTextField(
+                controller: _oldPassController,
+                validation: _oldPassValidator,
+                fieldName: 'Старый пароль',
+                textAlign: TextAlign.center,
+                fontSize: 18,
+                obscureText: true,
+                errorText: 'Некоректный пароль',
+              ),
               const SizedBox(height: 10),
-              SettingPack(children: [
-                MyTextField(
-                  controller: _newPass1Controller,
-                  validation: _newPass1Validator,
-                  hintText: 'Новый пароль',
-                  textAlign: TextAlign.center,
-                  fontSize: 18,
-                  obscureText: true,
-                  inBox: true,
-                ),
-              ]),
+              MyTextField(
+                controller: _newPass1Controller,
+                validation: _newPass1Validator,
+                fieldName: 'Новый пароль',
+                textAlign: TextAlign.center,
+                fontSize: 18,
+                obscureText: true,
+              ),
               const SizedBox(height: 10),
-              SettingPack(children: [
-                MyTextField(
-                  controller: _newPass2Controller,
-                  validation: _newPass2Validator,
-                  hintText: 'Повтор пароля',
-                  textAlign: TextAlign.center,
-                  fontSize: 18,
-                  obscureText: true,
-                  errorText: 'Повтор не совпадает',
-                  inBox: true,
-                ),
-              ]),
+              MyTextField(
+                controller: _newPass2Controller,
+                validation: _newPass2Validator,
+                fieldName: 'Повтор пароля',
+                textAlign: TextAlign.center,
+                fontSize: 18,
+                obscureText: true,
+                errorText: 'Повтор не совпадает',
+              ),
             ],
           ),
         ),
