@@ -18,6 +18,7 @@ class ConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Подтверждение'),
+      titlePadding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 4.0),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0)),
       content: Text(textConfirmation),

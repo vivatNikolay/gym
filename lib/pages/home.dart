@@ -5,7 +5,6 @@ import '../services/db/account_db_service.dart';
 import 'main_page/manager/manager_qr_page.dart';
 import 'main_page/sportsman/sportsman_qr_page.dart';
 import 'training_list/training_list.dart';
-import 'profile/profile.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -40,16 +39,7 @@ class _HomeState extends State<Home> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text(bottomItemsByRole()[_selectedIndex].label ?? ''),
-        ),
-        body: Column(
-          children: [
-            const SizedBox(height: 10),
-            widgetsByRole().elementAt(_selectedIndex),
-          ],
-        ),
-        drawer: const Profile(),
+        body: widgetsByRole().elementAt(_selectedIndex),
         bottomNavigationBar: widgetsByRole().length > 1
             ? ClipRRect(
                 borderRadius: const BorderRadius.only(

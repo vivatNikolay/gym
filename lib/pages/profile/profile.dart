@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
 import '../../services/db/account_db_service.dart';
-import '../widgets/profile_row.dart';
 import 'profile_edit/profile_edit.dart';
 import 'settings/settings.dart';
 
@@ -39,8 +38,8 @@ class _ProfileState extends State<Profile> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomCenter,
                   colors: [
-                    mainColor.withOpacity(0.9),
-                    mainColor.withOpacity(0.8)
+                    mainColor,
+                    mainColor.withOpacity(0.9)
                   ],
                 ),
               ),

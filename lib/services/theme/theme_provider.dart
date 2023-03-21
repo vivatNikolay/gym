@@ -42,7 +42,7 @@ class MyThemes {
     primaryColor: Colors.white,
     backgroundColor: const Color(0xFFF3F3F8),
     appBarTheme: AppBarTheme(
-      backgroundColor: mainColor.withOpacity(0.8),
+      backgroundColor: mainColor.withOpacity(0.9),
       titleTextStyle: const TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.bold),
@@ -65,7 +65,7 @@ class MyThemes {
     ),
     cardTheme: CardTheme(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(13.0),
+        borderRadius: BorderRadius.circular(12.0),
       ),
     ),
   );
@@ -77,7 +77,7 @@ class MyThemes {
     backgroundColor: const Color(0xFF1C1C1E),
     scaffoldBackgroundColor: const Color(0xFF1C1C1E),
     appBarTheme: AppBarTheme(
-      backgroundColor: mainColor.withOpacity(0.8),
+      backgroundColor: mainColor.withOpacity(0.9),
       titleTextStyle: const TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.bold),
@@ -100,7 +100,7 @@ class MyThemes {
     ),
     cardTheme: CardTheme(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(13.0),
+        borderRadius: BorderRadius.circular(12.0),
       ),
     ),
     snackBarTheme: const SnackBarThemeData(

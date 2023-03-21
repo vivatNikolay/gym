@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../helpers/constants.dart';
 import '../../pages/training_list/training_edit.dart';
-import '../../pages/training_list/widgets/add_button.dart';
 import '../../services/db/training_db_service.dart';
 import '../../models/training.dart';
+import '../profile/profile.dart';
 import '../widgets/my_text_field.dart';
 import '../widgets/confirm_dialog.dart';
+import 'widgets/training_card.dart';
+import 'widgets/floating_add_button.dart';
 
 class TrainingList extends StatefulWidget {
   const TrainingList({Key? key}) : super(key: key);
@@ -40,17 +42,21 @@ class _TrainingListState extends State<TrainingList> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: Column(
-          children: [
-            buildList(context),
-            AddButton(
-              text: 'Добавить тренировку',
-              onTap: () => creationDialog(),
-              highlightColor: Colors.black,
-            ),
-          ],
-        ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        title: const Text('Тренировки'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingAddButton(
+        text: 'Добавить тренировку',
+        onPressed: () => creationDialog(),
+      ),
+      drawer: const Profile(),
+      body: SingleChildScrollView(
+        child: buildList(context),
+        padding: const EdgeInsets.only(top: 10),
+      ),
     );
   }
 
@@ -63,28 +69,20 @@ class _TrainingListState extends State<TrainingList> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: _trainings.length,
         itemBuilder: (_, index) {
-          return Card(
-            color: Theme.of(context).primaryColor.withOpacity(0.9),
-            elevation: 2.0,
-            child: ListTile(
-              title: Text(_trainings[index].name,
-                  style: const TextStyle(fontSize: 19)),
-              subtitle: Text('${_trainings[index].exercises.length.toString()} упражнений'),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete_outline),
-                onPressed: () => deletionDialog(index),
-              ),
-              onTap: () async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            TrainingEdit(training: _trainings[index])));
-                setState(() {
-                  _trainings = _dbService.getAll();
-                });
-              },
-            ),
+          return TrainingCard(
+              title: _trainings[index].name,
+            subtitle: '${_trainings[index].exercises.length.toString()} упражнений',
+            onDelete: () => deletionDialog(index),
+            onTap: () async {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          TrainingEdit(training: _trainings[index])));
+              setState(() {
+                _trainings = _dbService.getAll();
+              });
+            },
           );
         });
   }

@@ -7,7 +7,8 @@ import '../../models/training.dart';
 import '../../services/db/training_settings_db_service.dart';
 import '../../services/db/training_db_service.dart';
 import '../../pages/training_list/exercise_edit.dart';
-import '../../pages/training_list/widgets/add_button.dart';
+import '../../pages/training_list/widgets/floating_add_button.dart';
+import 'widgets/training_card.dart';
 
 class TrainingEdit extends StatefulWidget {
   final Training training;
@@ -15,21 +16,19 @@ class TrainingEdit extends StatefulWidget {
   const TrainingEdit({required this.training, Key? key}) : super(key: key);
 
   @override
-  State<TrainingEdit> createState() => _TrainingEditState(training);
+  State<TrainingEdit> createState() => _TrainingEditState();
 }
 
 class _TrainingEditState extends State<TrainingEdit> {
-  final Training training;
+  late Training training;
   final TrainingDBService _dbService = TrainingDBService();
   final TrainingSettings _settings = TrainingSettingsDBService().getFirst();
   late List<Exercise> _exercises;
 
-  _TrainingEditState(this.training);
-
   @override
   void initState() {
     super.initState();
-
+    training = widget.training;
     _exercises = training.exercises;
   }
 
@@ -42,6 +41,26 @@ class _TrainingEditState extends State<TrainingEdit> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(training.name),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingAddButton(
+          text: 'Добавить упражнение',
+          onPressed: () async {
+            ValueNotifier<Exercise> newExercise = ValueNotifier(Exercise(
+                name: '',
+                reps: _settings.defaultExerciseReps,
+                sets: _settings.defaultExerciseSets));
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ExerciseEdit(exercise: newExercise)));
+            setState(() {
+              if (newExercise.value.name.isNotEmpty) {
+                _exercises.add(newExercise.value);
+              }
+            });
+          },
         ),
         body: Container(
           width: double.infinity,
@@ -56,32 +75,8 @@ class _TrainingEditState extends State<TrainingEdit> {
           ),
           child: SingleChildScrollView(
               child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(top: 20),
-            child: Column(
-              children: [
-                buildList(context),
-                AddButton(
-                  text: 'Добавить упражнение',
-                  onTap: () async {
-                    ValueNotifier<Exercise> newExercise = ValueNotifier(Exercise(
-                        name: '',
-                        reps: _settings.defaultExerciseReps,
-                        sets: _settings.defaultExerciseSets));
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ExerciseEdit(exercise: newExercise)));
-                    setState(() {
-                      if (newExercise.value.name.isNotEmpty) {
-                        _exercises.add(newExercise.value);
-                      }
-                    });
-                  },
-                  highlightColor: Theme.of(context).primaryColor,
-                ),
-              ],
-            ),
+            padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
+            child: buildList(context),
           )),
         ),
       ),
@@ -97,34 +92,24 @@ class _TrainingEditState extends State<TrainingEdit> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: _exercises.length,
         itemBuilder: (_, index) {
-          return Card(
-            color: Theme.of(context).primaryColor.withOpacity(0.9),
-            elevation: 4.0,
-            child: ListTile(
-              title: Text(_exercises[index].name,
-                  style: const TextStyle(fontSize: 19)),
-              subtitle: Text('${_exercises[index].reps} / ${_exercises[index].sets}'),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete_outline),
-                onPressed: () {
-                  setState(() {
-                    _exercises.remove(_exercises[index]);
-                  });
-                },
-              ),
-              onTap: () async {
-                ValueNotifier<Exercise> exercise =
-                    ValueNotifier(_exercises[index]);
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ExerciseEdit(exercise: exercise)));
-                setState(() {
-                  _exercises[index] = exercise.value;
-                });
-              },
-            ),
+          return TrainingCard(
+            title: _exercises[index].name,
+            subtitle: '${_exercises[index].reps} / ${_exercises[index].sets}',
+            onDelete: () => setState(() {
+              _exercises.remove(_exercises[index]);
+            }),
+            onTap: () async {
+              ValueNotifier<Exercise> exercise =
+              ValueNotifier(_exercises[index]);
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ExerciseEdit(exercise: exercise)));
+              setState(() {
+                _exercises[index] = exercise.value;
+              });
+            },
           );
         });
   }
