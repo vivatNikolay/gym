@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/custom_icons.dart';
 import '../helpers/constants.dart';
 import '../services/db/account_db_service.dart';
 import 'main_page/manager/manager_qr_page.dart';
@@ -101,7 +102,7 @@ class _HomeState extends State<Home> {
         label: 'QR-код',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.sticky_note_2_outlined),
+        icon: Icon(CustomIcons.dumbbell),
         label: 'Тренировки',
       ),
     ];
