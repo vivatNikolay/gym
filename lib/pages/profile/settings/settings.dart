@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sportmen_in_gym/services/db/manager_settings_db_service.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
+import '../../../models/manager_settings.dart';
 import '../../../pages/profile/settings/password_changer.dart';
 import '../../../helpers/constants.dart';
 import '../../../models/training_settings.dart';
@@ -12,7 +14,8 @@ import '../../../services/db/training_settings_db_service.dart';
 import '../../../services/theme/theme_provider.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+  final bool isManager;
+  const Settings({required this.isManager, Key? key}) : super(key: key);
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -20,12 +23,17 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
 
-  final TrainingSettingsDBService _dbService = TrainingSettingsDBService();
+  final TrainingSettingsDBService _trainingDBService = TrainingSettingsDBService();
+  final ManagerSettingsDBService _managerDBService = ManagerSettingsDBService();
   late TrainingSettings _trainingSettings;
+  late ManagerSettings _managerSettings;
 
   @override
   initState() {
-    _trainingSettings = _dbService.getFirst();
+    super.initState();
+
+    _trainingSettings = _trainingDBService.getFirst();
+    _managerSettings = _managerDBService.getFirst();
   }
 
   @override
@@ -61,44 +69,7 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
               ]),
-              SettingTitle(text: 'Тренировки'),
-              SettingPack(children: [
-                const SizedBox(height: 15),
-                SettingName(text: 'Стандартное кол-во подходов:'),
-                SfSlider(
-                  min: 0,
-                  max: 10,
-                  interval: 5,
-                  showLabels: true,
-                  enableTooltip: true,
-                  activeColor: mainColor,
-                  value: _trainingSettings.defaultExerciseSets,
-                  onChanged: (value) {
-                    setState(() {
-                      _trainingSettings.defaultExerciseSets = value.toInt();
-                      _dbService.put(_trainingSettings);
-                    });
-                  },
-                ),
-                const SizedBox(height: 15),
-                SettingName(text: 'Стандартное кол-во повторений:'),
-                SfSlider(
-                  min: 0,
-                  max: 30,
-                  interval: 10,
-                  showLabels: true,
-                  enableTooltip: true,
-                  activeColor: mainColor,
-                  value: _trainingSettings.defaultExerciseReps,
-                  onChanged: (value) {
-                    setState(() {
-                      _trainingSettings.defaultExerciseReps = value.toInt();
-                      _dbService.put(_trainingSettings);
-                    });
-                  },
-                ),
-                const SizedBox(height: 15),
-              ]),
+              ...widget.isManager ? managerPart() : sportsmanPart(),
               SettingTitle(text: 'Безопасность'),
               SettingPack(
                   children: [
@@ -120,5 +91,91 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
+  }
+
+  List<Widget> sportsmanPart() {
+    return [
+      SettingTitle(text: 'Тренировки'),
+      SettingPack(children: [
+        const SizedBox(height: 15),
+        SettingName(text: 'Стандартное кол-во подходов:'),
+        SfSlider(
+          min: 0,
+          max: 10,
+          interval: 5,
+          showLabels: true,
+          enableTooltip: true,
+          activeColor: mainColor,
+          value: _trainingSettings.defaultExerciseSets,
+          onChanged: (value) {
+            setState(() {
+              _trainingSettings.defaultExerciseSets = value.toInt();
+              _trainingDBService.put(_trainingSettings);
+            });
+          },
+        ),
+        const SizedBox(height: 15),
+        SettingName(text: 'Стандартное кол-во повторений:'),
+        SfSlider(
+          min: 0,
+          max: 30,
+          interval: 10,
+          showLabels: true,
+          enableTooltip: true,
+          activeColor: mainColor,
+          value: _trainingSettings.defaultExerciseReps,
+          onChanged: (value) {
+            setState(() {
+              _trainingSettings.defaultExerciseReps = value.toInt();
+              _trainingDBService.put(_trainingSettings);
+            });
+          },
+        ),
+        const SizedBox(height: 15),
+      ]),
+    ];
+  }
+
+  List<Widget> managerPart() {
+    return [
+      SettingTitle(text: 'Абонемент'),
+      SettingPack(children: [
+        const SizedBox(height: 15),
+        SettingName(text: 'Стандартная длительность(мес.):'),
+        SfSlider(
+          min: 0,
+          max: 12,
+          interval: 3,
+          showLabels: true,
+          enableTooltip: true,
+          activeColor: mainColor,
+          value: _managerSettings.defaultMembershipTime,
+          onChanged: (value) {
+            setState(() {
+              _managerSettings.defaultMembershipTime = value.toInt();
+              _managerDBService.put(_managerSettings);
+            });
+          },
+        ),
+        const SizedBox(height: 15),
+        SettingName(text: 'Стандартное кол-во посещений:'),
+        SfSlider(
+          min: 0,
+          max: 50,
+          interval: 10,
+          showLabels: true,
+          enableTooltip: true,
+          activeColor: mainColor,
+          value: _managerSettings.defaultMembershipNumber,
+          onChanged: (value) {
+            setState(() {
+              _managerSettings.defaultMembershipNumber = value.toInt();
+              _managerDBService.put(_managerSettings);
+            });
+          },
+        ),
+        const SizedBox(height: 15),
+      ]),
+    ];
   }
 }

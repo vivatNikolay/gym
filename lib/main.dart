@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:sportmen_in_gym/models/manager_settings.dart';
 
 import 'models/training_settings.dart';
 import 'models/visit.dart';
@@ -30,12 +31,14 @@ Future<void> hiveInitialization() async {
   Hive.registerAdapter(SubscriptionAdapter());
   Hive.registerAdapter(SystemSettingsAdapter());
   Hive.registerAdapter(TrainingSettingsAdapter());
+  Hive.registerAdapter(ManagerSettingsAdapter());
   Hive.registerAdapter(TrainingAdapter());
   Hive.registerAdapter(ExerciseAdapter());
   Hive.registerAdapter(VisitAdapter());
   await Hive.openBox<Account>('account');
   await Hive.openBox<SystemSettings>('system_settings');
   await Hive.openBox<TrainingSettings>('training_settings');
+  await Hive.openBox<ManagerSettings>('manager_settings');
   await Hive.openBox<Training>('training');
 }
 

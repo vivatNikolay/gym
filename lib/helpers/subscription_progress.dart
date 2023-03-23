@@ -14,6 +14,6 @@ class SubscriptionProgress {
       return '${subscription.visits.length}/${subscription.numberOfVisits}\n'
           'c ${_formatterDate.format(subscription.dateOfStart)} по ${_formatterDate.format(subscription.dateOfEnd)}';
     }
-    return 'Не добавлен';
+    return 'Отсутствует';
   }
 }

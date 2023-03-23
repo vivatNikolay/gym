@@ -38,10 +38,7 @@ class _ProfileState extends State<Profile> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomCenter,
-                  colors: [
-                    mainColor,
-                    mainColor.withOpacity(0.9)
-                  ],
+                  colors: [mainColor, mainColor.withOpacity(0.9)],
                 ),
               ),
               child: Column(
@@ -68,7 +65,11 @@ class _ProfileState extends State<Profile> {
                             account = _accountDBService.getFirst();
                           });
                         },
-                        child: const Icon(Icons.edit, color: mainColor, size: 28),
+                        child: const Icon(
+                          Icons.edit,
+                          color: mainColor,
+                          size: 28,
+                        ),
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(),
                           padding: const EdgeInsets.all(10),
@@ -103,8 +104,9 @@ class _ProfileState extends State<Profile> {
             minLeadingWidth: 24,
             title: const Text('Настройки', style: TextStyle(fontSize: 18)),
             onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const Settings()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      Settings(isManager: account?.role == 'MANAGER')));
             },
           ),
           ListTile(

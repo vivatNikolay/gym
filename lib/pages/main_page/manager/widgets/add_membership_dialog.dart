@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../controllers/subscription_http_controller.dart';
+import '../../../../services/db/manager_settings_db_service.dart';
+import '../../../../models/manager_settings.dart';
 import '../../../../helpers/constants.dart';
 
 class AddMembershipDialog extends StatefulWidget {
@@ -14,12 +16,11 @@ class AddMembershipDialog extends StatefulWidget {
 
 class _AddMembershipDialogState extends State<AddMembershipDialog> {
   final SubscriptionHttpController _subscriptionHttpController = SubscriptionHttpController.instance;
+  final ManagerSettings _settings = ManagerSettingsDBService().getFirst();
   final DateFormat formatterDate = DateFormat('dd.MM.yy');
   final String _email;
-  DateTimeRange _dateRange = DateTimeRange(
-      start: DateTime.now(),
-      end: DateTime.now().add(const Duration(days: 60)),
-  );
+  final DateTime _now = DateTime.now();
+  late DateTimeRange _dateRange;
   final TextEditingController _numberOfVisitsController = TextEditingController();
   late ValueNotifier<bool> _numberOfVisitsValidation;
 
@@ -28,7 +29,11 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
   @override
   void initState() {
     super.initState();
-
+    _dateRange = DateTimeRange(
+      start: _now,
+      end: DateTime(_now.year, _now.month + _settings.defaultMembershipTime, _now.day),
+    );
+    _numberOfVisitsController.text = _settings.defaultMembershipNumber.toString();
     _numberOfVisitsValidation = ValueNotifier(true);
   }
 
@@ -42,6 +47,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Добавить абонемент'),
+      titlePadding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 4.0),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0)),
       backgroundColor: Theme.of(context).backgroundColor,
@@ -69,10 +75,10 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
               Text(
                 'Начало: ${formatterDate.format(_dateRange.start)}\n'
                 'Конец:   ${formatterDate.format(_dateRange.end)}',
-                style: const TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 18),
               ),
               ElevatedButton(
-                child: const Icon(Icons.calendar_today, size: 28),
+                child: const Icon(Icons.calendar_today, size: 26),
                 style: ElevatedButton.styleFrom(
                   shape: const CircleBorder(),
                   padding: const EdgeInsets.all(10),
@@ -92,7 +98,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
               ),
             ],
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 8),
           TextField(
             controller: _numberOfVisitsController,
             keyboardType: TextInputType.number,

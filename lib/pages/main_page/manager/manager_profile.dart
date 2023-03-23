@@ -15,24 +15,26 @@ import 'widgets/add_membership_dialog.dart';
 class ManagerProfile extends StatefulWidget {
   final String email;
 
-  ManagerProfile({required this.email, Key? key}) : super(key: key);
+  const ManagerProfile({required this.email, Key? key}) : super(key: key);
 
   @override
-  State<ManagerProfile> createState() => _ManagerProfileState(email);
+  State<ManagerProfile> createState() => _ManagerProfileState();
 }
 
 class _ManagerProfileState extends State<ManagerProfile> {
-  final String email;
   final AccountHttpController _accountHttpController =
       AccountHttpController.instance;
   final VisitHttpController _visitHttpController = VisitHttpController.instance;
+  late String email;
   late Future<Account> _futureAccount;
 
-  _ManagerProfileState(this.email);
+  _ManagerProfileState();
 
   @override
   void initState() {
     super.initState();
+
+    email = widget.email;
     _futureAccount = _accountHttpController.getSportsmenByEmail(email);
   }
 
