@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import '../models/subscription.dart';
 
 class SubscriptionProgress {
-  static final DateFormat _formatterDate = DateFormat('dd.MM.yyyy');
+  static final DateFormat _formatterDate = DateFormat('dd.MM.yy');
 
   static getString(List<Subscription> subscriptions) {
     Subscription? subscription;
@@ -11,14 +11,8 @@ class SubscriptionProgress {
       subscription = subscriptions.last;
     }
     if (subscription != null) {
-      if (subscription.dateOfEnd
-          .add(const Duration(days: 1))
-          .isBefore(DateTime.now())) {
-        return 'Истекает ${_formatterDate.format(subscription.dateOfEnd)}';
-      } else {
-        return '${subscription.visits.length}/${subscription.numberOfVisits} '
-            'до ${_formatterDate.format(subscription.dateOfEnd)}';
-      }
+      return '${subscription.visits.length}/${subscription.numberOfVisits}\n'
+          'c ${_formatterDate.format(subscription.dateOfStart)} по ${_formatterDate.format(subscription.dateOfEnd)}';
     }
     return 'Не добавлен';
   }

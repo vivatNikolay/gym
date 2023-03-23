@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../models/visit.dart';
 
 class VisitsList extends StatelessWidget {
-  final DateFormat _formatterDate = DateFormat('dd.MM.yyyy');
+  final DateFormat _formatterDate = DateFormat('dd.MM.yy');
   final DateFormat _formatterWeekDay = DateFormat('E');
   final List<Visit> visits;
   final String title;

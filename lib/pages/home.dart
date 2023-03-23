@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
           image:
               AssetImage(_selectedIndex == 0 ? gantelImage : trainingListImage),
           fit: BoxFit.cover,
-          opacity: 0.6,
+          opacity: 0.75,
         ),
         color: Theme.of(context).backgroundColor,
       ),
@@ -45,7 +45,6 @@ class _HomeState extends State<Home> {
             ? ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(30.0),
-                  topLeft: Radius.circular(30.0),
                 ),
                 child: BottomNavigationBar(
                   selectedItemColor: mainColor,

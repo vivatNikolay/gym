@@ -27,11 +27,12 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Theme.of(context).primaryColor,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           SizedBox(
-            height: 238,
+            height: 246,
             child: DrawerHeader(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -76,27 +77,27 @@ class _ProfileState extends State<Profile> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 6),
                   Text(
                     '${account!.firstName ?? ''} ${account!.lastName}',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 22.0,
+                      fontSize: 24.0,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 6),
                   Text(
                     account!.email ?? '',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16.0,
+                      fontSize: 18.0,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 6),
           ListTile(
             leading: const Icon(Icons.settings_outlined, color: mainColor),
             minLeadingWidth: 24,

@@ -4,8 +4,8 @@ import '../../helpers/constants.dart';
 import '../../pages/training_list/training_edit.dart';
 import '../../services/db/training_db_service.dart';
 import '../../models/training.dart';
-import '../profile/profile.dart';
 import '../widgets/my_text_field.dart';
+import '../widgets/main_scaffold.dart';
 import '../widgets/confirm_dialog.dart';
 import 'widgets/training_card.dart';
 import 'widgets/floating_add_button.dart';
@@ -42,17 +42,12 @@ class _TrainingListState extends State<TrainingList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: const Text('Тренировки'),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    return MainScaffold(
+      title: 'Тренировки',
       floatingActionButton: FloatingAddButton(
         text: 'Добавить тренировку',
         onPressed: () => creationDialog(),
       ),
-      drawer: const Profile(),
       body: SingleChildScrollView(
         child: buildList(context),
         padding: const EdgeInsets.only(top: 10),

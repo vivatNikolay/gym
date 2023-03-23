@@ -38,42 +38,44 @@ class _TrainingEditState extends State<TrainingEdit> {
       onWillPop: () {
         return _dbService.saveOrUpdate(training);
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(training.name),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingAddButton(
-          text: 'Добавить упражнение',
-          onPressed: () async {
-            ValueNotifier<Exercise> newExercise = ValueNotifier(Exercise(
-                name: '',
-                reps: _settings.defaultExerciseReps,
-                sets: _settings.defaultExerciseSets));
-            await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ExerciseEdit(exercise: newExercise)));
-            setState(() {
-              if (newExercise.value.name.isNotEmpty) {
-                _exercises.add(newExercise.value);
-              }
-            });
-          },
-        ),
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(trainingListImage),
-              fit: BoxFit.cover,
-              alignment: Alignment.centerRight,
-              opacity: 0.6,
-            ),
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage(trainingListImage),
+            fit: BoxFit.cover,
+            alignment: Alignment.centerRight,
+            opacity: 0.6,
           ),
-          child: SingleChildScrollView(
+          color: Theme.of(context).backgroundColor,
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: Text(training.name),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: FloatingAddButton(
+            text: 'Добавить упражнение',
+            onPressed: () async {
+              ValueNotifier<Exercise> newExercise = ValueNotifier(Exercise(
+                  name: '',
+                  reps: _settings.defaultExerciseReps,
+                  sets: _settings.defaultExerciseSets));
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ExerciseEdit(exercise: newExercise)));
+              setState(() {
+                if (newExercise.value.name.isNotEmpty) {
+                  _exercises.add(newExercise.value);
+                }
+              });
+            },
+          ),
+          body: SingleChildScrollView(
               child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
             child: buildList(context),

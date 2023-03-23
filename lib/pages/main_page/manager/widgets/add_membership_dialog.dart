@@ -14,7 +14,7 @@ class AddMembershipDialog extends StatefulWidget {
 
 class _AddMembershipDialogState extends State<AddMembershipDialog> {
   final SubscriptionHttpController _subscriptionHttpController = SubscriptionHttpController.instance;
-  final DateFormat formatterDate = DateFormat('dd.MM.yyyy');
+  final DateFormat formatterDate = DateFormat('dd.MM.yy');
   final String _email;
   DateTimeRange _dateRange = DateTimeRange(
       start: DateTime.now(),
@@ -92,6 +92,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
               ),
             ],
           ),
+          const SizedBox(height: 5),
           TextField(
             controller: _numberOfVisitsController,
             keyboardType: TextInputType.number,

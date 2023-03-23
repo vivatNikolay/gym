@@ -11,8 +11,7 @@ class ThemeProvider extends ChangeNotifier {
   late SystemSettings _settings;
 
   ThemeProvider() {
-    _settings = _dbService.getFirst() ??
-        SystemSettings(isDark: ThemeMode.system == ThemeMode.dark);
+    _settings = _dbService.getFirst() ?? SystemSettings(isDark: true);
     themeMode = initThemeMode();
   }
 
@@ -43,16 +42,23 @@ class MyThemes {
     backgroundColor: const Color(0xFFF3F3F8),
     appBarTheme: AppBarTheme(
       backgroundColor: mainColor.withOpacity(0.9),
-      titleTextStyle: const TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.bold),
+      titleTextStyle:
+          const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
       titleSpacing: 18,
       centerTitle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(25),
+        ),
+      ),
     ),
     textTheme: const TextTheme(
       bodyMedium: TextStyle(
         color: Colors.black54,
       ),
+    ),
+    iconTheme: const IconThemeData(
+      color: Colors.black54,
     ),
     textSelectionTheme: const TextSelectionThemeData(
       cursorColor: mainColor,
@@ -71,40 +77,46 @@ class MyThemes {
   );
 
   static final dark = ThemeData(
-    colorScheme:
-        const ColorScheme.dark(primary: mainColor, secondary: mainColor),
-    brightness: Brightness.dark,
-    backgroundColor: const Color(0xFF1C1C1E),
-    scaffoldBackgroundColor: const Color(0xFF1C1C1E),
-    appBarTheme: AppBarTheme(
-      backgroundColor: mainColor.withOpacity(0.9),
-      titleTextStyle: const TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.bold),
-      titleSpacing: 18,
-      centerTitle: true,
-    ),
-    textTheme: const TextTheme(
-      bodyMedium: TextStyle(
+      colorScheme:
+          const ColorScheme.dark(primary: mainColor, secondary: mainColor),
+      brightness: Brightness.dark,
+      backgroundColor: const Color(0xFF1C1C1E),
+      scaffoldBackgroundColor: const Color(0xFF1C1C1E),
+      appBarTheme: AppBarTheme(
+        backgroundColor: mainColor.withOpacity(0.9),
+        titleTextStyle:
+            const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        titleSpacing: 18,
+        centerTitle: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+          ),
+        ),
+      ),
+      textTheme: const TextTheme(
+        bodyMedium: TextStyle(
+          color: Colors.white54,
+        ),
+      ),
+      iconTheme: const IconThemeData(
         color: Colors.white54,
       ),
-    ),
-    textSelectionTheme: const TextSelectionThemeData(
-      cursorColor: mainColor,
-    ),
-    inputDecorationTheme: const InputDecorationTheme(
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: mainColor),
-        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+      textSelectionTheme: const TextSelectionThemeData(
+        cursorColor: mainColor,
       ),
-    ),
-    cardTheme: CardTheme(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
+      inputDecorationTheme: const InputDecorationTheme(
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: mainColor),
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        ),
       ),
-    ),
-    snackBarTheme: const SnackBarThemeData(
-      backgroundColor: Colors.white60,
-    )
-  );
+      cardTheme: CardTheme(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+      ),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: Colors.white60,
+      ));
 }

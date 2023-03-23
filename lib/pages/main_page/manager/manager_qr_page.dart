@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../models/account.dart';
-import '../../profile/profile.dart';
+import '../../training_list/widgets/floating_add_button.dart';
+import '../../widgets/main_scaffold.dart';
+import '../widgets/qr_item.dart';
 import 'manager_profile_edit.dart';
 import 'widgets/custom_search_delegate.dart';
 import 'widgets/qr_scan_page.dart';
+import 'widgets/search_field.dart';
 
 class ManagerQrPage extends StatefulWidget {
   const ManagerQrPage({Key? key}) : super(key: key);
@@ -17,74 +20,36 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: const Text('QR-код'),
+    return MainScaffold(
+      title: 'QR-код',
+      floatingActionButton: FloatingAddButton(
+        text: 'Создать аккаунт',
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ManagerProfileEdit(
+                account: Account.emptySportsman(), isEdit: false))),
       ),
-      drawer: const Profile(),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-          InkWell(
-            child: Container(
-              width: 210,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: Column(
-                children: [
-                  Image.asset('images/qr_scan.png'),
-                  const SizedBox(height: 5),
-                ],
-              ),
-            ),
-            onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const QrScanPage()));
-            },
-          ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 20, 12, 10),
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
+              SearchField(
+                onTap: () => showSearch(
+                  context: context,
+                  delegate: CustomSearchDelegate(),
                 ),
-                child: IconButton(
-                    onPressed: () {
-                      showSearch(
-                        context: context,
-                        delegate:
-                            CustomSearchDelegate(),
-                      );
-                    },
-                    icon:
-                        const Icon(Icons.search, size: 34, color: Colors.black)),
               ),
-              const SizedBox(width: 20),
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ManagerProfileEdit(
-                              account: Account.emptySportsman(), isEdit: false)));
-                    },
-                    icon: const Icon(Icons.add, size: 34, color: Colors.black)),
+              const SizedBox(height: 120),
+              QrItem(
+                data: 'Scan qr-code!',
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const QrScanPage()));
+                },
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

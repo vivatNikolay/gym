@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../../../helpers/subscription_progress.dart';
 import '../../../controllers/subscription_http_controller.dart';
-import '../../../helpers/constants.dart';
 import '../../../models/account.dart';
 import '../../../models/subscription.dart';
 import '../../../services/db/account_db_service.dart';
-import '../../profile/profile.dart';
 import '../../widgets/visits_list.dart';
-import 'widgets/qr_item.dart';
+import '../../widgets/main_scaffold.dart';
+import '../widgets/qr_item.dart';
+import 'widgets/membership_card.dart';
+import 'widgets/qr_dialog.dart';
 
 class SportsmanQrPage extends StatefulWidget {
   const SportsmanQrPage({Key? key}) : super(key: key);
@@ -17,9 +19,11 @@ class SportsmanQrPage extends StatefulWidget {
   State<SportsmanQrPage> createState() => _SportsmanQrPageState();
 }
 
-class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProviderStateMixin {
+class _SportsmanQrPageState extends State<SportsmanQrPage>
+    with SingleTickerProviderStateMixin {
   final AccountDBService _accountDBService = AccountDBService();
-  final SubscriptionHttpController _subscriptionHttpController = SubscriptionHttpController.instance;
+  final SubscriptionHttpController _subscriptionHttpController =
+      SubscriptionHttpController.instance;
   Future<List<Subscription>>? _futureSubscription;
   late AnimationController _animationController;
 
@@ -27,8 +31,7 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
   void initState() {
     super.initState();
 
-    _futureSubscription = _subscriptionHttpController
-        .getByAccount();
+    _futureSubscription = _subscriptionHttpController.getByAccount();
 
     _animationController = AnimationController(
       vsync: this,
@@ -44,39 +47,22 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: const Text('QR-код'),
-      ),
-      drawer: const Profile(),
-      body: Column(children: [
-        const SizedBox(height: 20),
-        QrItem(data: _accountDBService.getFirst()!.email),
-        const SizedBox(height: 20),
-        Card(
-          color: Colors.white,
-          child: ListTile(
-              leading:
-              const Icon(Icons.credit_card, size: 26, color: mainColor),
-              minLeadingWidth: 22,
-              title: const Text(
-                'Абонемент',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
+    return MainScaffold(
+      title: 'QR-код',
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            MembershipCard(
               subtitle: FutureBuilder<List<Subscription>>(
                 future: _futureSubscription,
                 builder: (context, snapshot) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) =>
-                      ScaffoldMessenger.of(context).clearSnackBars()
-                  );
+                  WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => ScaffoldMessenger.of(context).clearSnackBars());
                   if (snapshot.hasError) {
                     WidgetsBinding.instance.addPostFrameCallback((_) =>
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Нет интернет соединения'),
-                        ))
-                    );
+                        )));
                   }
                   if (snapshot.hasData) {
                     Account? s = _accountDBService.getFirst();
@@ -87,9 +73,9 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
                     SubscriptionProgress.getString(snapshot.data ??
                         _accountDBService.getFirst()!.subscriptions),
                     style: const TextStyle(
-                        fontSize: 17,
-                        color: Colors.black,
-                        fontStyle: FontStyle.italic),
+                      fontSize: 17,
+                      fontStyle: FontStyle.italic,
+                    ),
                   );
                 },
               ),
@@ -97,14 +83,13 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
                 onPressed: () {
                   _animationController.forward(from: 0.0);
                   setState(() {
-                    _futureSubscription = _subscriptionHttpController
-                        .getByAccount();
+                    _futureSubscription =
+                        _subscriptionHttpController.getByAccount();
                   });
                 },
                 icon: RotationTransition(
                     turns: _animationController,
-                    child: const Icon(Icons.refresh,
-                        size: 32, color: mainColor)),
+                    child: const Icon(Icons.refresh, size: 32)),
               ),
               onTap: () {
                 setState(() {
@@ -114,14 +99,32 @@ class _SportsmanQrPageState extends State<SportsmanQrPage> with SingleTickerProv
                 if (_accountDBService.getFirst()!.subscriptions.isNotEmpty) {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => VisitsList(
-                            visits: _accountDBService.getFirst()!
-                                .subscriptions.last.visits,
+                            visits: _accountDBService
+                                .getFirst()!
+                                .subscriptions
+                                .last
+                                .visits,
                             title: 'История абонемента',
                           )));
                 }
-              }),
+              },
+            ),
+            const SizedBox(height: 120),
+            QrItem(
+              data: _accountDBService.getFirst()!.email,
+              onTap: () {
+                ScreenBrightness().setScreenBrightness(1);
+                showDialog(
+                  context: context,
+                  builder: (context) => QrDialog(
+                    data: _accountDBService.getFirst()!.email,
+                  ),
+                ).then((value) => ScreenBrightness().resetScreenBrightness());
+              },
+            ),
+          ],
         ),
-      ]),
+      ),
     );
   }
 }
