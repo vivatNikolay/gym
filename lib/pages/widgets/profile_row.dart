@@ -25,25 +25,28 @@ class ProfileRow extends StatelessWidget {
         ),
         Expanded(
           flex: 7,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Tooltip(
-                message: account.firstName,
-                child: Text('${account.firstName} ${account.lastName}',
-                    maxLines: 2,
-                    style: const TextStyle(
-                        fontSize: 27,
-                        fontWeight: FontWeight.bold)),
-              ),
-              Tooltip(
-                message: account.email,
-                child: Text(account.email,
-                    maxLines: 2,
-                    style: const TextStyle(fontSize: 18)),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 1),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Tooltip(
+                  message: account.firstName,
+                  child: Text('${account.firstName} ${account.lastName}',
+                      maxLines: 2,
+                      style: const TextStyle(
+                          fontSize: 27,
+                          fontWeight: FontWeight.bold)),
+                ),
+                Tooltip(
+                  message: account.email,
+                  child: Text(account.email,
+                      maxLines: 2,
+                      style: const TextStyle(fontSize: 18)),
+                ),
+              ],
+            ),
           ),
         ),
         Expanded(

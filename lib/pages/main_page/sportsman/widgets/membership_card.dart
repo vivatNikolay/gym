@@ -45,7 +45,6 @@ class MembershipCard extends StatelessWidget {
               child: ListTile(
                 title: const Text(
                   'Абонемент',
-                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 23),
                 ),
                 subtitle: subtitle,

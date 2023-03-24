@@ -110,11 +110,19 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                   onPressed: () async {
                                     if (isMembershipInactive(
                                         snapshot.data!.subscriptions)) {
-                                      await showDialog(context: context,
-                                          builder: (context) => AddMembershipDialog(snapshot.data!.email));
-                                      setState(() {
-                                        _futureAccount = _accountHttpController.getSportsmenByEmail(email);
-                                      });
+                                      if (isMembershipNotStarted(snapshot.data!.subscriptions)) {
+                                        return;
+                                      } else {
+                                        await showDialog(context: context,
+                                            builder: (context) =>
+                                                AddMembershipDialog(
+                                                    snapshot.data!.email));
+                                        setState(() {
+                                          _futureAccount =
+                                              _accountHttpController
+                                                  .getSportsmenByEmail(email);
+                                        });
+                                      }
                                     } else {
                                       showDialog(
                                         context: context,
@@ -229,7 +237,19 @@ class _ManagerProfileState extends State<ManagerProfile> {
     }
     Subscription subscription = subscriptions.last;
     if (subscription.dateOfEnd.isBefore(DateTime.now()) ||
+        subscription.dateOfStart.isAfter(DateTime.now()) ||
         subscription.visits.length >= subscription.numberOfVisits) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isMembershipNotStarted(List<Subscription> subscriptions) {
+    Subscription subscription = subscriptions.last;
+    if (subscription.dateOfStart.isAfter(DateTime.now())) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Абонемент не начат'),
+      ));
       return true;
     }
     return false;

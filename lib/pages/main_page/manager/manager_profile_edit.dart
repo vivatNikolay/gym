@@ -36,6 +36,10 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   late ValueNotifier<bool> _gender;
   late ValueNotifier<int> _iconNum;
   final DateFormat formatterDate = DateFormat('dd.MM.yyyy');
+  final RegExp _regExpEmail = RegExp(
+      r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
+      multiLine: false
+  );
 
   _ManagerProfileEditState(this._account, this._isEdit);
 
@@ -143,6 +147,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               fieldName: 'Email',
               textAlign: TextAlign.center,
               readOnly: _isEdit,
+              errorText: 'Неверный email',
             ),
             const SizedBox(height: 5),
             MyTextField(
@@ -193,28 +198,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                 gender: _gender,
                 onPressedMale: () => setState(() => _gender.value = true),
                 onPressedFemale: () => setState(() => _gender.value = false)),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: MediaQuery.of(context).size.width/7),
-                backgroundColor: mainColor,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(30),
-                  ),
-                ),
-              ),
-              onPressed: () {
-                _account.password = '1111';
-              },
-              child: const Text(
-                'Сбросить пароль',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-            )
+            ..._optionalWidgets(),
           ],
         ),
       ),
@@ -223,7 +207,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
 
   bool validateFields() {
     setState(() {
-      _emailValidator.value = _emailController.text.isNotEmpty;
+      _emailValidator.value = _regExpEmail.hasMatch(_emailController.text.trim());
       _nameValidator.value = _nameController.text.isNotEmpty;
       _lastNameValidator.value = _lastNameController.text.isNotEmpty;
       _phoneValidator.value = _phoneController.text.isNotEmpty;
@@ -232,5 +216,58 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
         _nameValidator.value &&
         _lastNameValidator.value &&
         _phoneValidator.value;
+  }
+
+  List<Widget> _optionalWidgets() {
+    if (_isEdit) {
+      return [
+        const SizedBox(height: 12),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: MediaQuery
+                .of(context)
+                .size
+                .width / 7),
+            backgroundColor: mainColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(30),
+              ),
+            ),
+          ),
+          onPressed: () async {
+            bool success;
+            success = await _accountHttpController.editAccount(
+                Account(
+                    email: _account.email,
+                    lastName: _account.lastName,
+                    password: '1111',
+                    phone: _account.phone,
+                    firstName: _account.firstName,
+                    gender: _account.gender,
+                    iconNum: _account.iconNum,
+                    dateOfBirth: _account.dateOfBirth,
+                    subscriptions: _account.subscriptions,
+                    role: _account.role));
+            if (success) {
+              Navigator.pop(context);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Нет интернет соединения'),
+              ));
+            }
+          },
+          child: const Text(
+            'Сбросить пароль',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ];
+    } else {
+      return [];
+    }
   }
 }
