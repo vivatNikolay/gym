@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../controllers/visit_http_controller.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
 import '../../services/db/account_db_service.dart';
+import '../widgets/visits_list.dart';
 import 'profile_edit/profile_edit.dart';
 import 'settings/settings.dart';
 
@@ -14,6 +16,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final VisitHttpController _visitHttpController = VisitHttpController.instance;
   final AccountDBService _accountDBService = AccountDBService();
   Account? account;
 
@@ -99,6 +102,7 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           const SizedBox(height: 6),
+          ..._optionalTiles(),
           ListTile(
             leading: const Icon(Icons.settings_outlined, color: mainColor),
             minLeadingWidth: 24,
@@ -121,5 +125,27 @@ class _ProfileState extends State<Profile> {
         ],
       ),
     );
+  }
+
+  List<Widget> _optionalTiles() {
+    if (account?.role == 'USER') {
+      return [
+        ListTile(
+          leading: const Icon(Icons.history, color: mainColor),
+          minLeadingWidth: 24,
+          title: const Text('История', style: TextStyle(fontSize: 18)),
+          onTap: () {
+            _visitHttpController
+                .getOwnVisitsByAccount()
+                .then((value) => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => VisitsList(
+                          visits: account!.subscriptions.last.visits,
+                          title: 'История всех посещений',
+                        ))));
+          },
+        ),
+      ];
+    }
+    return [];
   }
 }

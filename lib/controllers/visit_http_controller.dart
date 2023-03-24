@@ -19,6 +19,11 @@ class VisitHttpController {
     return visits;
   }
 
+  Future<List<Visit>> getOwnVisitsByAccount() async {
+    List<Visit> visits = await _httpService.getByAccount(_accountDBService.getFirst()!);
+    return visits;
+  }
+
   Future<bool> addSingleVisit(Account account) async {
     bool success = await _httpService.addSingleVisit(account, _accountDBService.getFirst()!);
     return success;
