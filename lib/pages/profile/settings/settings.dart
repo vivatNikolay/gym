@@ -98,7 +98,7 @@ class _SettingsState extends State<Settings> {
       SettingTitle(text: 'Тренировки'),
       SettingPack(children: [
         const SizedBox(height: 15),
-        SettingName(text: 'Стандартное кол-во подходов:'),
+        const SettingName(text: 'Стандартное кол-во подходов:'),
         SfSlider(
           min: 0,
           max: 10,
@@ -115,7 +115,7 @@ class _SettingsState extends State<Settings> {
           },
         ),
         const SizedBox(height: 15),
-        SettingName(text: 'Стандартное кол-во повторений:'),
+        const SettingName(text: 'Стандартное кол-во повторений:'),
         SfSlider(
           min: 0,
           max: 30,
@@ -141,7 +141,7 @@ class _SettingsState extends State<Settings> {
       SettingTitle(text: 'Абонемент'),
       SettingPack(children: [
         const SizedBox(height: 15),
-        SettingName(text: 'Стандартная длительность(мес.):'),
+        const SettingName(text: 'Стандартная длительность(мес.):'),
         SfSlider(
           min: 0,
           max: 12,
@@ -158,7 +158,7 @@ class _SettingsState extends State<Settings> {
           },
         ),
         const SizedBox(height: 15),
-        SettingName(text: 'Стандартное кол-во посещений:'),
+        const SettingName(text: 'Стандартное кол-во посещений:'),
         SfSlider(
           min: 0,
           max: 50,
