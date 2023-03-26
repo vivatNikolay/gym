@@ -22,6 +22,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
   late ValueNotifier<bool> _oldPassValidator;
   late ValueNotifier<bool> _newPass1Validator;
   late ValueNotifier<bool> _newPass2Validator;
+  bool _saveEnabled = true;
 
   @override
   initState() {
@@ -48,34 +49,39 @@ class _PasswordChangerState extends State<PasswordChanger> {
       appBar: AppBar(
         title: const Text('Смена пароля'),
         actions: [
-          IconButton(
-            padding: const EdgeInsets.only(right: 12),
-            icon: const Icon(Icons.check, size: 28),
-            onPressed: () async {
-              ScaffoldMessenger.of(context).clearSnackBars();
-              if (validateFields()) {
-                bool success = await _accountHttpController.editOwnAccount(Account(
-                    email: _account.email,
-                    lastName: _account.lastName,
-                    password: _newPass2Controller.text,
-                    phone: _account.phone,
-                    firstName: _account.firstName,
-                    gender: _account.gender,
-                    iconNum: _account.iconNum,
-                    dateOfBirth: _account.dateOfBirth,
-                    subscriptions: _account.subscriptions,
-                    role: _account.role));
-                if (success) {
-                  _account.password = _newPass2Controller.text;
-                  _accountDBService.put(_account);
-                  Navigator.pop(context);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Нет интернет соединения'),
-                  ));
+          AbsorbPointer(
+            absorbing: !_saveEnabled,
+            child: IconButton(
+              padding: const EdgeInsets.only(right: 12),
+              icon: const Icon(Icons.check, size: 28),
+              onPressed: () async {
+                setState(() => _saveEnabled = false);
+                ScaffoldMessenger.of(context).clearSnackBars();
+                if (validateFields()) {
+                  bool success = await _accountHttpController.editOwnAccount(Account(
+                      email: _account.email,
+                      lastName: _account.lastName,
+                      password: _newPass2Controller.text,
+                      phone: _account.phone,
+                      firstName: _account.firstName,
+                      gender: _account.gender,
+                      iconNum: _account.iconNum,
+                      dateOfBirth: _account.dateOfBirth,
+                      subscriptions: _account.subscriptions,
+                      role: _account.role));
+                  if (success) {
+                    _account.password = _newPass2Controller.text;
+                    _accountDBService.put(_account);
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Нет интернет соединения'),
+                    ));
+                  }
                 }
-              }
-            },
+                setState(() => _saveEnabled = true);
+              },
+            ),
           ),
         ],
       ),

@@ -28,6 +28,7 @@ class _LoginState extends State<Login> {
       r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
       multiLine: false
   );
+  bool _loginEnabled = true;
 
   @override
   void initState() {
@@ -90,14 +91,21 @@ class _LoginState extends State<Login> {
                   const SizedBox(
                     height: 15,
                   ),
-                  LoginButton(
-                    onPressed: () => setState(() {
-                    if (validateFields()) {
-                      _futureAccount = _accountHttpController.getAccount(
-                          _loginController.text.trim(),
-                          _passController.text);
-                    }
-                  })),
+                  AbsorbPointer(
+                    absorbing: !_loginEnabled,
+                    child: LoginButton(
+                        onPressed: () => setState(() {
+                              _loginEnabled = false;
+                              if (validateFields()) {
+                                _futureAccount =
+                                    _accountHttpController.getAccount(
+                                        _loginController.text.trim(),
+                                        _passController.text);
+                              }
+                              _loginEnabled = true;
+                            }),
+                    ),
+                  ),
                   FutureBuilder<Account>(
                       future: _futureAccount,
                       builder: (context, snapshot) {

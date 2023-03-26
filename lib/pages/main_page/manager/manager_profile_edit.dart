@@ -40,6 +40,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
       r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
       multiLine: false
   );
+  bool _saveEnabled = true;
 
   _ManagerProfileEditState(this._account, this._isEdit);
 
@@ -76,49 +77,54 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
       appBar: AppBar(
         title: const Text('Профиль'),
         actions: [
-          IconButton(
-            padding: const EdgeInsets.only(right: 12),
-            icon: const Icon(Icons.check, size: 28),
-            onPressed: () async {
-              ScaffoldMessenger.of(context).clearSnackBars();
-              if (validateFields()) {
-                bool success;
-                if (_isEdit) {
-                  success = await _accountHttpController.editAccount(
-                      Account(
-                          email: _emailController.text.trim(),
-                          lastName: _lastNameController.text.trim(),
-                          password: _account.password,
-                          phone: _phoneController.text.trim(),
-                          firstName: _nameController.text.trim(),
-                          gender: _gender.value,
-                          iconNum: _iconNum.value,
-                          dateOfBirth: _pickedDate,
-                          subscriptions: _account.subscriptions,
-                          role: _account.role));
-                } else {
-                  success = await _accountHttpController.createAccount(
-                      Account(
-                          email: _emailController.text.trim(),
-                          lastName: _lastNameController.text.trim(),
-                          password: '1111',
-                          phone: _phoneController.text.trim(),
-                          firstName: _nameController.text.trim(),
-                          gender: _gender.value,
-                          iconNum: _iconNum.value,
-                          dateOfBirth: _pickedDate,
-                          subscriptions: _account.subscriptions,
-                          role: _account.role));
+          AbsorbPointer(
+            absorbing: !_saveEnabled,
+            child: IconButton(
+              padding: const EdgeInsets.only(right: 12),
+              icon: const Icon(Icons.check, size: 28),
+              onPressed: () async {
+                setState(() => _saveEnabled = false);
+                ScaffoldMessenger.of(context).clearSnackBars();
+                if (validateFields()) {
+                  bool success;
+                  if (_isEdit) {
+                    success = await _accountHttpController.editAccount(
+                        Account(
+                            email: _emailController.text.trim(),
+                            lastName: _lastNameController.text.trim(),
+                            password: _account.password,
+                            phone: _phoneController.text.trim(),
+                            firstName: _nameController.text.trim(),
+                            gender: _gender.value,
+                            iconNum: _iconNum.value,
+                            dateOfBirth: _pickedDate,
+                            subscriptions: _account.subscriptions,
+                            role: _account.role));
+                  } else {
+                    success = await _accountHttpController.createAccount(
+                        Account(
+                            email: _emailController.text.trim(),
+                            lastName: _lastNameController.text.trim(),
+                            password: '1111',
+                            phone: _phoneController.text.trim(),
+                            firstName: _nameController.text.trim(),
+                            gender: _gender.value,
+                            iconNum: _iconNum.value,
+                            dateOfBirth: _pickedDate,
+                            subscriptions: _account.subscriptions,
+                            role: _account.role));
+                  }
+                  if (success) {
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Нет интернет соединения'),
+                    ));
+                  }
                 }
-                if (success) {
-                  Navigator.pop(context);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Нет интернет соединения'),
-                  ));
-                }
-              }
-            },
+                setState(() => _saveEnabled = true);
+              },
+            ),
           )
         ],
       ),
@@ -222,46 +228,50 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
     if (_isEdit) {
       return [
         const SizedBox(height: 12),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: MediaQuery
-                .of(context)
-                .size
-                .width / 7),
-            backgroundColor: mainColor,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(30),
+        AbsorbPointer(
+          absorbing: !_saveEnabled,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: MediaQuery
+                  .of(context)
+                  .size
+                  .width / 7),
+              backgroundColor: mainColor,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(30),
+                ),
               ),
             ),
-          ),
-          onPressed: () async {
-            bool success;
-            success = await _accountHttpController.editAccount(
-                Account(
-                    email: _account.email,
-                    lastName: _account.lastName,
-                    password: '1111',
-                    phone: _account.phone,
-                    firstName: _account.firstName,
-                    gender: _account.gender,
-                    iconNum: _account.iconNum,
-                    dateOfBirth: _account.dateOfBirth,
-                    subscriptions: _account.subscriptions,
-                    role: _account.role));
-            if (success) {
-              Navigator.pop(context);
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Нет интернет соединения'),
-              ));
-            }
-          },
-          child: const Text(
-            'Сбросить пароль',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
+            onPressed: () async {
+              setState(() => _saveEnabled = false);
+              bool success = await _accountHttpController.editAccount(
+                  Account(
+                      email: _account.email,
+                      lastName: _account.lastName,
+                      password: '1111',
+                      phone: _account.phone,
+                      firstName: _account.firstName,
+                      gender: _account.gender,
+                      iconNum: _account.iconNum,
+                      dateOfBirth: _account.dateOfBirth,
+                      subscriptions: _account.subscriptions,
+                      role: _account.role));
+              if (success) {
+                Navigator.pop(context);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Нет интернет соединения'),
+                ));
+              }
+              setState(() => _saveEnabled = true);
+            },
+            child: const Text(
+              'Сбросить пароль',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+              ),
             ),
           ),
         ),

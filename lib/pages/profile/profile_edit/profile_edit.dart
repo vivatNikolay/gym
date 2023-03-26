@@ -10,29 +10,29 @@ import '../../widgets/circle_image.dart';
 
 class ProfileEdit extends StatefulWidget {
   final Account account;
-  ProfileEdit({required this.account, Key? key}) : super(key: key);
+  const ProfileEdit({required this.account, Key? key}) : super(key: key);
 
   @override
-  State<ProfileEdit> createState() => _ProfileEditState(account);
+  State<ProfileEdit> createState() => _ProfileEditState();
 }
 
 class _ProfileEditState extends State<ProfileEdit> {
-  Account _account;
   final AccountHttpController _accountHttpController = AccountHttpController.instance;
   final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  late Account _account;
   late ValueNotifier<bool> _nameValidator;
   late ValueNotifier<bool> _phoneValidator;
   late ValueNotifier<bool> _gender;
   late ValueNotifier<int> _iconNum;
-
-  _ProfileEditState(this._account);
+  bool _saveEnabled = true;
 
   @override
   void initState() {
     super.initState();
 
+    _account = widget.account;
     _nameController.text = _account.firstName;
     _phoneController.text = _account.phone;
     _nameValidator = ValueNotifier(true);
@@ -55,37 +55,42 @@ class _ProfileEditState extends State<ProfileEdit> {
       appBar: AppBar(
         title: const Text('Профиль'),
         actions: [
-          IconButton(
-            padding: const EdgeInsets.only(right: 12),
-            icon: const Icon(Icons.check, size: 28),
-            onPressed: () async {
-              ScaffoldMessenger.of(context).clearSnackBars();
-              if (validateFields()) {
-                bool success = await _accountHttpController.editOwnAccount(Account(
-                    email: _account.email,
-                    lastName: _account.lastName,
-                    password: _account.password,
-                    phone: _phoneController.text.trim(),
-                    firstName: _nameController.text.trim(),
-                    gender: _gender.value,
-                    iconNum: _iconNum.value,
-                    dateOfBirth: _account.dateOfBirth,
-                    subscriptions: _account.subscriptions,
-                    role: _account.role));
-                if (success) {
-                  _account.firstName = _nameController.text.trim();
-                  _account.phone = _phoneController.text.trim();
-                  _account.gender = _gender.value;
-                  _account.iconNum = _iconNum.value;
-                  _accountDBService.put(_account);
-                  Navigator.pop(context);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Нет интернет соединения'),
-                  ));
+          AbsorbPointer(
+            absorbing: !_saveEnabled,
+            child: IconButton(
+              padding: const EdgeInsets.only(right: 12),
+              icon: const Icon(Icons.check, size: 28),
+              onPressed: () async {
+                setState(() => _saveEnabled = false);
+                ScaffoldMessenger.of(context).clearSnackBars();
+                if (validateFields()) {
+                  bool success = await _accountHttpController.editOwnAccount(Account(
+                      email: _account.email,
+                      lastName: _account.lastName,
+                      password: _account.password,
+                      phone: _phoneController.text.trim(),
+                      firstName: _nameController.text.trim(),
+                      gender: _gender.value,
+                      iconNum: _iconNum.value,
+                      dateOfBirth: _account.dateOfBirth,
+                      subscriptions: _account.subscriptions,
+                      role: _account.role));
+                  if (success) {
+                    _account.firstName = _nameController.text.trim();
+                    _account.phone = _phoneController.text.trim();
+                    _account.gender = _gender.value;
+                    _account.iconNum = _iconNum.value;
+                    _accountDBService.put(_account);
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Нет интернет соединения'),
+                    ));
+                  }
                 }
-              }
-            },
+                setState(() => _saveEnabled = true);
+              },
+            ),
           )
         ],
       ),

@@ -27,6 +27,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
   final VisitHttpController _visitHttpController = VisitHttpController.instance;
   late String email;
   late Future<Account> _futureAccount;
+  bool _addMembershipEnabled = true;
+  bool _addVisitEnabled = true;
 
   _ManagerProfileState();
 
@@ -104,51 +106,60 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                   SubscriptionProgress.getString(
                                       snapshot.data!.subscriptions),
                                 ),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.add,
-                                      size: 32, color: mainColor),
-                                  onPressed: () async {
-                                    if (isMembershipInactive(
-                                        snapshot.data!.subscriptions)) {
-                                      if (isMembershipNotStarted(snapshot.data!.subscriptions)) {
-                                        return;
+                                trailing: AbsorbPointer(
+                                  absorbing: !_addMembershipEnabled,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.add,
+                                        size: 32, color: mainColor),
+                                    onPressed: () async {
+                                      setState(() => _addMembershipEnabled = false);
+                                      ScaffoldMessenger.of(context).clearSnackBars();
+                                      if (isMembershipInactive(
+                                          snapshot.data!.subscriptions)) {
+                                        if (isMembershipStarted(snapshot.data!.subscriptions)) {
+                                          await showDialog(context: context,
+                                              builder: (context) =>
+                                                  AddMembershipDialog(
+                                                      snapshot.data!.email));
+                                          setState(() {
+                                            _futureAccount =
+                                                _accountHttpController
+                                                    .getSportsmenByEmail(email);
+                                          });
+                                        }
                                       } else {
-                                        await showDialog(context: context,
-                                            builder: (context) =>
-                                                AddMembershipDialog(
-                                                    snapshot.data!.email));
-                                        setState(() {
-                                          _futureAccount =
-                                              _accountHttpController
-                                                  .getSportsmenByEmail(email);
-                                        });
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AbsorbPointer(
+                                            absorbing: !_addVisitEnabled,
+                                            child: ConfirmDialog(
+                                              textConfirmation: 'Добавить посещение в абонемент?',
+                                              onNo: () => Navigator.pop(context),
+                                              onYes: () async {
+                                                setState(() => _addVisitEnabled = false);
+                                                bool success =
+                                                    await _visitHttpController
+                                                        .addVisitToMembership(
+                                                            snapshot.data!);
+                                                if (success) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(const SnackBar(
+                                                          content: Text(
+                                                              'Посещение добавлено в абонемент')));
+                                                  setState(() {
+                                                    _futureAccount = _accountHttpController.getSportsmenByEmail(email);
+                                                  });
+                                                }
+                                                Navigator.pop(context);
+                                                setState(() => _addVisitEnabled = true);
+                                              },
+                                            ),
+                                          ),
+                                        );
                                       }
-                                    } else {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => ConfirmDialog(
-                                          textConfirmation: 'Добавить посещение в абонемент?',
-                                          onNo: () => Navigator.pop(context),
-                                          onYes: () async {
-                                            bool success =
-                                                await _visitHttpController
-                                                    .addVisitToMembership(
-                                                        snapshot.data!);
-                                            if (success) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                      content: Text(
-                                                          'Посещение добавлено в абонемент')));
-                                              setState(() {
-                                                _futureAccount = _accountHttpController.getSportsmenByEmail(email);
-                                              });
-                                            }
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      );
-                                    }
-                                  },
+                                      setState(() => _addMembershipEnabled = true);
+                                    },
+                                  ),
                                 ),
                                 onTap: () async {
                                   if (snapshot.data!.subscriptions.isNotEmpty) {
@@ -182,27 +193,33 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                       ),
                                     ),
                                     onPressed: () async {
+                                      ScaffoldMessenger.of(context).clearSnackBars();
                                       showDialog(
                                         context: context,
-                                        builder: (context) => ConfirmDialog(
-                                          textConfirmation: 'Добавить разовое?',
-                                          onNo: () => Navigator.pop(context),
-                                          onYes: () async {
-                                            bool success =
-                                                await _visitHttpController
-                                                    .addSingleVisit(
-                                                        snapshot.data!);
-                                            if (success) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                      content: Text(
-                                                          'Добавлено разовое посещение')));
-                                              setState(() {
-                                                _futureAccount = _accountHttpController.getSportsmenByEmail(email);
-                                              });
-                                            }
-                                            Navigator.pop(context);
-                                          },
+                                        builder: (context) => AbsorbPointer(
+                                          absorbing: !_addVisitEnabled,
+                                          child: ConfirmDialog(
+                                            textConfirmation: 'Добавить разовое?',
+                                            onNo: () => Navigator.pop(context),
+                                            onYes: () async {
+                                              setState(() => _addVisitEnabled = false);
+                                              bool success =
+                                                  await _visitHttpController
+                                                      .addSingleVisit(
+                                                          snapshot.data!);
+                                              if (success) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(const SnackBar(
+                                                        content: Text(
+                                                            'Добавлено разовое посещение')));
+                                                setState(() {
+                                                  _futureAccount = _accountHttpController.getSportsmenByEmail(email);
+                                                });
+                                              }
+                                              Navigator.pop(context);
+                                              setState(() => _addVisitEnabled = true);
+                                            },
+                                          ),
                                         ),
                                       );
                                     },
@@ -244,14 +261,17 @@ class _ManagerProfileState extends State<ManagerProfile> {
     return false;
   }
 
-  bool isMembershipNotStarted(List<Subscription> subscriptions) {
+  bool isMembershipStarted(List<Subscription> subscriptions) {
+    if (subscriptions.isEmpty) {
+      return true;
+    }
     Subscription subscription = subscriptions.last;
     if (subscription.dateOfStart.isAfter(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Абонемент не начат'),
       ));
-      return true;
+      return false;
     }
-    return false;
+    return true;
   }
 }

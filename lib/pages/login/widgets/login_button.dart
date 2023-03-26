@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../helpers/constants.dart';
 
 class LoginButton extends StatelessWidget {
-  VoidCallback? onPressed;
+  final VoidCallback? onPressed;
 
-  LoginButton({
+  const LoginButton({
     this.onPressed,
     Key? key}) : super(key: key);
 

@@ -104,7 +104,9 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               label: Text('Кол-во посещений'),
+              counterText: '',
             ),
+            maxLength: 4,
           ),
         ],
       ),
