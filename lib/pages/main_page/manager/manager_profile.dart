@@ -5,6 +5,7 @@ import '../../../controllers/visit_http_controller.dart';
 import '../../../controllers/account_http_controller.dart';
 import '../../../models/subscription.dart';
 import '../../../models/account.dart';
+import '../../../models/custom_icons.dart';
 import '../../../helpers/constants.dart';
 import '../../widgets/confirm_dialog.dart';
 import '../../widgets/profile_row.dart';
@@ -95,7 +96,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                             Card(
                               elevation: 2,
                               child: ListTile(
-                                leading: const Icon(Icons.credit_card,
+                                leading: const Icon(CustomIcons.sub,
                                     size: 26, color: mainColor),
                                 minLeadingWidth: 22,
                                 title: const Text(

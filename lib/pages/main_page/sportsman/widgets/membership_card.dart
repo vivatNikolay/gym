@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../helpers/constants.dart';
+import '../../../../models/custom_icons.dart';
 
 class MembershipCard extends StatelessWidget {
   final Widget subtitle;
@@ -36,7 +37,7 @@ class MembershipCard extends StatelessWidget {
                   topLeft: Radius.circular(12),
                 ),
               ),
-              child: const Icon(Icons.credit_card, size: 40, color: Colors.white),
+              child: const Icon(CustomIcons.sub, size: 40, color: Colors.white),
             ),
           ),
           Expanded(
