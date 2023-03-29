@@ -139,7 +139,7 @@ class _ProfileState extends State<Profile> {
                 .getOwnVisitsByAccount()
                 .then((value) => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => VisitsList(
-                          visits: account!.subscriptions.last.visits,
+                          visits: value,
                           title: 'История всех посещений',
                         ))));
           },
