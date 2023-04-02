@@ -7,14 +7,14 @@ import 'main_page/manager/manager_qr_page.dart';
 import 'main_page/sportsman/sportsman_qr_page.dart';
 import 'training_list/training_list.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Tabs extends StatefulWidget {
+  const Tabs({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Tabs> createState() => _TabsState();
 }
 
-class _HomeState extends State<Home> {
+class _TabsState extends State<Tabs> {
   final AccountDBService _accountDBService = AccountDBService();
   int _selectedIndex = 0;
 

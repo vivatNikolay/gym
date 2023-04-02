@@ -9,7 +9,7 @@ import 'models/visit.dart';
 import 'services/db/account_db_service.dart';
 import 'services/theme/theme_provider.dart';
 import 'models/system_settings.dart';
-import 'pages/home.dart';
+import 'pages/tabs.dart';
 import 'models/account.dart';
 import 'models/subscription.dart';
 import 'pages/login/login.dart';
@@ -53,19 +53,15 @@ class MyApp extends StatelessWidget {
         builder: (context, _) {
           final themeProvider = Provider.of<ThemeProvider>(context);
 
-          String initialRoute = 'login';
-          if (_accountDBService.getFirst() != null) {
-            initialRoute = 'home';
-          }
           return MaterialApp(
             title: 'Gym',
             darkTheme: MyThemes.dark,
             theme: MyThemes.light,
             themeMode: themeProvider.themeMode,
-            initialRoute: initialRoute,
+            initialRoute: _accountDBService.getFirst() != null ? '/' : '/login',
             routes: {
-              'home':(context) => const Home(),
-              'login':(context) => const Login(),
+              '/':(context) => const Tabs(),
+              '/login':(context) => const Login(),
             },
           );
         },

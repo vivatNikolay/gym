@@ -45,7 +45,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
         return Future.value(true);
       },
       child: Scaffold(

@@ -118,7 +118,7 @@ class _ProfileState extends State<Profile> {
             minLeadingWidth: 24,
             title: const Text('Выход', style: TextStyle(fontSize: 18)),
             onTap: () {
-              Navigator.pushReplacementNamed(context, 'login');
+              Navigator.pushReplacementNamed(context, '/login');
               _accountDBService.deleteAll();
             },
           ),
