@@ -62,7 +62,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                 fieldName: 'Название',
               ),
               const SizedBox(height: 15),
-              const Text('Кол-во сетов:', style: TextStyle(fontSize: 15)),
+              const Text('Кол-во подходов:', style: TextStyle(fontSize: 15)),
               SfSlider(
                 min: 0,
                 max: 10,

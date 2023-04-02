@@ -126,7 +126,7 @@ class _LoginState extends State<Login> {
                               _accountDBService.put(snapshot.data!);
                               WidgetsBinding.instance
                                   .addPostFrameCallback((_) {
-                                Navigator.pushReplacementNamed(context, '/');
+                                Navigator.pushReplacementNamed(context, 'home');
                               });
                               return const Icon(Icons.check, color: mainColor, size: 24);
                             } else {
