@@ -98,7 +98,7 @@ class _SettingsState extends State<Settings> {
       SettingTitle(text: 'Тренировки'),
       SettingPack(children: [
         const SizedBox(height: 15),
-        const SettingName(text: 'Стандартное кол-во подходов:'),
+        const SettingName(text: 'Стандартное кол-во сетов:'),
         SfSlider(
           min: 0,
           max: 10,
