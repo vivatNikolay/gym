@@ -39,7 +39,7 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
                   delegate: CustomSearchDelegate(),
                 ),
               ),
-              const SizedBox(height: 120),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.14),
               QrItem(
                 data: 'Scan qr-code!',
                 onTap: () {

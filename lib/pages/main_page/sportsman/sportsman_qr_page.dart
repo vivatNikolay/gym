@@ -109,7 +109,7 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
                 }
               },
             ),
-            const SizedBox(height: 120),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.14),
             QrItem(
               data: _accountDBService.getFirst()!.email,
               onTap: () {
