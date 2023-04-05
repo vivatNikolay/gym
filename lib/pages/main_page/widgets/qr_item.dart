@@ -15,7 +15,7 @@ class QrItem extends StatelessWidget {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(150)),
       child: Container(
-        padding: const EdgeInsets.all(38),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width/10.8),
         margin: const EdgeInsets.all(7),
         decoration: BoxDecoration(
           // color: mainColor.withOpacity(0.9),
@@ -37,7 +37,7 @@ class QrItem extends StatelessWidget {
         ),
         child: QrImage(
           data: data,
-          size: 180,
+          size: MediaQuery.of(context).size.width/2.28,
           foregroundColor: Colors.white,
         ),
       ),
