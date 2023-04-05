@@ -13,17 +13,20 @@ class ManagerProfileEdit extends StatefulWidget {
   final Account account;
   final bool isEdit;
 
-  const ManagerProfileEdit({required this.account, required this.isEdit, Key? key})
+  const ManagerProfileEdit(
+      {required this.account, required this.isEdit, Key? key})
       : super(key: key);
 
   @override
-  State<ManagerProfileEdit> createState() => _ManagerProfileEditState(account, isEdit);
+  State<ManagerProfileEdit> createState() =>
+      _ManagerProfileEditState(account, isEdit);
 }
 
 class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   final Account _account;
   final bool _isEdit;
-  final AccountHttpController _accountHttpController = AccountHttpController.instance;
+  final AccountHttpController _accountHttpController =
+      AccountHttpController.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -38,8 +41,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   final DateFormat formatterDate = DateFormat('dd.MM.yyyy');
   final RegExp _regExpEmail = RegExp(
       r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
-      multiLine: false
-  );
+      multiLine: false);
   bool _saveEnabled = true;
 
   _ManagerProfileEditState(this._account, this._isEdit);
@@ -88,18 +90,17 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                 if (validateFields()) {
                   bool success;
                   if (_isEdit) {
-                    success = await _accountHttpController.editAccount(
-                        Account(
-                            email: _emailController.text.trim(),
-                            lastName: _lastNameController.text.trim(),
-                            password: _account.password,
-                            phone: _phoneController.text.trim(),
-                            firstName: _nameController.text.trim(),
-                            gender: _gender.value,
-                            iconNum: _iconNum.value,
-                            dateOfBirth: _pickedDate,
-                            subscriptions: _account.subscriptions,
-                            role: _account.role));
+                    success = await _accountHttpController.editAccount(Account(
+                        email: _emailController.text.trim(),
+                        lastName: _lastNameController.text.trim(),
+                        password: _account.password,
+                        phone: _phoneController.text.trim(),
+                        firstName: _nameController.text.trim(),
+                        gender: _gender.value,
+                        iconNum: _iconNum.value,
+                        dateOfBirth: _pickedDate,
+                        subscriptions: _account.subscriptions,
+                        role: _account.role));
                   } else {
                     success = await _accountHttpController.createAccount(
                         Account(
@@ -128,92 +129,94 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width/10).copyWith(top: 20),
-        child: Column(
-          children: [
-            CircleImage(
-                image: AssetImage('images/profileImg${_iconNum.value}.png'),
-                icon: Icons.edit,
-                onTap: () async {
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ImageSelector(iconNum: _iconNum)));
-                  setState(() {
-                    _iconNum.value;
-                  });
-                }),
-            const SizedBox(height: 10),
-            MyTextField(
-              controller: _emailController,
-              validation: _emailValidator,
-              fontSize: 20,
-              fieldName: 'Email',
-              textAlign: TextAlign.center,
-              readOnly: _isEdit,
-              errorText: 'Неверный email',
-            ),
-            const SizedBox(height: 5),
-            MyTextField(
-              controller: _nameController,
-              validation: _nameValidator,
-              fontSize: 20,
-              fieldName: 'Имя',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 5),
-            MyTextField(
-              controller: _lastNameController,
-              validation: _nameValidator,
-              fontSize: 20,
-              fieldName: 'Фамилия',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 5),
-            MyTextField(
-              controller: _phoneController,
-              validation: _phoneValidator,
-              fontSize: 20,
-              fieldName: 'Телефон',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            MyTextField(
-              controller: TextEditingController()..text = formatterDate.format(_pickedDate),
-              validation: ValueNotifier(true),
-              fieldName: 'Дата рождения',
-              textAlign: TextAlign.center,
-              fontSize: 20,
-              readOnly: true,
+      body: ListView(
+        padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 10)
+            .copyWith(top: 20),
+        children: [
+          CircleImage(
+              image: AssetImage('images/profileImg${_iconNum.value}.png'),
+              icon: Icons.edit,
               onTap: () async {
-                DateTime? newPickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: _account.dateOfBirth,
-                  firstDate: DateTime(1950),
-                  lastDate: DateTime.now(),
-                );
-                if (newPickedDate != null) {
-                  setState(() => _pickedDate = newPickedDate);
-                }
-              },
-            ),
-            const SizedBox(height: 5),
-            GenderSwitcher(
-                gender: _gender,
-                onPressedMale: () => setState(() => _gender.value = true),
-                onPressedFemale: () => setState(() => _gender.value = false)),
-            ..._optionalWidgets(),
-          ],
-        ),
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ImageSelector(iconNum: _iconNum)));
+                setState(() {
+                  _iconNum.value;
+                });
+              }),
+          const SizedBox(height: 10),
+          MyTextField(
+            controller: _emailController,
+            validation: _emailValidator,
+            fontSize: 20,
+            fieldName: 'Email',
+            textAlign: TextAlign.center,
+            readOnly: _isEdit,
+            errorText: 'Неверный email',
+          ),
+          const SizedBox(height: 5),
+          MyTextField(
+            controller: _nameController,
+            validation: _nameValidator,
+            fontSize: 20,
+            fieldName: 'Имя',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 5),
+          MyTextField(
+            controller: _lastNameController,
+            validation: _nameValidator,
+            fontSize: 20,
+            fieldName: 'Фамилия',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 5),
+          MyTextField(
+            controller: _phoneController,
+            validation: _phoneValidator,
+            fontSize: 20,
+            fieldName: 'Телефон',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          MyTextField(
+            controller: TextEditingController()
+              ..text = formatterDate.format(_pickedDate),
+            validation: ValueNotifier(true),
+            fieldName: 'Дата рождения',
+            textAlign: TextAlign.center,
+            fontSize: 20,
+            readOnly: true,
+            onTap: () async {
+              DateTime? newPickedDate = await showDatePicker(
+                context: context,
+                initialDate: _account.dateOfBirth,
+                firstDate: DateTime(1950),
+                lastDate: DateTime.now(),
+              );
+              if (newPickedDate != null) {
+                setState(() => _pickedDate = newPickedDate);
+              }
+            },
+          ),
+          const SizedBox(height: 5),
+          GenderSwitcher(
+              gender: _gender,
+              onPressedMale: () => setState(() => _gender.value = true),
+              onPressedFemale: () => setState(() => _gender.value = false)),
+          ..._optionalWidgets(),
+        ],
       ),
     );
   }
 
   bool validateFields() {
     setState(() {
-      _emailValidator.value = _regExpEmail.hasMatch(_emailController.text.trim());
+      _emailValidator.value =
+          _regExpEmail.hasMatch(_emailController.text.trim());
       _nameValidator.value = _nameController.text.isNotEmpty;
       _lastNameValidator.value = _lastNameController.text.isNotEmpty;
       _phoneValidator.value = _phoneController.text.isNotEmpty;
@@ -232,10 +235,9 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
           absorbing: !_saveEnabled,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 7),
+              padding: EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: MediaQuery.of(context).size.width / 7),
               backgroundColor: mainColor,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -245,18 +247,17 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             ),
             onPressed: () async {
               setState(() => _saveEnabled = false);
-              bool success = await _accountHttpController.editAccount(
-                  Account(
-                      email: _account.email,
-                      lastName: _account.lastName,
-                      password: '1111',
-                      phone: _account.phone,
-                      firstName: _account.firstName,
-                      gender: _account.gender,
-                      iconNum: _account.iconNum,
-                      dateOfBirth: _account.dateOfBirth,
-                      subscriptions: _account.subscriptions,
-                      role: _account.role));
+              bool success = await _accountHttpController.editAccount(Account(
+                  email: _account.email,
+                  lastName: _account.lastName,
+                  password: '1111',
+                  phone: _account.phone,
+                  firstName: _account.firstName,
+                  gender: _account.gender,
+                  iconNum: _account.iconNum,
+                  dateOfBirth: _account.dateOfBirth,
+                  subscriptions: _account.subscriptions,
+                  role: _account.role));
               if (success) {
                 Navigator.pop(context);
               } else {

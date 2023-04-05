@@ -15,6 +15,7 @@ import '../../../services/theme/theme_provider.dart';
 
 class Settings extends StatefulWidget {
   final bool isManager;
+
   const Settings({required this.isManager, Key? key}) : super(key: key);
 
   @override
@@ -22,8 +23,8 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-
-  final TrainingSettingsDBService _trainingDBService = TrainingSettingsDBService();
+  final TrainingSettingsDBService _trainingDBService =
+      TrainingSettingsDBService();
   final ManagerSettingsDBService _managerDBService = ManagerSettingsDBService();
   late TrainingSettings _trainingSettings;
   late ManagerSettings _managerSettings;
@@ -48,46 +49,42 @@ class _SettingsState extends State<Settings> {
         width: double.infinity,
         height: double.infinity,
         color: Theme.of(context).backgroundColor,
-        child: SingleChildScrollView(
+        child: ListView(
           padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              SettingTitle(text: 'Главные'),
-              SettingPack(children: [
-                ListTile(
-                  leading: const Icon(Icons.dark_mode_outlined),
-                  minLeadingWidth: 24,
-                  title: const Text('Темная тема'),
-                  subtitle:
-                      Text(themeProvider.isDarkMode ? 'включено' : 'выключено'),
-                  trailing: Switch(
-                    value: themeProvider.isDarkMode,
-                    onChanged: (value) {
-                      themeProvider.toggleTheme(value);
-                    },
-                    activeColor: mainColor,
-                  ),
+          children: [
+            SettingTitle(text: 'Главные'),
+            SettingPack(children: [
+              ListTile(
+                leading: const Icon(Icons.dark_mode_outlined),
+                minLeadingWidth: 24,
+                title: const Text('Темная тема'),
+                subtitle:
+                    Text(themeProvider.isDarkMode ? 'включено' : 'выключено'),
+                trailing: Switch(
+                  value: themeProvider.isDarkMode,
+                  onChanged: (value) {
+                    themeProvider.toggleTheme(value);
+                  },
+                  activeColor: mainColor,
                 ),
-              ]),
-              ...widget.isManager ? managerPart() : sportsmanPart(),
-              SettingTitle(text: 'Безопасность'),
-              SettingPack(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.lock_outline),
-                      minLeadingWidth: 24,
-                      title: const Text('Сменить пароль'),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const PasswordChanger()));
-                      },
-                    ),
-                  ])
-            ],
-          ),
+              ),
+            ]),
+            ...widget.isManager ? managerPart() : sportsmanPart(),
+            SettingTitle(text: 'Безопасность'),
+            SettingPack(children: [
+              ListTile(
+                leading: const Icon(Icons.lock_outline),
+                minLeadingWidth: 24,
+                title: const Text('Сменить пароль'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PasswordChanger()));
+                },
+              ),
+            ])
+          ],
         ),
       ),
     );

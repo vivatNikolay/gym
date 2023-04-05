@@ -10,6 +10,7 @@ import '../../widgets/circle_image.dart';
 
 class ProfileEdit extends StatefulWidget {
   final Account account;
+
   const ProfileEdit({required this.account, Key? key}) : super(key: key);
 
   @override
@@ -17,7 +18,8 @@ class ProfileEdit extends StatefulWidget {
 }
 
 class _ProfileEditState extends State<ProfileEdit> {
-  final AccountHttpController _accountHttpController = AccountHttpController.instance;
+  final AccountHttpController _accountHttpController =
+      AccountHttpController.instance;
   final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -64,17 +66,18 @@ class _ProfileEditState extends State<ProfileEdit> {
                 setState(() => _saveEnabled = false);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 if (validateFields()) {
-                  bool success = await _accountHttpController.editOwnAccount(Account(
-                      email: _account.email,
-                      lastName: _account.lastName,
-                      password: _account.password,
-                      phone: _phoneController.text.trim(),
-                      firstName: _nameController.text.trim(),
-                      gender: _gender.value,
-                      iconNum: _iconNum.value,
-                      dateOfBirth: _account.dateOfBirth,
-                      subscriptions: _account.subscriptions,
-                      role: _account.role));
+                  bool success = await _accountHttpController.editOwnAccount(
+                      Account(
+                          email: _account.email,
+                          lastName: _account.lastName,
+                          password: _account.password,
+                          phone: _phoneController.text.trim(),
+                          firstName: _nameController.text.trim(),
+                          gender: _gender.value,
+                          iconNum: _iconNum.value,
+                          dateOfBirth: _account.dateOfBirth,
+                          subscriptions: _account.subscriptions,
+                          role: _account.role));
                   if (success) {
                     _account.firstName = _nameController.text.trim();
                     _account.phone = _phoneController.text.trim();
@@ -94,46 +97,46 @@ class _ProfileEditState extends State<ProfileEdit> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width/10).copyWith(top: 20),
-        child: Column(
-          children: [
-            CircleImage(
-                image: AssetImage('images/profileImg${_iconNum.value}.png'),
-                icon: Icons.edit,
-                onTap: () async {
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ImageSelector(iconNum: _iconNum)));
-                  setState(() {
-                    _iconNum.value;
-                  });
-                }),
-            const SizedBox(height: 10),
-            MyTextField(
-              controller: _nameController,
-              validation: _nameValidator,
-              fontSize: 20,
-              fieldName: 'Имя',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 5),
-            MyTextField(
-              controller: _phoneController,
-              validation: _phoneValidator,
-              fontSize: 20,
-              fieldName: 'Телефон',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            GenderSwitcher(
-                gender: _gender,
-                onPressedMale: () => setState(() => _gender.value = true),
-                onPressedFemale: () => setState(() => _gender.value = false)),
-          ],
-        ),
+      body: ListView(
+        padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 10)
+            .copyWith(top: 20),
+        children: [
+          CircleImage(
+              image: AssetImage('images/profileImg${_iconNum.value}.png'),
+              icon: Icons.edit,
+              onTap: () async {
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ImageSelector(iconNum: _iconNum)));
+                setState(() {
+                  _iconNum.value;
+                });
+              }),
+          const SizedBox(height: 10),
+          MyTextField(
+            controller: _nameController,
+            validation: _nameValidator,
+            fontSize: 20,
+            fieldName: 'Имя',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 5),
+          MyTextField(
+            controller: _phoneController,
+            validation: _phoneValidator,
+            fontSize: 20,
+            fieldName: 'Телефон',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          GenderSwitcher(
+              gender: _gender,
+              onPressedMale: () => setState(() => _gender.value = true),
+              onPressedFemale: () => setState(() => _gender.value = false)),
+        ],
       ),
     );
   }

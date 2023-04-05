@@ -17,7 +17,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final AccountHttpController _accountHttpController = AccountHttpController.instance;
+  final AccountHttpController _accountHttpController =
+      AccountHttpController.instance;
   final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
@@ -26,8 +27,7 @@ class _LoginState extends State<Login> {
   Future<Account>? _futureAccount;
   final RegExp _regExpEmail = RegExp(
       r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
-      multiLine: false
-  );
+      multiLine: false);
   bool _loginEnabled = true;
 
   @override
@@ -53,90 +53,84 @@ class _LoginState extends State<Login> {
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 40,
-              ).copyWith(top: 90),
-              child: Column(
-                children: [
-                  const Text(
-                    'Добро пожаловать',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'PT-Sans',
-                      fontSize: 46,
-                      fontWeight: FontWeight.bold,
-                      color: mainColor,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 45,
-                  ),
-                  const FieldName(text: 'Логин'),
-                  MyTextField(
-                    controller: _loginController,
-                    validation: _loginValidation,
-                    errorText: 'Неверный логин',
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const FieldName(text: 'Пароль'),
-                  MyTextField(
-                    controller: _passController,
-                    validation: _passwordValidation,
-                    obscureText: true,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  AbsorbPointer(
-                    absorbing: !_loginEnabled,
-                    child: LoginButton(
-                        onPressed: () => setState(() {
-                              _loginEnabled = false;
-                              if (validateFields()) {
-                                _futureAccount =
-                                    _accountHttpController.getAccount(
-                                        _loginController.text.trim(),
-                                        _passController.text);
-                              }
-                              _loginEnabled = true;
-                            }),
-                    ),
-                  ),
-                  FutureBuilder<Account>(
-                      future: _futureAccount,
-                      builder: (context, snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.none:
-                            return Container();
-                          case ConnectionState.waiting:
-                            return const CircularProgressIndicator(
-                                color: mainColor);
-                          default:
-                            if (snapshot.hasError) {
-                              if (snapshot.error! is SocketException) {
-                                return const Text('Нет интернет соединения');
-                              }
-                              return const Text('Неверный логин или пароль');
-                            }
-                            if (snapshot.hasData) {
-                              _accountDBService.put(snapshot.data!);
-                              WidgetsBinding.instance
-                                  .addPostFrameCallback((_) {
-                                Navigator.pushReplacementNamed(context, 'home');
-                              });
-                              return const Icon(Icons.check, color: mainColor, size: 24);
-                            } else {
-                              return const Text('Неверный логин или пароль');
-                            }
-                        }
-                      }),
-                ],
+          child: ListView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 40,
+            ).copyWith(top: 90),
+            children: [
+              const Text(
+                'Добро пожаловать',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'PT-Sans',
+                  fontSize: 46,
+                  fontWeight: FontWeight.bold,
+                  color: mainColor,
+                ),
               ),
-            ),
+              const SizedBox(
+                height: 45,
+              ),
+              const FieldName(text: 'Логин'),
+              MyTextField(
+                controller: _loginController,
+                validation: _loginValidation,
+                errorText: 'Неверный логин',
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              const FieldName(text: 'Пароль'),
+              MyTextField(
+                controller: _passController,
+                validation: _passwordValidation,
+                obscureText: true,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              AbsorbPointer(
+                absorbing: !_loginEnabled,
+                child: LoginButton(
+                  onPressed: () => setState(() {
+                    _loginEnabled = false;
+                    if (validateFields()) {
+                      _futureAccount = _accountHttpController.getAccount(
+                          _loginController.text.trim(), _passController.text);
+                    }
+                    _loginEnabled = true;
+                  }),
+                ),
+              ),
+              FutureBuilder<Account>(
+                  future: _futureAccount,
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                        return Container();
+                      case ConnectionState.waiting:
+                        return const CircularProgressIndicator(
+                            color: mainColor);
+                      default:
+                        if (snapshot.hasError) {
+                          if (snapshot.error! is SocketException) {
+                            return const Text('Нет интернет соединения');
+                          }
+                          return const Text('Неверный логин или пароль');
+                        }
+                        if (snapshot.hasData) {
+                          _accountDBService.put(snapshot.data!);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Navigator.pushReplacementNamed(context, 'home');
+                          });
+                          return const Icon(Icons.check,
+                              color: mainColor, size: 24);
+                        } else {
+                          return const Text('Неверный логин или пароль');
+                        }
+                    }
+                  }),
+            ],
           ),
         ),
       ),
@@ -144,7 +138,8 @@ class _LoginState extends State<Login> {
   }
 
   bool validateFields() {
-    _loginValidation.value = _regExpEmail.hasMatch(_loginController.text.trim());
+    _loginValidation.value =
+        _regExpEmail.hasMatch(_loginController.text.trim());
     _passwordValidation.value = _passController.text.isNotEmpty;
     return _loginValidation.value && _passwordValidation.value;
   }

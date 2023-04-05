@@ -14,7 +14,8 @@ class PasswordChanger extends StatefulWidget {
 
 class _PasswordChangerState extends State<PasswordChanger> {
   late Account _account;
-  final AccountHttpController _accountHttpController = AccountHttpController.instance;
+  final AccountHttpController _accountHttpController =
+      AccountHttpController.instance;
   final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _oldPassController = TextEditingController();
   final TextEditingController _newPass1Controller = TextEditingController();
@@ -58,17 +59,18 @@ class _PasswordChangerState extends State<PasswordChanger> {
                 setState(() => _saveEnabled = false);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 if (validateFields()) {
-                  bool success = await _accountHttpController.editOwnAccount(Account(
-                      email: _account.email,
-                      lastName: _account.lastName,
-                      password: _newPass2Controller.text,
-                      phone: _account.phone,
-                      firstName: _account.firstName,
-                      gender: _account.gender,
-                      iconNum: _account.iconNum,
-                      dateOfBirth: _account.dateOfBirth,
-                      subscriptions: _account.subscriptions,
-                      role: _account.role));
+                  bool success = await _accountHttpController.editOwnAccount(
+                      Account(
+                          email: _account.email,
+                          lastName: _account.lastName,
+                          password: _newPass2Controller.text,
+                          phone: _account.phone,
+                          firstName: _account.firstName,
+                          gender: _account.gender,
+                          iconNum: _account.iconNum,
+                          dateOfBirth: _account.dateOfBirth,
+                          subscriptions: _account.subscriptions,
+                          role: _account.role));
                   if (success) {
                     _account.password = _newPass2Controller.text;
                     _accountDBService.put(_account);
@@ -89,40 +91,38 @@ class _PasswordChangerState extends State<PasswordChanger> {
         width: double.infinity,
         height: double.infinity,
         color: Theme.of(context).backgroundColor,
-        child: SingleChildScrollView(
+        child: ListView(
           padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-          child: Column(
-            children: [
-              MyTextField(
-                controller: _oldPassController,
-                validation: _oldPassValidator,
-                fieldName: 'Старый пароль',
-                textAlign: TextAlign.center,
-                fontSize: 18,
-                obscureText: true,
-                errorText: 'Некоректный пароль',
-              ),
-              const SizedBox(height: 10),
-              MyTextField(
-                controller: _newPass1Controller,
-                validation: _newPass1Validator,
-                fieldName: 'Новый пароль',
-                textAlign: TextAlign.center,
-                fontSize: 18,
-                obscureText: true,
-              ),
-              const SizedBox(height: 10),
-              MyTextField(
-                controller: _newPass2Controller,
-                validation: _newPass2Validator,
-                fieldName: 'Повтор пароля',
-                textAlign: TextAlign.center,
-                fontSize: 18,
-                obscureText: true,
-                errorText: 'Повтор не совпадает',
-              ),
-            ],
-          ),
+          children: [
+            MyTextField(
+              controller: _oldPassController,
+              validation: _oldPassValidator,
+              fieldName: 'Старый пароль',
+              textAlign: TextAlign.center,
+              fontSize: 18,
+              obscureText: true,
+              errorText: 'Некоректный пароль',
+            ),
+            const SizedBox(height: 10),
+            MyTextField(
+              controller: _newPass1Controller,
+              validation: _newPass1Validator,
+              fieldName: 'Новый пароль',
+              textAlign: TextAlign.center,
+              fontSize: 18,
+              obscureText: true,
+            ),
+            const SizedBox(height: 10),
+            MyTextField(
+              controller: _newPass2Controller,
+              validation: _newPass2Validator,
+              fieldName: 'Повтор пароля',
+              textAlign: TextAlign.center,
+              fontSize: 18,
+              obscureText: true,
+              errorText: 'Повтор не совпадает',
+            ),
+          ],
         ),
       ),
     );

@@ -28,27 +28,25 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
             builder: (context) => ManagerProfileEdit(
                 account: Account.emptySportsman(), isEdit: false))),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 20, 12, 10),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SearchField(
-                onTap: () => showSearch(
-                  context: context,
-                  delegate: CustomSearchDelegate(),
-                ),
+        child: Column(
+          children: [
+            SearchField(
+              onTap: () => showSearch(
+                context: context,
+                delegate: CustomSearchDelegate(),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.14),
-              QrItem(
-                data: 'Scan qr-code!',
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const QrScanPage()));
-                },
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.14),
+            QrItem(
+              data: 'Scan qr-code!',
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const QrScanPage()));
+              },
+            ),
+          ],
         ),
       ),
     );
