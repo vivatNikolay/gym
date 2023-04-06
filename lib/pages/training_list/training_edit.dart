@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../helpers/constants.dart';
 import '../../models/exercise.dart';
-import '../../models/training_settings.dart';
+import '../../models/user_settings.dart';
 import '../../models/training.dart';
-import '../../services/db/training_settings_db_service.dart';
 import '../../services/db/training_db_service.dart';
 import '../../pages/training_list/exercise_edit.dart';
 import '../../pages/training_list/widgets/floating_add_button.dart';
+import '../../services/providers/user_settings_provider.dart';
 import 'widgets/training_card.dart';
 
 class TrainingEdit extends StatefulWidget {
@@ -22,7 +23,6 @@ class TrainingEdit extends StatefulWidget {
 class _TrainingEditState extends State<TrainingEdit> {
   late Training training;
   final TrainingDBService _dbService = TrainingDBService();
-  final TrainingSettings _settings = TrainingSettingsDBService().getFirst();
   late List<Exercise> _exercises;
 
   @override
@@ -34,6 +34,8 @@ class _TrainingEditState extends State<TrainingEdit> {
 
   @override
   Widget build(BuildContext context) {
+    final UserSettings _settings = Provider.of<UserSettingsPr>(context, listen: false).settings;
+
     return WillPopScope(
       onWillPop: () {
         return _dbService.saveOrUpdate(training);

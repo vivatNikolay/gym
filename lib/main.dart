@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'models/training_settings.dart';
+import 'models/user_settings.dart';
 import 'models/visit.dart';
-import 'models/manager_settings.dart';
 import 'services/db/account_db_service.dart';
 import 'services/providers/system_settings_provider.dart';
 import 'models/system_settings.dart';
@@ -15,6 +14,7 @@ import 'models/subscription.dart';
 import 'pages/login/login.dart';
 import 'models/training.dart';
 import 'models/exercise.dart';
+import 'services/providers/user_settings_provider.dart';
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
@@ -30,15 +30,13 @@ Future<void> hiveInitialization() async {
   Hive.registerAdapter(AccountAdapter());
   Hive.registerAdapter(SubscriptionAdapter());
   Hive.registerAdapter(SystemSettingsAdapter());
-  Hive.registerAdapter(TrainingSettingsAdapter());
-  Hive.registerAdapter(ManagerSettingsAdapter());
+  Hive.registerAdapter(UserSettingsAdapter());
   Hive.registerAdapter(TrainingAdapter());
   Hive.registerAdapter(ExerciseAdapter());
   Hive.registerAdapter(VisitAdapter());
   await Hive.openBox<Account>('account');
   await Hive.openBox<SystemSettings>('system_settings');
-  await Hive.openBox<TrainingSettings>('training_settings');
-  await Hive.openBox<ManagerSettings>('manager_settings');
+  await Hive.openBox<UserSettings>('user_settings');
   await Hive.openBox<Training>('training');
 }
 
@@ -52,6 +50,9 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider.value(
             value: SystemSettingsPr(),
+          ),
+          ChangeNotifierProvider.value(
+            value: UserSettingsPr(),
           ),
         ],
         builder: (context, _) {
