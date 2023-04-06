@@ -4,13 +4,13 @@ import '../../helpers/constants.dart';
 import '../../models/system_settings.dart';
 import '../db/system_settings_db_service.dart';
 
-class ThemeProvider extends ChangeNotifier {
+class SystemSettingsPr extends ChangeNotifier {
   final SystemSettingsDBService _dbService = SystemSettingsDBService();
 
   late ThemeMode themeMode;
   late SystemSettings _settings;
 
-  ThemeProvider() {
+  SystemSettingsPr() {
     _settings = _dbService.getFirst() ?? SystemSettings(isDark: true);
     themeMode = initThemeMode();
   }

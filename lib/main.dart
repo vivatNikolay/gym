@@ -2,12 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:sportmen_in_gym/models/manager_settings.dart';
 
 import 'models/training_settings.dart';
 import 'models/visit.dart';
+import 'models/manager_settings.dart';
 import 'services/db/account_db_service.dart';
-import 'services/theme/theme_provider.dart';
+import 'services/providers/system_settings_provider.dart';
 import 'models/system_settings.dart';
 import 'pages/home.dart';
 import 'models/account.dart';
@@ -48,10 +48,14 @@ class MyApp extends StatelessWidget {
   final AccountDBService _accountDBService = AccountDBService();
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (context) => ThemeProvider(),
+  Widget build(BuildContext context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(
+            value: SystemSettingsPr(),
+          ),
+        ],
         builder: (context, _) {
-          final themeProvider = Provider.of<ThemeProvider>(context);
+          final systemSettingsPr = Provider.of<SystemSettingsPr>(context);
 
           String initialRoute = 'login';
           if (_accountDBService.getFirst() != null) {
@@ -61,11 +65,11 @@ class MyApp extends StatelessWidget {
             title: 'Gym',
             darkTheme: MyThemes.dark,
             theme: MyThemes.light,
-            themeMode: themeProvider.themeMode,
+            themeMode: systemSettingsPr.themeMode,
             initialRoute: initialRoute,
             routes: {
-              'home':(context) => const Home(),
-              'login':(context) => const Login(),
+              'home': (context) => const Home(),
+              'login': (context) => const Login(),
             },
           );
         },

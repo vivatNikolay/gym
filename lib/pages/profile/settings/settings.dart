@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sportmen_in_gym/services/db/manager_settings_db_service.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../../models/manager_settings.dart';
@@ -11,7 +10,8 @@ import '../../../pages/profile/settings/widgets/setting_name.dart';
 import '../../../pages/profile/settings/widgets/setting_pack.dart';
 import '../../../pages/profile/settings/widgets/setting_title.dart';
 import '../../../services/db/training_settings_db_service.dart';
-import '../../../services/theme/theme_provider.dart';
+import '../../../services/db/manager_settings_db_service.dart';
+import '../../../services/providers/system_settings_provider.dart';
 
 class Settings extends StatefulWidget {
   final bool isManager;
@@ -39,8 +39,6 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Настройки'),
@@ -54,18 +52,20 @@ class _SettingsState extends State<Settings> {
           children: [
             SettingTitle(text: 'Главные'),
             SettingPack(children: [
-              ListTile(
-                leading: const Icon(Icons.dark_mode_outlined),
-                minLeadingWidth: 24,
-                title: const Text('Темная тема'),
-                subtitle:
-                    Text(themeProvider.isDarkMode ? 'включено' : 'выключено'),
-                trailing: Switch(
-                  value: themeProvider.isDarkMode,
-                  onChanged: (value) {
-                    themeProvider.toggleTheme(value);
-                  },
-                  activeColor: mainColor,
+              Consumer<SystemSettingsPr>(
+                builder: (ctx, systemSettingsPr, _) => ListTile(
+                  leading: const Icon(Icons.dark_mode_outlined),
+                  minLeadingWidth: 24,
+                  title: const Text('Темная тема'),
+                  subtitle: Text(
+                      systemSettingsPr.isDarkMode ? 'включено' : 'выключено'),
+                  trailing: Switch(
+                    value: systemSettingsPr.isDarkMode,
+                    onChanged: (value) {
+                      systemSettingsPr.toggleTheme(value);
+                    },
+                    activeColor: mainColor,
+                  ),
                 ),
               ),
             ]),
