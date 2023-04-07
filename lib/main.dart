@@ -5,16 +5,16 @@ import 'package:provider/provider.dart';
 
 import 'models/user_settings.dart';
 import 'models/visit.dart';
-import 'services/db/account_db_service.dart';
-import 'services/providers/system_settings_provider.dart';
-import 'models/system_settings.dart';
-import 'pages/home.dart';
 import 'models/account.dart';
 import 'models/subscription.dart';
 import 'pages/login/login.dart';
 import 'models/training.dart';
 import 'models/exercise.dart';
-import 'services/providers/user_settings_provider.dart';
+import 'models/system_settings.dart';
+import 'pages/home.dart';
+import 'db/account_db_service.dart';
+import 'providers/system_settings_provider.dart';
+import 'providers/user_settings_provider.dart';
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();

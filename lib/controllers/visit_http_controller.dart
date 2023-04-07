@@ -1,7 +1,7 @@
-import '../../services/http/visit_http_service.dart';
+import '../../http/visit_http_service.dart';
 import '../models/account.dart';
 import '../models/visit.dart';
-import '../services/db/account_db_service.dart';
+import '../db/account_db_service.dart';
 
 class VisitHttpController {
 

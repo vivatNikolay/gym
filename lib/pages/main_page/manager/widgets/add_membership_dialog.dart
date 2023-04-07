@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../models/user_settings.dart';
 import '../../../../controllers/subscription_http_controller.dart';
 import '../../../../helpers/constants.dart';
-import '../../../../services/providers/user_settings_provider.dart';
+import '../../../../providers/user_settings_provider.dart';
 
 class AddMembershipDialog extends StatefulWidget {
   final String email;

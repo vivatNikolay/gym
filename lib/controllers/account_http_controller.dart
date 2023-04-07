@@ -1,6 +1,6 @@
 import '../models/account.dart';
-import '../services/db/account_db_service.dart';
-import '../services/http/account_http_service.dart';
+import '../db/account_db_service.dart';
+import '../http/account_http_service.dart';
 
 class AccountHttpController {
 

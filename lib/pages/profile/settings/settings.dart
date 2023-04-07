@@ -8,8 +8,8 @@ import '../../../helpers/constants.dart';
 import '../../../pages/profile/settings/widgets/setting_name.dart';
 import '../../../pages/profile/settings/widgets/setting_pack.dart';
 import '../../../pages/profile/settings/widgets/setting_title.dart';
-import '../../../services/providers/system_settings_provider.dart';
-import '../../../services/providers/user_settings_provider.dart';
+import '../../../providers/system_settings_provider.dart';
+import '../../../providers/user_settings_provider.dart';
 
 class Settings extends StatefulWidget {
   final bool isManager;

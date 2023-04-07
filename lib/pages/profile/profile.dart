@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../controllers/visit_http_controller.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
-import '../../services/db/account_db_service.dart';
+import '../../db/account_db_service.dart';
 import '../widgets/visits_list.dart';
 import 'profile_edit/profile_edit.dart';
 import 'settings/settings.dart';

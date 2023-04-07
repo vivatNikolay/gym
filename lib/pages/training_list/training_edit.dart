@@ -5,10 +5,10 @@ import '../../helpers/constants.dart';
 import '../../models/exercise.dart';
 import '../../models/user_settings.dart';
 import '../../models/training.dart';
-import '../../services/db/training_db_service.dart';
+import '../../db/training_db_service.dart';
 import '../../pages/training_list/exercise_edit.dart';
 import '../../pages/training_list/widgets/floating_add_button.dart';
-import '../../services/providers/user_settings_provider.dart';
+import '../../providers/user_settings_provider.dart';
 import 'widgets/training_card.dart';
 
 class TrainingEdit extends StatefulWidget {

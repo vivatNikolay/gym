@@ -5,7 +5,7 @@ import '../../controllers/account_http_controller.dart';
 import '../../pages/login/widgets/login_button.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
-import '../../services/db/account_db_service.dart';
+import '../../db/account_db_service.dart';
 import '../widgets/my_text_field.dart';
 import 'widgets/field_name.dart';
 

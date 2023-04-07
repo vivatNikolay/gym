@@ -5,7 +5,7 @@ import '../../../../helpers/subscription_progress.dart';
 import '../../../controllers/subscription_http_controller.dart';
 import '../../../models/account.dart';
 import '../../../models/subscription.dart';
-import '../../../services/db/account_db_service.dart';
+import '../../../db/account_db_service.dart';
 import '../../widgets/visits_list.dart';
 import '../../widgets/main_scaffold.dart';
 import '../widgets/qr_item.dart';

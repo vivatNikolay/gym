@@ -4,7 +4,7 @@ import '../../../controllers/account_http_controller.dart';
 import '../../widgets/image_selector.dart';
 import '../../widgets/gender_switcher.dart';
 import '../../../models/account.dart';
-import '../../../services/db/account_db_service.dart';
+import '../../../db/account_db_service.dart';
 import '../../widgets/my_text_field.dart';
 import '../../widgets/circle_image.dart';
 

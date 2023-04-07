@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../helpers/constants.dart';
 import '../../pages/training_list/training_edit.dart';
-import '../../services/db/training_db_service.dart';
+import '../../db/training_db_service.dart';
 import '../../models/training.dart';
 import '../widgets/my_text_field.dart';
 import '../widgets/main_scaffold.dart';

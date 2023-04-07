@@ -1,7 +1,7 @@
 import '../models/account.dart';
 import '../models/subscription.dart';
-import '../services/db/account_db_service.dart';
-import '../services/http/subscription_http_service.dart';
+import '../db/account_db_service.dart';
+import '../http/subscription_http_service.dart';
 
 class SubscriptionHttpController {
 

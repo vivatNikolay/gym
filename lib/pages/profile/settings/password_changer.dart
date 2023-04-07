@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../controllers/account_http_controller.dart';
 import '../../../pages/widgets/my_text_field.dart';
 import '../../../models/account.dart';
-import '../../../services/db/account_db_service.dart';
+import '../../../db/account_db_service.dart';
 
 class PasswordChanger extends StatefulWidget {
   const PasswordChanger({Key? key}) : super(key: key);

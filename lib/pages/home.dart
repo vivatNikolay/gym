@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/custom_icons.dart';
 import '../helpers/constants.dart';
-import '../services/db/account_db_service.dart';
+import '../db/account_db_service.dart';
 import 'main_page/manager/manager_qr_page.dart';
 import 'main_page/sportsman/sportsman_qr_page.dart';
 import 'training_list/training_list.dart';
