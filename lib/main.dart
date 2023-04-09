@@ -15,6 +15,7 @@ import 'pages/home.dart';
 import 'db/account_db_service.dart';
 import 'providers/system_settings_provider.dart';
 import 'providers/user_settings_provider.dart';
+import 'providers/training_provider.dart';
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
@@ -53,6 +54,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider.value(
             value: UserSettingsPr(),
+          ),
+          ChangeNotifierProvider.value(
+            value: TrainingPr(),
           ),
         ],
         builder: (context, _) {

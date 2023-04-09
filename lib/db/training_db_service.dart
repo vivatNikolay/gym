@@ -5,12 +5,8 @@ class TrainingDBService {
 
   final box = Hive.box<Training>('training');
 
-  void delete(Training training) {
-    box.delete(training.key);
-  }
-
-  void deleteAll() {
-    box.deleteAll(box.keys);
+  Future<void> delete(Training training) async {
+    await box.delete(training.key);
   }
 
   List<Training> getAll() {

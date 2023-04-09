@@ -4,7 +4,7 @@ import '../models/subscription.dart';
 
 part 'account.g.dart';
 
-@HiveType(typeId:0)
+@HiveType(typeId: 0)
 class Account extends HiveObject{
   @HiveField(0)
   String email;

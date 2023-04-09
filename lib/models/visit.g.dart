@@ -8,7 +8,7 @@ part of 'visit.dart';
 
 class VisitAdapter extends TypeAdapter<Visit> {
   @override
-  final int typeId = 7;
+  final int typeId = 2;
 
   @override
   Visit read(BinaryReader reader) {

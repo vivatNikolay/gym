@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'visit.g.dart';
 
-@HiveType(typeId: 7)
+@HiveType(typeId: 2)
 class Visit extends HiveObject{
   @HiveField(0)
   DateTime date;

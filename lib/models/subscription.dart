@@ -4,7 +4,7 @@ import 'visit.dart';
 
 part 'subscription.g.dart';
 
-@HiveType(typeId:1)
+@HiveType(typeId: 1)
 class Subscription {
   @HiveField(0)
   int id;

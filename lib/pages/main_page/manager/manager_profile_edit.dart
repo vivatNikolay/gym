@@ -193,7 +193,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             onTap: () async {
               DateTime? newPickedDate = await showDatePicker(
                 context: context,
-                initialDate: _account.dateOfBirth,
+                initialDate: _pickedDate,
                 firstDate: DateTime(1950),
                 lastDate: DateTime.now(),
               );
