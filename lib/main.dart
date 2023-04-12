@@ -12,7 +12,7 @@ import 'models/training.dart';
 import 'models/exercise.dart';
 import 'models/system_settings.dart';
 import 'pages/home.dart';
-import 'db/account_db_service.dart';
+import 'providers/account_provider.dart';
 import 'providers/system_settings_provider.dart';
 import 'providers/user_settings_provider.dart';
 import 'providers/training_provider.dart';
@@ -42,9 +42,7 @@ Future<void> hiveInitialization() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
-
-  final AccountDBService _accountDBService = AccountDBService();
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => MultiProvider(
@@ -58,20 +56,20 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(
             value: TrainingPr(),
           ),
+          ChangeNotifierProvider.value(
+            value: AccountPr(),
+          ),
         ],
         builder: (context, _) {
           final systemSettingsPr = Provider.of<SystemSettingsPr>(context);
+          final account = Provider.of<AccountPr>(context).account;
 
-          String initialRoute = 'login';
-          if (_accountDBService.getFirst() != null) {
-            initialRoute = 'home';
-          }
           return MaterialApp(
             title: 'Gym',
             darkTheme: MyThemes.dark,
             theme: MyThemes.light,
             themeMode: systemSettingsPr.themeMode,
-            initialRoute: initialRoute,
+            home: account != null ? const Home() : const Login(),
             routes: {
               'home': (context) => const Home(),
               'login': (context) => const Login(),

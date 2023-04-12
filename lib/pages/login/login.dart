@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../controllers/account_http_controller.dart';
 import '../../pages/login/widgets/login_button.dart';
 import '../../helpers/constants.dart';
-import '../../models/account.dart';
-import '../../db/account_db_service.dart';
+import '../../providers/account_provider.dart';
 import '../widgets/my_text_field.dart';
 import 'widgets/field_name.dart';
 
@@ -17,14 +16,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final AccountHttpController _accountHttpController =
-      AccountHttpController.instance;
-  final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   late ValueNotifier<bool> _loginValidation;
   late ValueNotifier<bool> _passwordValidation;
-  Future<Account>? _futureAccount;
+  Future<void>? _future;
   final RegExp _regExpEmail = RegExp(
       r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
       multiLine: false);
@@ -96,15 +92,16 @@ class _LoginState extends State<Login> {
                     onPressed: () => setState(() {
                       _loginEnabled = false;
                       if (validateFields()) {
-                        _futureAccount = _accountHttpController.getAccount(
-                            _loginController.text.trim(), _passController.text);
+                        _future = Provider.of<AccountPr>(context, listen: false)
+                            .get(_loginController.text.trim(),
+                                _passController.text);
                       }
                       _loginEnabled = true;
                     }),
                   ),
                 ),
-                FutureBuilder<Account>(
-                    future: _futureAccount,
+                FutureBuilder(
+                    future: _future,
                     builder: (context, snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.none:
@@ -119,16 +116,8 @@ class _LoginState extends State<Login> {
                             }
                             return const Text('Неверный логин или пароль');
                           }
-                          if (snapshot.hasData) {
-                            _accountDBService.put(snapshot.data!);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.pushReplacementNamed(context, 'home');
-                            });
-                            return const Icon(Icons.check,
-                                color: mainColor, size: 24);
-                          } else {
-                            return const Text('Неверный логин или пароль');
-                          }
+                          return const Icon(Icons.check,
+                              color: mainColor, size: 24);
                       }
                     }),
               ],

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../controllers/account_http_controller.dart';
 import '../../../pages/widgets/my_text_field.dart';
 import '../../../models/account.dart';
-import '../../../db/account_db_service.dart';
+import '../../../providers/account_provider.dart';
 
 class PasswordChanger extends StatefulWidget {
   const PasswordChanger({Key? key}) : super(key: key);
@@ -13,10 +13,6 @@ class PasswordChanger extends StatefulWidget {
 }
 
 class _PasswordChangerState extends State<PasswordChanger> {
-  late Account _account;
-  final AccountHttpController _accountHttpController =
-      AccountHttpController.instance;
-  final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _oldPassController = TextEditingController();
   final TextEditingController _newPass1Controller = TextEditingController();
   final TextEditingController _newPass2Controller = TextEditingController();
@@ -29,7 +25,6 @@ class _PasswordChangerState extends State<PasswordChanger> {
   initState() {
     super.initState();
 
-    _account = _accountDBService.getFirst()!;
     _oldPassValidator = ValueNotifier(true);
     _newPass1Validator = ValueNotifier(true);
     _newPass2Validator = ValueNotifier(true);
@@ -46,6 +41,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
 
   @override
   Widget build(BuildContext context) {
+    final account = Provider.of<AccountPr>(context, listen: false).account!;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Смена пароля'),
@@ -58,22 +54,20 @@ class _PasswordChangerState extends State<PasswordChanger> {
               onPressed: () async {
                 setState(() => _saveEnabled = false);
                 ScaffoldMessenger.of(context).clearSnackBars();
-                if (validateFields()) {
-                  bool success = await _accountHttpController.editOwnAccount(
+                if (validateFields(account)) {
+                  bool success = await Provider.of<AccountPr>(context, listen: false).put(
                       Account(
-                          email: _account.email,
-                          lastName: _account.lastName,
+                          email: account.email,
+                          lastName: account.lastName,
                           password: _newPass2Controller.text,
-                          phone: _account.phone,
-                          firstName: _account.firstName,
-                          gender: _account.gender,
-                          iconNum: _account.iconNum,
-                          dateOfBirth: _account.dateOfBirth,
-                          subscriptions: _account.subscriptions,
-                          role: _account.role));
+                          phone: account.phone,
+                          firstName: account.firstName,
+                          gender: account.gender,
+                          iconNum: account.iconNum,
+                          dateOfBirth: account.dateOfBirth,
+                          subscriptions: account.subscriptions,
+                          role: account.role));
                   if (success) {
-                    _account.password = _newPass2Controller.text;
-                    _accountDBService.put(_account);
                     Navigator.pop(context);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -128,13 +122,13 @@ class _PasswordChangerState extends State<PasswordChanger> {
     );
   }
 
-  bool validateFields() {
+  bool validateFields(Account acc) {
     setState(() {
       _oldPassValidator.value = _oldPassController.text.isNotEmpty;
       _newPass1Validator.value = _newPass1Controller.text.isNotEmpty;
       _newPass2Validator.value = _newPass2Controller.text.isNotEmpty;
     });
-    if (_oldPassController.text != _account.password) {
+    if (_oldPassController.text != acc.password) {
       _oldPassValidator.value = false;
     }
     if (_newPass1Controller.text != _newPass2Controller.text) {

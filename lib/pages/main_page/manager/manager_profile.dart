@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../helpers/subscription_progress.dart';
-import '../../../controllers/visit_http_controller.dart';
-import '../../../controllers/account_http_controller.dart';
+import '../../../http/account_http_service.dart';
+import '../../../http/visit_http_service.dart';
 import '../../../models/subscription.dart';
 import '../../../models/account.dart';
 import '../../../models/custom_icons.dart';
 import '../../../helpers/constants.dart';
+import '../../../providers/account_provider.dart';
 import '../../widgets/confirm_dialog.dart';
 import '../../widgets/profile_row.dart';
 import '../../widgets/visits_list.dart';
@@ -23,13 +25,14 @@ class ManagerProfile extends StatefulWidget {
 }
 
 class _ManagerProfileState extends State<ManagerProfile> {
-  final AccountHttpController _accountHttpController =
-      AccountHttpController.instance;
-  final VisitHttpController _visitHttpController = VisitHttpController.instance;
+  final AccountHttpService _accountHttpService = AccountHttpService();
+  final VisitHttpService _visitHttpService = VisitHttpService();
   late String email;
-  late Future<Account> _futureAccount;
+  late Future<Account>? _futureAccount;
   bool _addMembershipEnabled = true;
   bool _addVisitEnabled = true;
+  var _isInit = true;
+  late Account _managerAcc;
 
   _ManagerProfileState();
 
@@ -38,7 +41,22 @@ class _ManagerProfileState extends State<ManagerProfile> {
     super.initState();
 
     email = widget.email;
-    _futureAccount = _accountHttpController.getSportsmenByEmail(email);
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      _managerAcc = Provider.of<AccountPr>(context, listen: false).account!;
+      _updateSportsman();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  void _updateSportsman() {
+    setState(() {
+      _futureAccount = _accountHttpService.getSportsmenByEmail(_managerAcc, email);
+    });
   }
 
   @override
@@ -84,12 +102,13 @@ class _ManagerProfileState extends State<ManagerProfile> {
                             ProfileRow(
                               account: snapshot.data!,
                               onEdit: () async {
-                                await Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ManagerProfileEdit(
-                                        account: snapshot.data!, isEdit: true)));
-                                setState(() {
-                                  _futureAccount = _accountHttpController.getSportsmenByEmail(email);
-                                });
+                                await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ManagerProfileEdit(
+                                                account: snapshot.data!,
+                                                isEdit: true)));
+                                _updateSportsman();
                               },
                             ),
                             const SizedBox(height: 4),
@@ -113,20 +132,20 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                     icon: const Icon(Icons.add,
                                         size: 32, color: mainColor),
                                     onPressed: () async {
-                                      setState(() => _addMembershipEnabled = false);
-                                      ScaffoldMessenger.of(context).clearSnackBars();
+                                      setState(
+                                          () => _addMembershipEnabled = false);
+                                      ScaffoldMessenger.of(context)
+                                          .clearSnackBars();
                                       if (isMembershipInactive(
                                           snapshot.data!.subscriptions)) {
-                                        if (isMembershipStarted(snapshot.data!.subscriptions)) {
-                                          await showDialog(context: context,
+                                        if (isMembershipStarted(
+                                            snapshot.data!.subscriptions)) {
+                                          await showDialog(
+                                              context: context,
                                               builder: (context) =>
                                                   AddMembershipDialog(
                                                       snapshot.data!.email));
-                                          setState(() {
-                                            _futureAccount =
-                                                _accountHttpController
-                                                    .getSportsmenByEmail(email);
-                                          });
+                                          _updateSportsman();
                                         }
                                       } else {
                                         showDialog(
@@ -134,22 +153,22 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                           builder: (context) => AbsorbPointer(
                                             absorbing: !_addVisitEnabled,
                                             child: ConfirmDialog(
-                                              textConfirmation: 'Добавить посещение в абонемент?',
-                                              onNo: () => Navigator.pop(context),
+                                              textConfirmation:
+                                                  'Добавить посещение в абонемент?',
+                                              onNo: () =>
+                                                  Navigator.pop(context),
                                               onYes: () async {
                                                 setState(() => _addVisitEnabled = false);
                                                 bool success =
-                                                    await _visitHttpController
+                                                    await _visitHttpService
                                                         .addVisitToMembership(
-                                                            snapshot.data!);
+                                                      snapshot.data!, _managerAcc);
                                                 if (success) {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(const SnackBar(
                                                           content: Text(
                                                               'Посещение добавлено в абонемент')));
-                                                  setState(() {
-                                                    _futureAccount = _accountHttpController.getSportsmenByEmail(email);
-                                                  });
+                                                  _updateSportsman();
                                                 }
                                                 Navigator.pop(context);
                                                 setState(() => _addVisitEnabled = true);
@@ -167,8 +186,11 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
                                             builder: (context) => VisitsList(
-                                                  visits: snapshot.data!
-                                                      .subscriptions.last.visits,
+                                                  visits: snapshot
+                                                      .data!
+                                                      .subscriptions
+                                                      .last
+                                                      .visits,
                                                   title: 'История абонемента',
                                                 )));
                                   }
@@ -176,7 +198,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -194,31 +217,32 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                       ),
                                     ),
                                     onPressed: () async {
-                                      ScaffoldMessenger.of(context).clearSnackBars();
+                                      ScaffoldMessenger.of(context)
+                                          .clearSnackBars();
                                       showDialog(
                                         context: context,
                                         builder: (context) => AbsorbPointer(
                                           absorbing: !_addVisitEnabled,
                                           child: ConfirmDialog(
-                                            textConfirmation: 'Добавить разовое?',
+                                            textConfirmation:
+                                                'Добавить разовое?',
                                             onNo: () => Navigator.pop(context),
                                             onYes: () async {
-                                              setState(() => _addVisitEnabled = false);
+                                              setState(() =>
+                                                  _addVisitEnabled = false);
                                               bool success =
-                                                  await _visitHttpController
+                                                  await _visitHttpService
                                                       .addSingleVisit(
-                                                          snapshot.data!);
+                                                    snapshot.data!, _managerAcc);
                                               if (success) {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(const SnackBar(
                                                         content: Text(
                                                             'Добавлено разовое посещение')));
-                                                setState(() {
-                                                  _futureAccount = _accountHttpController.getSportsmenByEmail(email);
-                                                });
                                               }
                                               Navigator.pop(context);
-                                              setState(() => _addVisitEnabled = true);
+                                              setState(() =>
+                                                  _addVisitEnabled = true);
                                             },
                                           ),
                                         ),

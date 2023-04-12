@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../helpers/constants.dart';
-import '../../../../controllers/account_http_controller.dart';
+import '../../../../http/account_http_service.dart';
 import '../../../../models/account.dart';
+import '../../../../providers/account_provider.dart';
 import '../manager_profile.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
-  final AccountHttpController _accountHttpController = AccountHttpController.instance;
+  final AccountHttpService _httpService = AccountHttpService();
 
   CustomSearchDelegate()
       : super(
@@ -53,13 +55,14 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    final managerAcc = Provider.of<AccountPr>(context, listen: false).account!;
     if (query.trim() == '') {
       return const Center(
         child: Text('Введите что-нибудь'),
       );
     }
     return FutureBuilder<List<Account>>(
-        future: _accountHttpController.getSportsmenByQuery(query.trim()),
+        future: _httpService.getSportsmenByQuery(managerAcc, query.trim()),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(

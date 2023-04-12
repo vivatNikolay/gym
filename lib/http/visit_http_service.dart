@@ -21,20 +21,6 @@ class VisitHttpService extends HttpService<Visit>{
     }
   }
 
-  Future<List<Visit>> getBySubscription(Account account) async {
-    final uri = Uri.http(url, '/sportsmanDetails/visitsBySubscription/${account.email}');
-    Response res = await get(uri,
-        headers: <String, String>{
-          'authorization' : basicAuth(account.email, account.password)
-        });
-    if (res.statusCode == 200) {
-      return (jsonDecode(res.body) as List).map((i) =>
-          Visit.fromJson(i)).toList();
-    } else {
-      throw "Unable to retrieve visits.";
-    }
-  }
-
   Future<bool> addSingleVisit(Account account, ownAccount) async {
     final params = {"email": account.email};
     final uri = Uri.http(url, '/manager/addSingleVisit', params);

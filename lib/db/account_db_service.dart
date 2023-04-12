@@ -6,14 +6,14 @@ class AccountDBService {
 
   final box = Hive.box<Account>('account');
 
-  void put(Account? account) {
+  Future<void> put(Account? account) async {
     if (account != null) {
-      box.put(0, account);
+      await box.put(0, account);
     }
   }
 
-  void deleteAll() {
-    box.deleteAll(box.keys);
+  Future<void> deleteAll() async {
+    await box.deleteAll(box.keys);
   }
 
   Account? getFirst() {

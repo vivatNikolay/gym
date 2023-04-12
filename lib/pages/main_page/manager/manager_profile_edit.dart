@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-import '../../../controllers/account_http_controller.dart';
 import '../../../helpers/constants.dart';
+import '../../../http/account_http_service.dart';
+import '../../../providers/account_provider.dart';
 import '../../widgets/image_selector.dart';
 import '../../widgets/gender_switcher.dart';
 import '../../../models/account.dart';
@@ -19,14 +21,13 @@ class ManagerProfileEdit extends StatefulWidget {
 
   @override
   State<ManagerProfileEdit> createState() =>
-      _ManagerProfileEditState(account, isEdit);
+      _ManagerProfileEditState();
 }
 
 class _ManagerProfileEditState extends State<ManagerProfileEdit> {
-  final Account _account;
-  final bool _isEdit;
-  final AccountHttpController _accountHttpController =
-      AccountHttpController.instance;
+  late Account _account;
+  late bool _isEdit;
+  final AccountHttpService _httpService = AccountHttpService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -44,11 +45,12 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
       multiLine: false);
   bool _saveEnabled = true;
 
-  _ManagerProfileEditState(this._account, this._isEdit);
-
   @override
   void initState() {
     super.initState();
+
+    _account = widget.account;
+    _isEdit = widget.isEdit;
 
     _emailController.text = _account.email;
     _nameController.text = _account.firstName;
@@ -75,6 +77,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
+    final managerAcc = Provider.of<AccountPr>(context, listen: false).account!;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Профиль'),
@@ -90,7 +93,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                 if (validateFields()) {
                   bool success;
                   if (_isEdit) {
-                    success = await _accountHttpController.editAccount(Account(
+                    success = await _httpService.edit(managerAcc, Account(
                         email: _emailController.text.trim(),
                         lastName: _lastNameController.text.trim(),
                         password: _account.password,
@@ -102,7 +105,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                         subscriptions: _account.subscriptions,
                         role: _account.role));
                   } else {
-                    success = await _accountHttpController.createAccount(
+                    success = await _httpService.create(managerAcc,
                         Account(
                             email: _emailController.text.trim(),
                             lastName: _lastNameController.text.trim(),
@@ -207,7 +210,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               gender: _gender,
               onPressedMale: () => setState(() => _gender.value = true),
               onPressedFemale: () => setState(() => _gender.value = false)),
-          ..._optionalWidgets(),
+          ..._optionalWidgets(managerAcc),
         ],
       ),
     );
@@ -227,7 +230,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
         _phoneValidator.value;
   }
 
-  List<Widget> _optionalWidgets() {
+  List<Widget> _optionalWidgets(Account managerAcc) {
     if (_isEdit) {
       return [
         const SizedBox(height: 12),
@@ -247,7 +250,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             ),
             onPressed: () async {
               setState(() => _saveEnabled = false);
-              bool success = await _accountHttpController.editAccount(Account(
+              bool success = await _httpService.edit(managerAcc, Account(
                   email: _account.email,
                   lastName: _account.lastName,
                   password: '1111',

@@ -1,34 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../controllers/visit_http_controller.dart';
+import '../../http/visit_http_service.dart';
+import '../../providers/account_provider.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
-import '../../db/account_db_service.dart';
 import '../widgets/visits_list.dart';
-import 'profile_edit/profile_edit.dart';
 import 'settings/settings.dart';
+import 'widgets/profile_box.dart';
 
-class Profile extends StatefulWidget {
+class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
 
   @override
-  State<Profile> createState() => _ProfileState();
-}
-
-class _ProfileState extends State<Profile> {
-  final VisitHttpController _visitHttpController = VisitHttpController.instance;
-  final AccountDBService _accountDBService = AccountDBService();
-  Account? account;
-
-  @override
-  void initState() {
-    super.initState();
-
-    account = _accountDBService.getFirst();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final account = Provider.of<AccountPr>(context, listen: false).account!;
     return Drawer(
       backgroundColor: Theme.of(context).primaryColor,
       child: ListView(
@@ -44,65 +30,11 @@ class _ProfileState extends State<Profile> {
                   colors: [mainColor, mainColor.withOpacity(0.9)],
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: mainColor,
-                        radius: 50.0,
-                        child: Image.asset(
-                            'images/profileImg${account!.iconNum}.png'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProfileEdit(account: account!)));
-                          setState(() {
-                            account = _accountDBService.getFirst();
-                          });
-                        },
-                        child: const Icon(
-                          Icons.edit,
-                          color: mainColor,
-                          size: 28,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(10),
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    '${account!.firstName ?? ''} ${account!.lastName}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.0,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    account!.email ?? '',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                    ),
-                  ),
-                ],
-              ),
+              child: const ProfileBox(),
             ),
           ),
           const SizedBox(height: 6),
-          ..._optionalTiles(),
+          ..._optionalTiles(context, account),
           ListTile(
             leading: const Icon(Icons.settings_outlined, color: mainColor),
             minLeadingWidth: 24,
@@ -110,16 +42,16 @@ class _ProfileState extends State<Profile> {
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
-                      Settings(isManager: account?.role == 'MANAGER')));
+                      Settings(isManager: account.role == 'MANAGER')));
             },
           ),
           ListTile(
             leading: const Icon(Icons.logout, color: mainColor),
             minLeadingWidth: 24,
             title: const Text('Выход', style: TextStyle(fontSize: 18)),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, 'login');
-              _accountDBService.deleteAll();
+            onTap: () async {
+              Navigator.pop(context);
+              Provider.of<AccountPr>(context, listen: false).delete();
             },
           ),
         ],
@@ -127,16 +59,16 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  List<Widget> _optionalTiles() {
-    if (account?.role == 'USER') {
+  List<Widget> _optionalTiles(BuildContext context, Account account) {
+    if (account.role == 'USER') {
       return [
         ListTile(
           leading: const Icon(Icons.history, color: mainColor),
           minLeadingWidth: 24,
           title: const Text('История', style: TextStyle(fontSize: 18)),
           onTap: () {
-            _visitHttpController
-                .getOwnVisitsByAccount()
+            VisitHttpService()
+                .getByAccount(account)
                 .then((value) => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => VisitsList(
                           visits: value,

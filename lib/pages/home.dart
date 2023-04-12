@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/custom_icons.dart';
 import '../helpers/constants.dart';
-import '../db/account_db_service.dart';
+import '../providers/account_provider.dart';
 import 'main_page/manager/manager_qr_page.dart';
 import 'main_page/sportsman/sportsman_qr_page.dart';
 import 'training_list/training_list.dart';
@@ -15,7 +16,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final AccountDBService _accountDBService = AccountDBService();
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -26,6 +26,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final account = Provider.of<AccountPr>(context, listen: false).account;
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -40,15 +41,15 @@ class _HomeState extends State<Home> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: widgetsByRole().elementAt(_selectedIndex),
-        bottomNavigationBar: widgetsByRole().length > 1
+        body: widgetsByRole(account!.role).elementAt(_selectedIndex),
+        bottomNavigationBar: widgetsByRole(account.role).length > 1
             ? ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(30.0),
                 ),
                 child: BottomNavigationBar(
                   selectedItemColor: mainColor,
-                  items: bottomItemsByRole(),
+                  items: bottomItemsByRole(account.role),
                   currentIndex: _selectedIndex,
                   onTap: _onItemTapped,
                   iconSize: 26,
@@ -60,8 +61,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  List<Widget> widgetsByRole() {
-    switch (_accountDBService.getFirst()!.role) {
+  List<Widget> widgetsByRole(String role) {
+    switch (role) {
       case 'MANAGER':
         {
           return const [
@@ -79,8 +80,8 @@ class _HomeState extends State<Home> {
     ];
   }
 
-  List<BottomNavigationBarItem> bottomItemsByRole() {
-    switch (_accountDBService.getFirst()!.role) {
+  List<BottomNavigationBarItem> bottomItemsByRole(String role) {
+    switch (role) {
       case 'MANAGER':
         {
           return const [

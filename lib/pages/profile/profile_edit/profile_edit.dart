@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../controllers/account_http_controller.dart';
+import '../../../providers/account_provider.dart';
 import '../../widgets/image_selector.dart';
 import '../../widgets/gender_switcher.dart';
 import '../../../models/account.dart';
-import '../../../db/account_db_service.dart';
 import '../../widgets/my_text_field.dart';
 import '../../widgets/circle_image.dart';
 
 class ProfileEdit extends StatefulWidget {
-  final Account account;
 
-  const ProfileEdit({required this.account, Key? key}) : super(key: key);
+  const ProfileEdit({Key? key}) : super(key: key);
 
   @override
   State<ProfileEdit> createState() => _ProfileEditState();
 }
 
 class _ProfileEditState extends State<ProfileEdit> {
-  final AccountHttpController _accountHttpController =
-      AccountHttpController.instance;
-  final AccountDBService _accountDBService = AccountDBService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  var _isInit = true;
+
   late Account _account;
   late ValueNotifier<bool> _nameValidator;
   late ValueNotifier<bool> _phoneValidator;
@@ -31,16 +29,18 @@ class _ProfileEditState extends State<ProfileEdit> {
   bool _saveEnabled = true;
 
   @override
-  void initState() {
-    super.initState();
-
-    _account = widget.account;
-    _nameController.text = _account.firstName;
-    _phoneController.text = _account.phone;
-    _nameValidator = ValueNotifier(true);
-    _phoneValidator = ValueNotifier(true);
-    _gender = ValueNotifier(_account.gender);
-    _iconNum = ValueNotifier(_account.iconNum);
+  void didChangeDependencies() {
+    if (_isInit) {
+      _account = Provider.of<AccountPr>(context, listen: false).account!;
+      _nameController.text = _account.firstName;
+      _phoneController.text = _account.phone;
+      _nameValidator = ValueNotifier(true);
+      _phoneValidator = ValueNotifier(true);
+      _gender = ValueNotifier(_account.gender);
+      _iconNum = ValueNotifier(_account.iconNum);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -66,7 +66,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 setState(() => _saveEnabled = false);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 if (validateFields()) {
-                  bool success = await _accountHttpController.editOwnAccount(
+                  bool success = await Provider.of<AccountPr>(context, listen: false).put(
                       Account(
                           email: _account.email,
                           lastName: _account.lastName,
@@ -79,11 +79,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                           subscriptions: _account.subscriptions,
                           role: _account.role));
                   if (success) {
-                    _account.firstName = _nameController.text.trim();
-                    _account.phone = _phoneController.text.trim();
-                    _account.gender = _gender.value;
-                    _account.iconNum = _iconNum.value;
-                    _accountDBService.put(_account);
                     Navigator.pop(context);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../../../helpers/subscription_progress.dart';
-import '../../../controllers/subscription_http_controller.dart';
-import '../../../models/account.dart';
-import '../../../models/subscription.dart';
-import '../../../db/account_db_service.dart';
+import '../../../providers/account_provider.dart';
 import '../../widgets/visits_list.dart';
 import '../../widgets/main_scaffold.dart';
 import '../widgets/qr_item.dart';
@@ -21,17 +19,12 @@ class SportsmanQrPage extends StatefulWidget {
 
 class _SportsmanQrPageState extends State<SportsmanQrPage>
     with SingleTickerProviderStateMixin {
-  final AccountDBService _accountDBService = AccountDBService();
-  final SubscriptionHttpController _subscriptionHttpController =
-      SubscriptionHttpController.instance;
-  Future<List<Subscription>>? _futureSubscription;
+  Future<void>? _future;
   late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
-
-    _futureSubscription = _subscriptionHttpController.getByAccount();
 
     _animationController = AnimationController(
       vsync: this,
@@ -47,14 +40,15 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
 
   @override
   Widget build(BuildContext context) {
+    final account = Provider.of<AccountPr>(context).account!;
     return MainScaffold(
       title: 'QR-код',
       body: SingleChildScrollView(
         child: Column(
           children: [
             MembershipCard(
-              subtitle: FutureBuilder<List<Subscription>>(
-                future: _futureSubscription,
+              subtitle: FutureBuilder(
+                future: _future,
                 builder: (context, snapshot) {
                   WidgetsBinding.instance.addPostFrameCallback(
                       (_) => ScaffoldMessenger.of(context).clearSnackBars());
@@ -64,14 +58,8 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
                           content: Text('Нет интернет соединения'),
                         )));
                   }
-                  if (snapshot.hasData) {
-                    Account? s = _accountDBService.getFirst();
-                    s?.subscriptions = snapshot.data!;
-                    _accountDBService.put(s);
-                  }
                   return Text(
-                    SubscriptionProgress.getString(snapshot.data ??
-                        _accountDBService.getFirst()!.subscriptions),
+                    SubscriptionProgress.getString(account.subscriptions),
                     style: const TextStyle(
                       fontSize: 17,
                       fontStyle: FontStyle.italic,
@@ -83,8 +71,7 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
                 onPressed: () {
                   _animationController.forward(from: 0.0);
                   setState(() {
-                    _futureSubscription =
-                        _subscriptionHttpController.getByAccount();
+                    _future = Provider.of<AccountPr>(context, listen: false).get(account.email, account.password);
                   });
                 },
                 icon: RotationTransition(
@@ -93,14 +80,12 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
               ),
               onTap: () {
                 setState(() {
-                  _futureSubscription =
-                      _subscriptionHttpController.getByAccount();
+                  _future = Provider.of<AccountPr>(context, listen: false).get(account.email, account.password);
                 });
-                if (_accountDBService.getFirst()!.subscriptions.isNotEmpty) {
+                if (account.subscriptions.isNotEmpty) {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => VisitsList(
-                            visits: _accountDBService
-                                .getFirst()!
+                            visits: account
                                 .subscriptions
                                 .last
                                 .visits,
@@ -111,13 +96,13 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.14),
             QrItem(
-              data: _accountDBService.getFirst()!.email,
+              data: account.email,
               onTap: () {
                 ScreenBrightness().setScreenBrightness(1);
                 showDialog(
                   context: context,
                   builder: (context) => QrDialog(
-                    data: _accountDBService.getFirst()!.email,
+                    data: account.email,
                   ),
                 ).then((value) => ScreenBrightness().resetScreenBrightness());
               },
