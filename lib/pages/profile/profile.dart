@@ -50,7 +50,7 @@ class Profile extends StatelessWidget {
             minLeadingWidth: 24,
             title: const Text('Выход', style: TextStyle(fontSize: 18)),
             onTap: () async {
-              Navigator.pop(context);
+              Navigator.of(context).pop();
               Provider.of<AccountPr>(context, listen: false).delete();
             },
           ),

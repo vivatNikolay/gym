@@ -36,11 +36,8 @@ class TrainingList extends StatelessWidget {
                 '${trainings[index].exercises.length.toString()} упражнений',
             onDelete: () => deletionDialog(context, trainings[index]),
             onTap: () async {
-              await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          TrainingEdit(trainings[index].key)));
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => TrainingEdit(trainings[index].key)));
             },
           ),
         ),
@@ -78,7 +75,7 @@ class TrainingList extends StatelessWidget {
                           name: _nameController.text.trim(),
                           exercises: List.empty(growable: true),
                         ));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       }
                     },
                   )
@@ -90,10 +87,10 @@ class TrainingList extends StatelessWidget {
   deletionDialog(BuildContext context, Training training) => showDialog(
         context: context,
         builder: (context) => ConfirmDialog(
-          onNo: () => Navigator.pop(context),
+          onNo: () => Navigator.of(context).pop(),
           onYes: () {
             Provider.of<TrainingPr>(context, listen: false).delete(training);
-            Navigator.pop(context);
+            Navigator.of(context).pop();
           },
         ),
       );

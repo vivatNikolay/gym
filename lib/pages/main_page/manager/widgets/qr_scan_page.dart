@@ -6,6 +6,7 @@ import '../manager_profile.dart';
 import '../../../../helpers/constants.dart';
 
 class QrScanPage extends StatefulWidget {
+  static const routeName = '/qr-scan';
   const QrScanPage({Key? key}) : super(key: key);
 
   @override
@@ -82,7 +83,7 @@ class _QrScanPageState extends State<QrScanPage> {
 
   void profileRoute() async {
     qrController?.pauseCamera();
-    await Navigator.push(context,
+    await Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) => ManagerProfile(email: result!)))
     .then((value) => qrController!.resumeCamera());

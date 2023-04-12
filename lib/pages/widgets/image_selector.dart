@@ -24,14 +24,14 @@ class ImageSelector extends StatelessWidget {
                   icon: iconNum.value == 1 ? Icons.check : null,
                   onTap: () {
                     iconNum.value = 1;
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   }),
               CircleImage(
                   image: const AssetImage('images/profileImg2.png'),
                   icon: iconNum.value == 2 ? Icons.check : null,
                   onTap: () {
                     iconNum.value = 2;
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   }),
             ],
           ),
@@ -44,14 +44,14 @@ class ImageSelector extends StatelessWidget {
                   icon: iconNum.value == 3 ? Icons.check : null,
                   onTap: () {
                     iconNum.value = 3;
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   }),
               CircleImage(
                   image: const AssetImage('images/profileImg4.png'),
                   icon: iconNum.value == 4 ? Icons.check : null,
                   onTap: () {
                     iconNum.value = 4;
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   }),
             ],
           ),
@@ -64,14 +64,14 @@ class ImageSelector extends StatelessWidget {
                   icon: iconNum.value == 5 ? Icons.check : null,
                   onTap: () {
                     iconNum.value = 5;
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   }),
               CircleImage(
                   image: const AssetImage('images/profileImg6.png'),
                   icon: iconNum.value == 6 ? Icons.check : null,
                   onTap: () {
                     iconNum.value = 6;
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   }),
             ],
           ),

@@ -6,6 +6,7 @@ import '../../../models/account.dart';
 import '../../../providers/account_provider.dart';
 
 class PasswordChanger extends StatefulWidget {
+  static const routeName = '/password-changer';
   const PasswordChanger({Key? key}) : super(key: key);
 
   @override
@@ -68,7 +69,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
                           subscriptions: account.subscriptions,
                           role: account.role));
                   if (success) {
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Нет интернет соединения'),

@@ -85,9 +85,9 @@ class CustomSearchDelegate extends SearchDelegate {
                   title: Text('${data[index].firstName} ${data[index].lastName}'),
                   subtitle: Text(data[index].email),
                   onTap: () async {
-                    await Navigator.push(context,
-                        MaterialPageRoute(
-                            builder: (context) => ManagerProfile(email: data[index].email)));
+                    await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            ManagerProfile(email: data[index].email)));
                   },
                 ),
               );

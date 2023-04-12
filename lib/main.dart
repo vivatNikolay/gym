@@ -12,6 +12,9 @@ import 'models/training.dart';
 import 'models/exercise.dart';
 import 'models/system_settings.dart';
 import 'pages/home.dart';
+import 'pages/main_page/manager/widgets/qr_scan_page.dart';
+import 'pages/profile/profile_edit/profile_edit.dart';
+import 'pages/profile/settings/password_changer.dart';
 import 'providers/account_provider.dart';
 import 'providers/system_settings_provider.dart';
 import 'providers/user_settings_provider.dart';
@@ -22,7 +25,7 @@ void main() async {
 
   await hiveInitialization();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 Future<void> hiveInitialization() async {
@@ -71,8 +74,9 @@ class MyApp extends StatelessWidget {
             themeMode: systemSettingsPr.themeMode,
             home: account != null ? const Home() : const Login(),
             routes: {
-              'home': (context) => const Home(),
-              'login': (context) => const Login(),
+              PasswordChanger.routeName: (ctx) => const PasswordChanger(),
+              ProfileEdit.routeName: (ctx) => const ProfileEdit(),
+              QrScanPage.routeName: (ctx) => const QrScanPage(),
             },
           );
         },

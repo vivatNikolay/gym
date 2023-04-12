@@ -63,7 +63,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
         return Future.value(true);
       },
       child: Scaffold(
@@ -156,7 +156,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                               textConfirmation:
                                                   'Добавить посещение в абонемент?',
                                               onNo: () =>
-                                                  Navigator.pop(context),
+                                                  Navigator.of(context).pop(),
                                               onYes: () async {
                                                 setState(() => _addVisitEnabled = false);
                                                 bool success =
@@ -170,7 +170,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                                               'Посещение добавлено в абонемент')));
                                                   _updateSportsman();
                                                 }
-                                                Navigator.pop(context);
+                                                Navigator.of(context).pop();
                                                 setState(() => _addVisitEnabled = true);
                                               },
                                             ),
@@ -226,7 +226,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                           child: ConfirmDialog(
                                             textConfirmation:
                                                 'Добавить разовое?',
-                                            onNo: () => Navigator.pop(context),
+                                            onNo: () => Navigator.of(context).pop(),
                                             onYes: () async {
                                               setState(() =>
                                                   _addVisitEnabled = false);
@@ -240,7 +240,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                                         content: Text(
                                                             'Добавлено разовое посещение')));
                                               }
-                                              Navigator.pop(context);
+                                              Navigator.of(context).pop();
                                               setState(() =>
                                                   _addVisitEnabled = true);
                                             },

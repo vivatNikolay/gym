@@ -23,12 +23,27 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
   late DateTimeRange _dateRange;
   final TextEditingController _numberOfVisitsController = TextEditingController();
   late ValueNotifier<bool> _numberOfVisitsValidation;
+  var isInit = true;
 
   @override
   void initState() {
     super.initState();
 
     _numberOfVisitsValidation = ValueNotifier(true);
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (isInit) {
+      final UserSettings _settings = Provider.of<UserSettingsPr>(context, listen: false).settings;
+      _dateRange = DateTimeRange(
+        start: _now,
+        end: DateTime(_now.year, _now.month + _settings.defaultMembershipTime, _now.day),
+      );
+      _numberOfVisitsController.text = _settings.defaultMembershipNumber.toString();
+    }
+    isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -39,13 +54,6 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
   }
   @override
   Widget build(BuildContext context) {
-    final UserSettings _settings = Provider.of<UserSettingsPr>(context, listen: false).settings;
-    _dateRange = DateTimeRange(
-      start: _now,
-      end: DateTime(_now.year, _now.month + _settings.defaultMembershipTime, _now.day),
-    );
-    _numberOfVisitsController.text = _settings.defaultMembershipNumber.toString();
-
     return AlertDialog(
       title: const Text('Добавить абонемент'),
       titlePadding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 4.0),
@@ -55,7 +63,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop();
           },
           child: const Text('Отмена',
               style: TextStyle(color: mainColor, fontSize: 18)),
@@ -100,7 +108,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           TextField(
             controller: _numberOfVisitsController,
             keyboardType: TextInputType.number,
@@ -125,7 +133,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
         _dateRange.end.toString().substring(0, 10),
         _numberOfVisitsController.text);
     if (success) {
-      Navigator.pop(context);
+      Navigator.of(context).pop();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Нет интернет соединения'),

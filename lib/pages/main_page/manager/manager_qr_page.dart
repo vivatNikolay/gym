@@ -42,8 +42,7 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
             QrItem(
               data: 'Scan qr-code!',
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const QrScanPage()));
+                Navigator.of(context).pushNamed(QrScanPage.routeName);
               },
             ),
           ],

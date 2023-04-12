@@ -37,7 +37,7 @@ class QrDialog extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
               child: const Text(
                 'Закрыть',

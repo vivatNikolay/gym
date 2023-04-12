@@ -9,7 +9,7 @@ import '../../widgets/my_text_field.dart';
 import '../../widgets/circle_image.dart';
 
 class ProfileEdit extends StatefulWidget {
-
+  static const routeName = '/profile-edit';
   const ProfileEdit({Key? key}) : super(key: key);
 
   @override
@@ -79,7 +79,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           subscriptions: _account.subscriptions,
                           role: _account.role));
                   if (success) {
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Нет интернет соединения'),
@@ -101,8 +101,7 @@ class _ProfileEditState extends State<ProfileEdit> {
               image: AssetImage('images/profileImg${_iconNum.value}.png'),
               icon: Icons.edit,
               onTap: () async {
-                await Navigator.push(
-                    context,
+                await Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (context) =>
                             ImageSelector(iconNum: _iconNum)));

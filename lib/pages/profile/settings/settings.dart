@@ -61,10 +61,7 @@ class _SettingsState extends State<Settings> {
                 minLeadingWidth: 24,
                 title: const Text('Сменить пароль'),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PasswordChanger()));
+                  Navigator.of(context).pushNamed(PasswordChanger.routeName);
                 },
               ),
             ])

@@ -49,8 +49,7 @@ class TrainingEdit extends StatelessWidget {
                 name: '',
                 reps: _settings.defaultExerciseReps,
                 sets: _settings.defaultExerciseSets));
-            await Navigator.push(
-                context,
+            await Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => ExerciseEdit(exercise: newExercise)));
 
@@ -79,9 +78,7 @@ class TrainingEdit extends StatelessWidget {
                     onTap: () async {
                       ValueNotifier<Exercise> exercise =
                           ValueNotifier(exercises[index]);
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
+                      await Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
                                   ExerciseEdit(exercise: exercise)));
                       exercises[index] = exercise.value;

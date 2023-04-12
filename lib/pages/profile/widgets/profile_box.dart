@@ -25,10 +25,7 @@ class ProfileBox extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfileEdit()));
+                await Navigator.of(context).pushNamed(ProfileEdit.routeName);
               },
               child: const Icon(
                 Icons.edit,
