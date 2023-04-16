@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../pages/login/widgets/login_button.dart';
 import '../../helpers/constants.dart';
 import '../../providers/account_provider.dart';
-import '../widgets/my_text_field.dart';
 import 'widgets/field_name.dart';
 
 class Login extends StatefulWidget {
@@ -16,43 +15,49 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final TextEditingController _loginController = TextEditingController();
-  final TextEditingController _passController = TextEditingController();
-  late ValueNotifier<bool> _loginValidation;
-  late ValueNotifier<bool> _passwordValidation;
-  Future<void>? _future;
+  final _formKey = GlobalKey<FormState>();
   final RegExp _regExpEmail = RegExp(
       r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
       multiLine: false);
-  bool _loginEnabled = true;
+  bool _isLoading = false;
+  String _email = '';
+  String _password = '';
+  String _errorMess = '';
 
-  @override
-  void initState() {
-    super.initState();
+  void _trySubmit() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final isValid = _formKey.currentState!.validate();
+    FocusScope.of(context).unfocus();
 
-    _loginValidation = ValueNotifier(true);
-    _passwordValidation = ValueNotifier(true);
-  }
-
-  @override
-  void dispose() {
-    _loginValidation.dispose();
-    _passwordValidation.dispose();
-
-    super.dispose();
+    if (isValid) {
+      _formKey.currentState!.save();
+      try {
+        _errorMess = '';
+        await Provider.of<AccountPr>(context, listen: false)
+            .get(_email.trim(), _password);
+      } on SocketException {
+        _errorMess = 'Нет интернет соединения';
+      } catch (e) {
+        _errorMess = 'Неверный логин или пароль';
+      }
+    }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 40,
-            ).copyWith(top: 90),
+    return Scaffold(
+      body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(40, 120, 40, 10),
+          child: Form(
+            key: _formKey,
             child: Column(
               children: [
                 const Text(
@@ -69,69 +74,69 @@ class _LoginState extends State<Login> {
                   height: 45,
                 ),
                 const FieldName(text: 'Логин'),
-                MyTextField(
-                  controller: _loginController,
-                  validation: _loginValidation,
-                  errorText: 'Неверный логин',
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 11),
+                  child: TextFormField(
+                    maxLength: 255,
+                    decoration: const InputDecoration(
+                      counterText: '',
+                    ),
+                    autocorrect: false,
+                    textCapitalization: TextCapitalization.none,
+                    enableSuggestions: false,
+                    validator: (value) {
+                      if (value != null && _regExpEmail.hasMatch(value.trim())) {
+                        return null;
+                      }
+                      return 'Неверный логин';
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    onSaved: (value) {
+                      if (value != null) {
+                        _email = value.trim();
+                      }
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 15,
                 ),
                 const FieldName(text: 'Пароль'),
-                MyTextField(
-                  controller: _passController,
-                  validation: _passwordValidation,
-                  obscureText: true,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 11),
+                  child: TextFormField(
+                    maxLength: 255,
+                    decoration: const InputDecoration(
+                      counterText: '',
+                    ),
+                    validator: (value) {
+                      if (value != null && value.isNotEmpty) {
+                        return null;
+                      }
+                      return 'Неверный пароль';
+                    },
+                    obscureText: true,
+                    onSaved: (value) {
+                      if (value != null) {
+                        _password = value.trim();
+                      }
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 15,
                 ),
-                AbsorbPointer(
-                  absorbing: !_loginEnabled,
-                  child: LoginButton(
-                    onPressed: () => setState(() {
-                      _loginEnabled = false;
-                      if (validateFields()) {
-                        _future = Provider.of<AccountPr>(context, listen: false)
-                            .get(_loginController.text.trim(),
-                                _passController.text);
-                      }
-                      _loginEnabled = true;
-                    }),
-                  ),
+                if (_isLoading) const CircularProgressIndicator(),
+                if (!_isLoading)
+                LoginButton(
+                  onPressed: _trySubmit,
                 ),
-                FutureBuilder(
-                    future: _future,
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                          return Container();
-                        case ConnectionState.waiting:
-                          return const CircularProgressIndicator(
-                              color: mainColor);
-                        default:
-                          if (snapshot.hasError) {
-                            if (snapshot.error! is SocketException) {
-                              return const Text('Нет интернет соединения');
-                            }
-                            return const Text('Неверный логин или пароль');
-                          }
-                          return const Icon(Icons.check,
-                              color: mainColor, size: 24);
-                      }
-                    }),
+                Text(_errorMess),
               ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  bool validateFields() {
-    _loginValidation.value =
-        _regExpEmail.hasMatch(_loginController.text.trim());
-    _passwordValidation.value = _passController.text.isNotEmpty;
-    return _loginValidation.value && _passwordValidation.value;
   }
 }

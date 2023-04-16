@@ -68,6 +68,10 @@ class MyThemes {
         borderSide: BorderSide(color: mainColor),
         borderRadius: BorderRadius.all(Radius.circular(15.0)),
       ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+      ),
+      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     ),
     cardTheme: CardTheme(
       shape: RoundedRectangleBorder(
@@ -110,6 +114,10 @@ class MyThemes {
           borderSide: BorderSide(color: mainColor),
           borderRadius: BorderRadius.all(Radius.circular(15.0)),
         ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
       cardTheme: CardTheme(
         shape: RoundedRectangleBorder(
