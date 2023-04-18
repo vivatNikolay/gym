@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart';
 
 import '../../models/account.dart';
@@ -9,43 +10,57 @@ class VisitHttpService extends HttpService<Visit>{
 
   Future<List<Visit>> getByAccount(Account account) async {
     final uri = Uri.http(url, '/sportsmanDetails/visits/${account.email}');
-    Response res = await get(uri,
-        headers: <String, String>{
-          'authorization' : basicAuth(account.email, account.password)
-        });
-    if (res.statusCode == 200) {
-      return (jsonDecode(res.body) as List).map((i) =>
-      Visit.fromJson(i)).toList();
-    } else {
-      throw "Unable to retrieve visits.";
+    try {
+      Response res = await get(uri,
+          headers: <String, String>{
+            'authorization': basicAuth(account.email, account.password)
+          });
+      if (res.statusCode == 200) {
+        return (jsonDecode(res.body) as List).map((i) =>
+            Visit.fromJson(i)).toList();
+      } else {
+        throw 'Посещения не найдены';
+      }
+    } on SocketException {
+      throw 'Нет интернет соединения';
+    } on Exception {
+      throw 'Ошибка';
     }
   }
 
-  Future<bool> addSingleVisit(Account account, ownAccount) async {
+  Future<void> addSingleVisit(Account account, ownAccount) async {
     final params = {"email": account.email};
     final uri = Uri.http(url, '/manager/addSingleVisit', params);
-    Response res = await post(uri,
-        headers: <String, String>{
-          'authorization' : basicAuth(ownAccount.email, ownAccount.password)
-        });
-    if (res.statusCode == 200) {
-      return true;
-    } else {
-      return false;
+    try {
+      Response res = await post(uri,
+          headers: <String, String>{
+            'authorization': basicAuth(ownAccount.email, ownAccount.password)
+          });
+      if (res.statusCode != 200) {
+        throw 'Ошибка при добавлении';
+      }
+    } on SocketException {
+      throw 'Нет интернет соединения';
+    } on Exception {
+      throw 'Ошибка';
     }
   }
 
-  Future<bool> addVisitToMembership(Account account, ownAccount) async {
+  Future<void> addVisitToMembership(Account account, ownAccount) async {
     final params = {"email": account.email};
     final uri = Uri.http(url, '/manager/addVisitToMembership', params);
-    Response res = await post(uri,
-        headers: <String, String>{
-          'authorization' : basicAuth(ownAccount.email, ownAccount.password)
-        });
-    if (res.statusCode == 200) {
-      return true;
-    } else {
-      return false;
+    try {
+      Response res = await post(uri,
+          headers: <String, String>{
+            'authorization': basicAuth(ownAccount.email, ownAccount.password)
+          });
+      if (res.statusCode != 200) {
+        throw 'Ошибка при добавлении';
+      }
+    } on SocketException {
+      throw 'Нет интернет соединения';
+    } on Exception {
+      throw 'Ошибка';
     }
   }
 }

@@ -91,38 +91,37 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                 setState(() => _saveEnabled = false);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 if (validateFields()) {
-                  bool success;
-                  if (_isEdit) {
-                    success = await _httpService.edit(managerAcc, Account(
-                        email: _emailController.text.trim(),
-                        lastName: _lastNameController.text.trim(),
-                        password: _account.password,
-                        phone: _phoneController.text.trim(),
-                        firstName: _nameController.text.trim(),
-                        gender: _gender.value,
-                        iconNum: _iconNum.value,
-                        dateOfBirth: _pickedDate,
-                        subscriptions: _account.subscriptions,
-                        role: _account.role));
-                  } else {
-                    success = await _httpService.create(managerAcc,
-                        Account(
-                            email: _emailController.text.trim(),
-                            lastName: _lastNameController.text.trim(),
-                            password: '1111',
-                            phone: _phoneController.text.trim(),
-                            firstName: _nameController.text.trim(),
-                            gender: _gender.value,
-                            iconNum: _iconNum.value,
-                            dateOfBirth: _pickedDate,
-                            subscriptions: _account.subscriptions,
-                            role: _account.role));
-                  }
-                  if (success) {
+                  try {
+                    if (_isEdit) {
+                      await _httpService.edit(managerAcc, Account(
+                          email: _emailController.text.trim(),
+                          lastName: _lastNameController.text.trim(),
+                          password: _account.password,
+                          phone: _phoneController.text.trim(),
+                          firstName: _nameController.text.trim(),
+                          gender: _gender.value,
+                          iconNum: _iconNum.value,
+                          dateOfBirth: _pickedDate,
+                          subscriptions: _account.subscriptions,
+                          role: _account.role));
+                    } else {
+                      await _httpService.create(managerAcc,
+                          Account(
+                              email: _emailController.text.trim(),
+                              lastName: _lastNameController.text.trim(),
+                              password: '1111',
+                              phone: _phoneController.text.trim(),
+                              firstName: _nameController.text.trim(),
+                              gender: _gender.value,
+                              iconNum: _iconNum.value,
+                              dateOfBirth: _pickedDate,
+                              subscriptions: _account.subscriptions,
+                              role: _account.role));
+                    }
                     Navigator.of(context).pop();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Нет интернет соединения'),
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(e.toString()),
                     ));
                   }
                 }
@@ -249,22 +248,22 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             ),
             onPressed: () async {
               setState(() => _saveEnabled = false);
-              bool success = await _httpService.edit(managerAcc, Account(
-                  email: _account.email,
-                  lastName: _account.lastName,
-                  password: '1111',
-                  phone: _account.phone,
-                  firstName: _account.firstName,
-                  gender: _account.gender,
-                  iconNum: _account.iconNum,
-                  dateOfBirth: _account.dateOfBirth,
-                  subscriptions: _account.subscriptions,
-                  role: _account.role));
-              if (success) {
+              try {
+                await _httpService.edit(managerAcc, Account(
+                    email: _account.email,
+                    lastName: _account.lastName,
+                    password: '1111',
+                    phone: _account.phone,
+                    firstName: _account.firstName,
+                    gender: _account.gender,
+                    iconNum: _account.iconNum,
+                    dateOfBirth: _account.dateOfBirth,
+                    subscriptions: _account.subscriptions,
+                    role: _account.role));
                 Navigator.of(context).pop();
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Нет интернет соединения'),
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(e.toString()),
                 ));
               }
               setState(() => _saveEnabled = true);

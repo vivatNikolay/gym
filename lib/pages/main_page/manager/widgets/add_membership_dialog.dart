@@ -126,17 +126,17 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
   Future<void> save(BuildContext context) async {
     final managerAcc = Provider.of<AccountPr>(context, listen: false).account!;
     ScaffoldMessenger.of(context).clearSnackBars();
-    bool success = await _httpService.addMembership(
-        managerAcc,
-        widget.email,
-        _dateRange.start.toString().substring(0, 10),
-        _dateRange.end.toString().substring(0, 10),
-        _numberOfVisitsController.text);
-    if (success) {
+    try {
+      await _httpService.addMembership(
+          managerAcc,
+          widget.email,
+          _dateRange.start.toString().substring(0, 10),
+          _dateRange.end.toString().substring(0, 10),
+          _numberOfVisitsController.text);
       Navigator.of(context).pop();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Нет интернет соединения'),
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.toString()),
       ));
     }
   }

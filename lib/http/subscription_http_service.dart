@@ -7,7 +7,7 @@ import 'http_service.dart';
 
 class SubscriptionHttpService extends HttpService<Subscription> {
 
-  Future<bool> addMembership(Account ownAccount, String email,
+  Future<void> addMembership(Account ownAccount, String email,
       String dateOfStart, String dateOfEnd, String numberOfVisits) async {
     final params = {
       "email": email,
@@ -23,12 +23,13 @@ class SubscriptionHttpService extends HttpService<Subscription> {
                 basicAuth(ownAccount.email, ownAccount.password),
             HttpHeaders.contentTypeHeader: 'application/json',
           });
-      if (res.statusCode == 200) {
-        return true;
+      if (res.statusCode != 200) {
+        throw 'Ошибка при добавлении';
       }
+    } on SocketException {
+      throw 'Нет подключения к интернету';
     } on Exception {
-      return false;
+      throw 'Ошибка';
     }
-    return false;
   }
 }

@@ -7,6 +7,7 @@ import '../../../providers/account_provider.dart';
 
 class PasswordChanger extends StatefulWidget {
   static const routeName = '/password-changer';
+
   const PasswordChanger({Key? key}) : super(key: key);
 
   @override
@@ -56,23 +57,23 @@ class _PasswordChangerState extends State<PasswordChanger> {
                 setState(() => _saveEnabled = false);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 if (validateFields(account)) {
-                  bool success = await Provider.of<AccountPr>(context, listen: false).put(
-                      Account(
-                          email: account.email,
-                          lastName: account.lastName,
-                          password: _newPass2Controller.text,
-                          phone: account.phone,
-                          firstName: account.firstName,
-                          gender: account.gender,
-                          iconNum: account.iconNum,
-                          dateOfBirth: account.dateOfBirth,
-                          subscriptions: account.subscriptions,
-                          role: account.role));
-                  if (success) {
+                  try {
+                    await Provider.of<AccountPr>(context, listen: false).put(
+                        Account(
+                            email: account.email,
+                            lastName: account.lastName,
+                            password: _newPass2Controller.text,
+                            phone: account.phone,
+                            firstName: account.firstName,
+                            gender: account.gender,
+                            iconNum: account.iconNum,
+                            dateOfBirth: account.dateOfBirth,
+                            subscriptions: account.subscriptions,
+                            role: account.role));
                     Navigator.of(context).pop();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Нет интернет соединения'),
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(e.toString()),
                     ));
                   }
                 }
@@ -96,7 +97,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
               textAlign: TextAlign.center,
               fontSize: 18,
               obscureText: true,
-              errorText: 'Некоректный пароль',
+              errorText: 'Неверный пароль',
             ),
             const SizedBox(height: 10),
             MyTextField(

@@ -54,8 +54,8 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
                       (_) => ScaffoldMessenger.of(context).clearSnackBars());
                   if (snapshot.hasError) {
                     WidgetsBinding.instance.addPostFrameCallback((_) =>
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Нет интернет соединения'),
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(snapshot.error!.toString()),
                         )));
                   }
                   return Text(

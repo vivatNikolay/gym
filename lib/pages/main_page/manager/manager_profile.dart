@@ -87,7 +87,11 @@ class _ManagerProfileState extends State<ManagerProfile> {
                       );
                     default:
                       if (snapshot.hasError) {
-                        return noConnectionMess();
+                        return Center(
+                            child: Text(
+                          snapshot.error!.toString(),
+                          style: const TextStyle(fontSize: 23.0),
+                        ));
                       }
                       return Container(
                         padding: const EdgeInsets.all(2),
@@ -159,18 +163,22 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                                   Navigator.of(context).pop(),
                                               onYes: () async {
                                                 setState(() => _addVisitEnabled = false);
-                                                bool success =
-                                                    await _visitHttpService
-                                                        .addVisitToMembership(
-                                                      snapshot.data!, _managerAcc);
-                                                if (success) {
+                                                try {
+                                                  await _visitHttpService
+                                                      .addVisitToMembership(
+                                                      snapshot.data!,
+                                                      _managerAcc);
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(const SnackBar(
-                                                          content: Text(
-                                                              'Посещение добавлено в абонемент')));
+                                                      content: Text(
+                                                          'Посещение добавлено в абонемент')));
                                                   _updateSportsman();
+                                                  Navigator.of(context).pop();
+                                                } catch (e) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(e.toString())));
                                                 }
-                                                Navigator.of(context).pop();
                                                 setState(() => _addVisitEnabled = true);
                                               },
                                             ),
@@ -217,8 +225,6 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                       ),
                                     ),
                                     onPressed: () async {
-                                      ScaffoldMessenger.of(context)
-                                          .clearSnackBars();
                                       showDialog(
                                         context: context,
                                         builder: (context) => AbsorbPointer(
@@ -230,17 +236,24 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                             onYes: () async {
                                               setState(() =>
                                                   _addVisitEnabled = false);
-                                              bool success =
-                                                  await _visitHttpService
-                                                      .addSingleVisit(
-                                                    snapshot.data!, _managerAcc);
-                                              if (success) {
+                                              ScaffoldMessenger.of(context)
+                                                  .clearSnackBars();
+                                              try {
+                                                await _visitHttpService
+                                                    .addSingleVisit(
+                                                    snapshot.data!,
+                                                    _managerAcc);
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        'Добавлено разовое посещение')));
+                                                Navigator.of(context).pop();
+                                              } catch (e) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
                                                         content: Text(
-                                                            'Добавлено разовое посещение')));
+                                                            e.toString())));
                                               }
-                                              Navigator.of(context).pop();
                                               setState(() =>
                                                   _addVisitEnabled = true);
                                             },
@@ -263,14 +276,6 @@ class _ManagerProfileState extends State<ManagerProfile> {
         ),
       ),
     );
-  }
-
-  Center noConnectionMess() {
-    return const Center(
-        child: Text(
-      'Нет интернет соединения',
-      style: TextStyle(fontSize: 23.0),
-    ));
   }
 
   bool isMembershipInactive(List<Subscription> subscriptions) {

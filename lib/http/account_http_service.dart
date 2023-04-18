@@ -6,60 +6,60 @@ import '../../models/account.dart';
 import 'http_service.dart';
 
 class AccountHttpService extends HttpService<Account>{
-
   Future<Account> login(String email, String pass) async {
     final uri = Uri.http(url, '/account/login');
-    Response res = await get(uri, headers: <String, String>{
-      HttpHeaders.authorizationHeader: basicAuth(email, pass)
-    });
-    print(res.body);
-    if (res.statusCode == 200) {
-      Account account = Account.fromJson(jsonDecode(res.body));
-      return account;
-    } else {
-      throw "Unable to retrieve account.";
+    try {
+      Response res = await get(uri, headers: <String, String>{
+        HttpHeaders.authorizationHeader: basicAuth(email, pass)
+      });
+      if (res.statusCode == 200) {
+        Account account = Account.fromJson(jsonDecode(res.body));
+        return account;
+      } else {
+        throw 'Неверный логин или пароль';
+      }
+    } on SocketException {
+      throw 'Нет интернет соединения';
+    } on Exception {
+      throw 'Ошибка';
     }
   }
 
-  Future<bool> update(Account ownAccount, Account newAccount) async {
+  Future<void> update(Account ownAccount, Account newAccount) async {
     final uri = Uri.http(url, '/account/update');
     try {
-      Response res = await put(uri,
+      await put(uri,
           headers: <String, String>{
-            HttpHeaders.authorizationHeader: basicAuth(ownAccount.email, ownAccount.password),
+            HttpHeaders.authorizationHeader:
+                basicAuth(ownAccount.email, ownAccount.password),
             HttpHeaders.contentTypeHeader: 'application/json',
           },
           body: jsonEncode(newAccount.toJson()));
-      print(res.statusCode);
-      if (res.statusCode == 200) {
-        return true;
-      }
+    } on SocketException {
+      throw 'Нет интернет соединения';
     } on Exception {
-      return false;
+      throw 'Ошибка';
     }
-    return false;
   }
 
-  Future<bool> edit(Account ownAccount, Account newAccount) async {
+  Future<void> edit(Account ownAccount, Account newAccount) async {
     final uri = Uri.http(url, '/manager/edit');
     try {
-      Response res = await put(uri,
+      await put(uri,
           headers: <String, String>{
-            HttpHeaders.authorizationHeader: basicAuth(ownAccount.email, ownAccount.password),
+            HttpHeaders.authorizationHeader:
+                basicAuth(ownAccount.email, ownAccount.password),
             HttpHeaders.contentTypeHeader: 'application/json',
           },
           body: jsonEncode(newAccount.toJson()));
-      print(res.statusCode);
-      if (res.statusCode == 200) {
-        return true;
-      }
+    } on SocketException {
+      throw 'Нет интернет соединения';
     } on Exception {
-      return false;
+      throw 'Ошибка';
     }
-    return false;
   }
 
-  Future<bool> create(Account ownAccount, Account newAccount) async {
+  Future<void> create(Account ownAccount, Account newAccount) async {
     final uri = Uri.http(url, '/manager/create');
     try {
       Response res = await post(uri,
@@ -68,14 +68,14 @@ class AccountHttpService extends HttpService<Account>{
             HttpHeaders.contentTypeHeader: 'application/json',
           },
           body: jsonEncode(newAccount.toJson()));
-      print(res.statusCode);
-      if (res.statusCode == 200) {
-        return true;
+      if (res.statusCode != 200) {
+        throw 'Аккаунт с такой почтой уже есть';
       }
+    } on SocketException {
+      throw 'Нет интернет соединения';
     } on Exception {
-      return false;
+      throw 'Ошибка';
     }
-    return false;
   }
 
   Future<List<Account>> getSportsmenByQuery(Account account, String query) async {
@@ -93,8 +93,10 @@ class AccountHttpService extends HttpService<Account>{
             .map((e) => Account.fromJson(e))
             .toList();
       }
+    } on SocketException {
+      throw 'Нет интернет соединения';
     } on Exception {
-      return List.empty();
+      throw 'Ошибка';
     }
     return accounts;
   }
@@ -112,10 +114,12 @@ class AccountHttpService extends HttpService<Account>{
         Account account = Account.fromJson(jsonDecode(res.body));
         return account;
       } else {
-        throw "Unable to retrieve account.";
+        throw "Аккаунт не найден";
       }
+    } on SocketException {
+      throw 'Нет интернет соединения';
     } on Exception {
-      throw "Server error.";
+      throw 'Ошибка';
     }
   }
 }

@@ -64,35 +64,52 @@ class CustomSearchDelegate extends SearchDelegate {
     return FutureBuilder<List<Account>>(
         future: _httpService.getSportsmenByQuery(managerAcc, query.trim()),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          List<Account>? data = snapshot.data;
-          if (data!.isEmpty) {
-            return const Center(
-              child: Text('Не найден'),
-            );
-          }
-          return ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              return Card(
-                color: Theme.of(context).primaryColor,
-                child: ListTile(
-                  leading: Image.asset('images/profileImg${data[index].iconNum}.png'),
-                  title: Text('${data[index].firstName} ${data[index].lastName}'),
-                  subtitle: Text(data[index].email),
-                  onTap: () async {
-                    await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            ManagerProfile(email: data[index].email)));
-                  },
-                ),
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return const Center(
+                child: CircularProgressIndicator(
+                    color: mainColor, strokeWidth: 5),
               );
-            },
-          );
+            default:
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(snapshot.error!.toString()),
+                );
+              }
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              List<Account>? data = snapshot.data;
+              if (data!.isEmpty) {
+                return const Center(
+                  child: Text('Не найден'),
+                );
+              }
+              return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    color: Theme
+                        .of(context)
+                        .primaryColor,
+                    child: ListTile(
+                      leading: Image.asset(
+                          'images/profileImg${data[index].iconNum}.png'),
+                      title: Text(
+                          '${data[index].firstName} ${data[index].lastName}'),
+                      subtitle: Text(data[index].email),
+                      onTap: () async {
+                        await Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                ManagerProfile(email: data[index].email)));
+                      },
+                    ),
+                  );
+                },
+              );
+          }
         });
   }
 

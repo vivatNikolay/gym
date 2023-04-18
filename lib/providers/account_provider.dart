@@ -16,16 +16,11 @@ class AccountPr extends ChangeNotifier {
     _account = AccountDBService().getFirst();
   }
 
-  Future<bool> put(Account acc) async {
-    try {
-      await AccountHttpService().update(_account!, acc);
-      await AccountDBService().put(acc);
-      _account = AccountDBService().getFirst();
-      notifyListeners();
-      return true;
-    } catch (e) {
-      return false;
-    }
+  Future<void> put(Account acc) async {
+    await AccountHttpService().update(_account!, acc);
+    await AccountDBService().put(acc);
+    _account = AccountDBService().getFirst();
+    notifyListeners();
   }
 
   Future<void> delete() async {

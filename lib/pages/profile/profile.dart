@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../http/visit_http_service.dart';
+import '../../models/visit.dart';
 import '../../providers/account_provider.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
@@ -66,14 +67,21 @@ class Profile extends StatelessWidget {
           leading: const Icon(Icons.history, color: mainColor),
           minLeadingWidth: 24,
           title: const Text('История', style: TextStyle(fontSize: 18)),
-          onTap: () {
-            VisitHttpService()
-                .getByAccount(account)
-                .then((value) => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => VisitsList(
-                          visits: value,
-                          title: 'История всех посещений',
-                        ))));
+          onTap: () async {
+            try {
+              List<Visit> visits = await VisitHttpService()
+                  .getByAccount(account);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      VisitsList(
+                        visits: visits,
+                        title: 'История всех посещений',
+                      )));
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(e.toString()),
+              ));
+            }
           },
         ),
       ];

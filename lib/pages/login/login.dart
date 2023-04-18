@@ -1,10 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../pages/login/widgets/login_button.dart';
 import '../../helpers/constants.dart';
 import '../../providers/account_provider.dart';
+import '../widgets/my_text_form_field.dart';
 import 'widgets/field_name.dart';
 
 class Login extends StatefulWidget {
@@ -37,10 +37,8 @@ class _LoginState extends State<Login> {
         _errorMess = '';
         await Provider.of<AccountPr>(context, listen: false)
             .get(_email.trim(), _password);
-      } on SocketException {
-        _errorMess = 'Нет интернет соединения';
       } catch (e) {
-        _errorMess = 'Неверный логин или пароль';
+        _errorMess = e.toString();
       }
     }
     setState(() {
@@ -74,54 +72,37 @@ class _LoginState extends State<Login> {
                   height: 45,
                 ),
                 const FieldName(text: 'Логин'),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 11),
-                  child: TextFormField(
-                    maxLength: 255,
-                    decoration: const InputDecoration(
-                      counterText: '',
-                    ),
-                    autocorrect: false,
-                    textCapitalization: TextCapitalization.none,
-                    enableSuggestions: false,
-                    validator: (value) {
-                      if (value != null && _regExpEmail.hasMatch(value.trim())) {
-                        return null;
-                      }
-                      return 'Неверный логин';
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    onSaved: (value) {
-                      if (value != null) {
-                        _email = value.trim();
-                      }
-                    },
-                  ),
+                MyTextFormField(
+                  validator: (value) {
+                    if (value != null && _regExpEmail.hasMatch(value.trim())) {
+                      return null;
+                    }
+                    return 'Неверный логин';
+                  },
+                  keyboardType: TextInputType.emailAddress,
+                  onSaved: (value) {
+                    if (value != null) {
+                      _email = value.trim();
+                    }
+                  },
                 ),
                 const SizedBox(
                   height: 15,
                 ),
                 const FieldName(text: 'Пароль'),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 11),
-                  child: TextFormField(
-                    maxLength: 255,
-                    decoration: const InputDecoration(
-                      counterText: '',
-                    ),
-                    validator: (value) {
-                      if (value != null && value.isNotEmpty) {
-                        return null;
-                      }
-                      return 'Неверный пароль';
-                    },
-                    obscureText: true,
-                    onSaved: (value) {
-                      if (value != null) {
-                        _password = value.trim();
-                      }
-                    },
-                  ),
+                MyTextFormField(
+                  validator: (value) {
+                    if (value != null && value.isNotEmpty) {
+                      return null;
+                    }
+                    return 'Неверный пароль';
+                  },
+                  obscureText: true,
+                  onSaved: (value) {
+                    if (value != null) {
+                      _password = value.trim();
+                    }
+                  },
                 ),
                 const SizedBox(
                   height: 15,
