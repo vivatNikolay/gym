@@ -10,6 +10,7 @@ import '../../widgets/gender_switcher.dart';
 import '../../../models/account.dart';
 import '../../widgets/circle_image.dart';
 import '../../widgets/my_text_field.dart';
+import '../../widgets/my_text_form_field.dart';
 
 class ManagerProfileEdit extends StatefulWidget {
   final Account account;
@@ -25,18 +26,18 @@ class ManagerProfileEdit extends StatefulWidget {
 }
 
 class _ManagerProfileEditState extends State<ManagerProfileEdit> {
+  final _formKey = GlobalKey<FormState>();
+  bool _isInit = true;
+  late Account _managerAcc;
+
   late Account _account;
   late bool _isEdit;
   final AccountHttpService _httpService = AccountHttpService();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  String _email = '';
+  String _name = '';
+  String _lastName = '';
+  String _phone = '';
   late DateTime _pickedDate;
-  late ValueNotifier<bool> _emailValidator;
-  late ValueNotifier<bool> _nameValidator;
-  late ValueNotifier<bool> _lastNameValidator;
-  late ValueNotifier<bool> _phoneValidator;
   late ValueNotifier<bool> _gender;
   late ValueNotifier<int> _iconNum;
   final DateFormat formatterDate = DateFormat('dd.MM.yyyy');
@@ -52,32 +53,70 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
     _account = widget.account;
     _isEdit = widget.isEdit;
 
-    _emailController.text = _account.email;
-    _nameController.text = _account.firstName;
-    _lastNameController.text = _account.lastName;
-    _phoneController.text = _account.phone;
+    _email = _account.email;
+    _name = _account.firstName;
+    _lastName = _account.lastName;
+    _phone = _account.phone;
     _pickedDate = _account.dateOfBirth;
-    _emailValidator = ValueNotifier(true);
-    _nameValidator = ValueNotifier(true);
-    _lastNameValidator = ValueNotifier(true);
-    _phoneValidator = ValueNotifier(true);
     _gender = ValueNotifier(_account.gender);
     _iconNum = ValueNotifier(_account.iconNum);
   }
 
   @override
-  void dispose() {
-    _emailValidator.dispose();
-    _nameValidator.dispose();
-    _phoneValidator.dispose();
-    _lastNameValidator.dispose();
+  void didChangeDependencies() {
+    if (_isInit) {
+      _managerAcc = Provider.of<AccountPr>(context, listen: false).account!;
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
-    super.dispose();
+  void _trySubmit() async {
+    setState(() => _saveEnabled = false);
+    ScaffoldMessenger.of(context).clearSnackBars();
+    final isValid = _formKey.currentState!.validate();
+    FocusScope.of(context).unfocus();
+    if (isValid) {
+      _formKey.currentState!.save();
+      try {
+        if (_isEdit) {
+          await _httpService.edit(_managerAcc, Account(
+              email: _email,
+              lastName: _lastName,
+              password: _account.password,
+              phone: _phone,
+              firstName: _name,
+              gender: _gender.value,
+              iconNum: _iconNum.value,
+              dateOfBirth: _pickedDate,
+              subscriptions: _account.subscriptions,
+              role: _account.role));
+        } else {
+          await _httpService.create(_managerAcc,
+              Account(
+                  email: _email,
+                  lastName: _lastName,
+                  password: '1111',
+                  phone: _phone,
+                  firstName: _name,
+                  gender: _gender.value,
+                  iconNum: _iconNum.value,
+                  dateOfBirth: _pickedDate,
+                  subscriptions: _account.subscriptions,
+                  role: _account.role));
+        }
+        Navigator.of(context).pop();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.toString()),
+        ));
+      }
+    }
+    setState(() => _saveEnabled = true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final managerAcc = Provider.of<AccountPr>(context, listen: false).account!;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Профиль'),
@@ -87,199 +126,195 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             child: IconButton(
               padding: const EdgeInsets.only(right: 12),
               icon: const Icon(Icons.check, size: 28),
-              onPressed: () async {
-                setState(() => _saveEnabled = false);
-                ScaffoldMessenger.of(context).clearSnackBars();
-                if (validateFields()) {
-                  try {
-                    if (_isEdit) {
-                      await _httpService.edit(managerAcc, Account(
-                          email: _emailController.text.trim(),
-                          lastName: _lastNameController.text.trim(),
-                          password: _account.password,
-                          phone: _phoneController.text.trim(),
-                          firstName: _nameController.text.trim(),
-                          gender: _gender.value,
-                          iconNum: _iconNum.value,
-                          dateOfBirth: _pickedDate,
-                          subscriptions: _account.subscriptions,
-                          role: _account.role));
-                    } else {
-                      await _httpService.create(managerAcc,
-                          Account(
-                              email: _emailController.text.trim(),
-                              lastName: _lastNameController.text.trim(),
-                              password: '1111',
-                              phone: _phoneController.text.trim(),
-                              firstName: _nameController.text.trim(),
-                              gender: _gender.value,
-                              iconNum: _iconNum.value,
-                              dateOfBirth: _pickedDate,
-                              subscriptions: _account.subscriptions,
-                              role: _account.role));
-                    }
-                    Navigator.of(context).pop();
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(e.toString()),
-                    ));
-                  }
-                }
-                setState(() => _saveEnabled = true);
-              },
+              onPressed: _trySubmit,
             ),
           )
         ],
       ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 10)
-            .copyWith(top: 20),
-        children: [
-          CircleImage(
-              image: AssetImage('images/profileImg${_iconNum.value}.png'),
-              icon: Icons.edit,
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 10)
+              .copyWith(top: 20),
+          children: [
+            CircleImage(
+                image: AssetImage('images/profileImg${_iconNum.value}.png'),
+                icon: Icons.edit,
+                onTap: () async {
+                  await Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ImageSelector(iconNum: _iconNum)));
+                  setState(() {
+                    _iconNum.value;
+                  });
+                }),
+            const SizedBox(height: 10),
+            MyTextFormField(
+              initialValue: _email,
+              fontSize: 20,
+              fieldName: 'Email',
+              textAlign: TextAlign.center,
+              readOnly: _isEdit,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Поле пустое';
+                } else if (_regExpEmail.hasMatch(value.trim())) {
+                  return null;
+                } else {
+                  return 'Неверный email';
+                }
+              },
+              keyboardType: TextInputType.emailAddress,
+              onSaved: (value) {
+                if (value != null) {
+                  _email = value.trim();
+                }
+              },
+            ),
+            const SizedBox(height: 5),
+            MyTextFormField(
+              initialValue: _name,
+              fieldName: 'Имя',
+              fontSize: 20,
+              textAlign: TextAlign.center,
+              validator: (value) {
+                if (value != null && value.isNotEmpty) {
+                  return null;
+                }
+                return 'Поле пустое';
+              },
+              keyboardType: TextInputType.text,
+              onSaved: (value) {
+                if (value != null) {
+                  _name = value.trim();
+                }
+              },
+            ),
+            const SizedBox(height: 5),
+            MyTextFormField(
+              initialValue: _lastName,
+              fieldName: 'Имя',
+              fontSize: 20,
+              textAlign: TextAlign.center,
+              validator: (value) {
+                if (value != null && value.isNotEmpty) {
+                  return null;
+                }
+                return 'Поле пустое';
+              },
+              keyboardType: TextInputType.text,
+              onSaved: (value) {
+                if (value != null) {
+                  _lastName = value.trim();
+                }
+              },
+            ),
+            const SizedBox(height: 5),
+            MyTextFormField(
+              initialValue: _phone,
+              fieldName: 'Телефон',
+              fontSize: 20,
+              textAlign: TextAlign.center,
+              validator: (value) {
+                if (value != null && value.isNotEmpty) {
+                  return null;
+                }
+                return 'Поле пустое';
+              },
+              keyboardType: TextInputType.phone,
+              onSaved: (value) {
+                if (value != null) {
+                  _phone = value.trim();
+                }
+              },
+            ),
+            const SizedBox(height: 10),
+            MyTextField(
+              controller: TextEditingController()
+                ..text = formatterDate.format(_pickedDate),
+              validation: ValueNotifier(true),
+              fieldName: 'Дата рождения',
+              textAlign: TextAlign.center,
+              fontSize: 20,
+              readOnly: true,
               onTap: () async {
-                await Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ImageSelector(iconNum: _iconNum)));
-                setState(() {
-                  _iconNum.value;
-                });
-              }),
-          const SizedBox(height: 10),
-          MyTextField(
-            controller: _emailController,
-            validation: _emailValidator,
-            fontSize: 20,
-            fieldName: 'Email',
-            textAlign: TextAlign.center,
-            readOnly: _isEdit,
-            errorText: 'Неверный email',
-          ),
-          const SizedBox(height: 5),
-          MyTextField(
-            controller: _nameController,
-            validation: _nameValidator,
-            fontSize: 20,
-            fieldName: 'Имя',
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 5),
-          MyTextField(
-            controller: _lastNameController,
-            validation: _nameValidator,
-            fontSize: 20,
-            fieldName: 'Фамилия',
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 5),
-          MyTextField(
-            controller: _phoneController,
-            validation: _phoneValidator,
-            fontSize: 20,
-            fieldName: 'Телефон',
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 10),
-          MyTextField(
-            controller: TextEditingController()
-              ..text = formatterDate.format(_pickedDate),
-            validation: ValueNotifier(true),
-            fieldName: 'Дата рождения',
-            textAlign: TextAlign.center,
-            fontSize: 20,
-            readOnly: true,
-            onTap: () async {
-              DateTime? newPickedDate = await showDatePicker(
-                context: context,
-                initialDate: _pickedDate,
-                firstDate: DateTime(1950),
-                lastDate: DateTime.now(),
-              );
-              if (newPickedDate != null) {
-                setState(() => _pickedDate = newPickedDate);
-              }
-            },
-          ),
-          const SizedBox(height: 5),
-          GenderSwitcher(
-              gender: _gender,
-              onPressedMale: () => setState(() => _gender.value = true),
-              onPressedFemale: () => setState(() => _gender.value = false)),
-          ..._optionalWidgets(managerAcc),
-        ],
+                DateTime? newPickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: _pickedDate,
+                  firstDate: DateTime(1950),
+                  lastDate: DateTime.now(),
+                );
+                if (newPickedDate != null) {
+                  setState(() => _pickedDate = newPickedDate);
+                }
+              },
+            ),
+            const SizedBox(height: 5),
+            GenderSwitcher(
+                gender: _gender,
+                onPressedMale: () => setState(() => _gender.value = true),
+                onPressedFemale: () => setState(() => _gender.value = false),
+            ),
+            if (_isEdit)
+              _resetPassword(_managerAcc),
+          ],
+        ),
       ),
     );
   }
 
-  bool validateFields() {
-    setState(() {
-      _emailValidator.value =
-          _regExpEmail.hasMatch(_emailController.text.trim());
-      _nameValidator.value = _nameController.text.isNotEmpty;
-      _lastNameValidator.value = _lastNameController.text.isNotEmpty;
-      _phoneValidator.value = _phoneController.text.isNotEmpty;
-    });
-    return _emailValidator.value &&
-        _nameValidator.value &&
-        _lastNameValidator.value &&
-        _phoneValidator.value;
-  }
-
-  List<Widget> _optionalWidgets(Account managerAcc) {
-    if (_isEdit) {
-      return [
-        const SizedBox(height: 12),
-        AbsorbPointer(
-          absorbing: !_saveEnabled,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: MediaQuery.of(context).size.width / 7),
-              backgroundColor: mainColor,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(30),
-                ),
-              ),
-            ),
-            onPressed: () async {
-              setState(() => _saveEnabled = false);
-              try {
-                await _httpService.edit(managerAcc, Account(
-                    email: _account.email,
-                    lastName: _account.lastName,
-                    password: '1111',
-                    phone: _account.phone,
-                    firstName: _account.firstName,
-                    gender: _account.gender,
-                    iconNum: _account.iconNum,
-                    dateOfBirth: _account.dateOfBirth,
-                    subscriptions: _account.subscriptions,
-                    role: _account.role));
-                Navigator.of(context).pop();
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(e.toString()),
-                ));
-              }
-              setState(() => _saveEnabled = true);
-            },
-            child: const Text(
-              'Сбросить пароль',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
+  Widget _resetPassword(Account managerAcc) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: AbsorbPointer(
+        absorbing: !_saveEnabled,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(
+                vertical: 15,
+                horizontal: MediaQuery.of(context).size.width / 7),
+            backgroundColor: mainColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(30),
               ),
             ),
           ),
+          onPressed: () async {
+            setState(() => _saveEnabled = false);
+            try {
+              await _httpService.edit(
+                  managerAcc,
+                  Account(
+                      email: _account.email,
+                      lastName: _account.lastName,
+                      password: '1111',
+                      phone: _account.phone,
+                      firstName: _account.firstName,
+                      gender: _account.gender,
+                      iconNum: _account.iconNum,
+                      dateOfBirth: _account.dateOfBirth,
+                      subscriptions: _account.subscriptions,
+                      role: _account.role));
+              Navigator.of(context).pop();
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(e.toString()),
+              ));
+            }
+            setState(() => _saveEnabled = true);
+          },
+          child: const Text(
+            'Сбросить пароль',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+          ),
         ),
-      ];
-    } else {
-      return [];
-    }
+      ),
+    );
   }
 }
