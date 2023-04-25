@@ -8,6 +8,7 @@ class MyTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool? obscureText;
   final bool? readOnly;
+  final bool? autofocus;
   final void Function(String?)? onSaved;
   final String? Function(String?)? validator;
 
@@ -19,6 +20,7 @@ class MyTextFormField extends StatelessWidget {
       this.keyboardType,
       this.obscureText,
       this.readOnly,
+      this.autofocus,
       this.onSaved,
       this.validator,
       Key? key})
@@ -47,6 +49,7 @@ class MyTextFormField extends StatelessWidget {
         onSaved: onSaved,
         validator: validator,
         readOnly: readOnly ?? false,
+        autofocus: autofocus ?? false,
       ),
     );
   }

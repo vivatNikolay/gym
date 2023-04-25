@@ -3,10 +3,10 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../helpers/constants.dart';
 import '../../models/exercise.dart';
-import '../widgets/my_text_field.dart';
+import '../widgets/my_text_form_field.dart';
 
 class ExerciseEdit extends StatefulWidget {
-  final ValueNotifier<Exercise> exercise;
+  final Exercise exercise;
 
   const ExerciseEdit({required this.exercise, Key? key}) : super(key: key);
 
@@ -15,85 +15,163 @@ class ExerciseEdit extends StatefulWidget {
 }
 
 class _ExerciseEditState extends State<ExerciseEdit> {
-  late ValueNotifier<Exercise> exercise;
-  final TextEditingController _exerciseController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  late Exercise exercise;
+  late String _name;
+  late int _sets;
+  late int _reps;
+  double? _weight;
+  double? _duration;
 
   @override
   void initState() {
     super.initState();
     exercise = widget.exercise;
-    _exerciseController.text = exercise.value.name;
-    _exerciseController.addListener(_controllerListener);
+    _name = exercise.name;
+    _sets = exercise.sets;
+    _reps = exercise.reps;
+    _weight = exercise.weight;
+    _duration = exercise.duration;
   }
 
-  void _controllerListener() {
-    if (_exerciseController.text.isNotEmpty) {
-      setState(() {
-        exercise.value.name = _exerciseController.text;
-      });
+  void _save() {
+    final isValid = _formKey.currentState!.validate();
+    FocusScope.of(context).unfocus();
+
+    if (isValid) {
+      _formKey.currentState!.save();
+      exercise.name = _name;
+      exercise.sets = _sets;
+      exercise.reps = _reps;
+      exercise.weight = _weight;
+      exercise.duration = _duration;
+      Navigator.of(context).pop();
     }
   }
 
   @override
-  void dispose() {
-    _exerciseController.removeListener(_controllerListener);
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        return Future.value(true);
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Упражнение'),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(top: 20),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              MyTextField(
-                autofocus: _exerciseController.text.isEmpty,
-                controller: _exerciseController,
-                validation: ValueNotifier(true),
-                fieldName: 'Название',
-              ),
-              const SizedBox(height: 15),
-              const Text('Кол-во сетов:', style: TextStyle(fontSize: 15)),
-              SfSlider(
-                min: 0,
-                max: 10,
-                interval: 5,
-                showLabels: true,
-                enableTooltip: true,
-                activeColor: mainColor,
-                value: exercise.value.sets.toDouble(),
-                onChanged: (value) {
-                  setState(() {
-                    exercise.value.sets = value.toInt();
-                  });
-                },
-              ),
-              const SizedBox(height: 15),
-              const Text('Кол-во повторений:', style: TextStyle(fontSize: 15)),
-              SfSlider(
-                min: 0,
-                max: 30,
-                interval: 10,
-                showLabels: true,
-                enableTooltip: true,
-                activeColor: mainColor,
-                value: exercise.value.reps.toDouble(),
-                onChanged: (value) {
-                  setState(() {
-                    exercise.value.reps = value.toInt();
-                  });
-                },
-              ),
-            ]),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Упражнение'),
+        actions: [
+          IconButton(
+            onPressed: _save,
+            padding: const EdgeInsets.only(right: 12),
+            icon: const Icon(Icons.check),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(top: 20),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MyTextFormField(
+                  fieldName: 'Название',
+                  initialValue: _name,
+                  autofocus: _name.isEmpty,
+                  validator: (value) {
+                    if (value != null && value.isNotEmpty) {
+                      return null;
+                    }
+                    return 'Поле пустое';
+                  },
+                  onSaved: (value) {
+                    if (value != null) {
+                      _name = value.trim();
+                    }
+                  },
+                ),
+                const SizedBox(height: 15),
+                const Text('Кол-во сетов:', style: TextStyle(fontSize: 15)),
+                SfSlider(
+                  min: 0,
+                  max: 10,
+                  interval: 5,
+                  showLabels: true,
+                  enableTooltip: true,
+                  activeColor: mainColor,
+                  value: _sets.toDouble(),
+                  onChanged: (value) {
+                    setState(() {
+                      _sets = value.toInt();
+                    });
+                  },
+                ),
+                const SizedBox(height: 15),
+                const Text('Кол-во повторений:',
+                    style: TextStyle(fontSize: 15)),
+                SfSlider(
+                  min: 0,
+                  max: 30,
+                  interval: 10,
+                  showLabels: true,
+                  enableTooltip: true,
+                  activeColor: mainColor,
+                  value: _reps.toDouble(),
+                  onChanged: (value) {
+                    setState(() {
+                      _reps = value.toInt();
+                    });
+                  },
+                ),
+                const SizedBox(height: 15),
+                const Text('Вес (кг):', style: TextStyle(fontSize: 15)),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.8,
+                  child: MyTextFormField(
+                    initialValue: _weight != null ? _weight.toString() : '',
+                    validator: (value) {
+                      if (value != null && value != '') {
+                        if (double.tryParse(value) == null) {
+                          return 'Введите число';
+                        }
+                        if (double.parse(value) <= 0) {
+                          return 'Число должно быть больше нуля';
+                        }
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.number,
+                    onSaved: (value) {
+                      if (value != null && value != '') {
+                        _weight = double.parse(value);
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Text('Длительность (мин):',
+                    style: TextStyle(fontSize: 15)),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.8,
+                  child: MyTextFormField(
+                    initialValue: _duration != null ? _duration.toString() : '',
+                    validator: (value) {
+                      if (value != null && value != '') {
+                        if (double.tryParse(value) == null) {
+                          return 'Введите число';
+                        }
+                        if (double.parse(value) <= 0) {
+                          return 'Число должно быть больше нуля';
+                        }
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.number,
+                    onSaved: (value) {
+                      if (value != null && value != '') {
+                        _duration = double.parse(value);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

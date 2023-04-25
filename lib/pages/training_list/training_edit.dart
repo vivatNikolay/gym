@@ -45,16 +45,14 @@ class TrainingEdit extends StatelessWidget {
         floatingActionButton: FloatingAddButton(
           text: 'Добавить упражнение',
           onPressed: () async {
-            ValueNotifier<Exercise> newExercise = ValueNotifier(Exercise(
+            Exercise newExercise = Exercise(
                 name: '',
                 reps: _settings.defaultExerciseReps,
-                sets: _settings.defaultExerciseSets));
-            await Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => ExerciseEdit(exercise: newExercise)));
-
-            if (newExercise.value.name.isNotEmpty) {
-              exercises.add(newExercise.value);
+                sets: _settings.defaultExerciseSets);
+            await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ExerciseEdit(exercise: newExercise)));
+            if (newExercise.name.isNotEmpty) {
+              exercises.add(newExercise);
               Provider.of<TrainingPr>(context, listen: false).put(training);
             }
           },
@@ -76,12 +74,9 @@ class TrainingEdit extends StatelessWidget {
                           .put(training);
                     },
                     onTap: () async {
-                      ValueNotifier<Exercise> exercise =
-                          ValueNotifier(exercises[index]);
                       await Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  ExerciseEdit(exercise: exercise)));
-                      exercises[index] = exercise.value;
+                          builder: (context) =>
+                              ExerciseEdit(exercise: exercises[index])));
                       Provider.of<TrainingPr>(context, listen: false)
                           .put(training);
                     },

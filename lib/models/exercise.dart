@@ -11,12 +11,15 @@ class Exercise extends HiveObject{
   @HiveField(2)
   int sets;
   @HiveField(3)
-  int? weight;
+  double? weight;
+  @HiveField(4)
+  double? duration;
 
   Exercise({
     required this.name,
     required this.reps,
     required this.sets,
-    this.weight
+    this.weight,
+    this.duration
   });
 }

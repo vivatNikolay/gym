@@ -31,13 +31,14 @@ void main() async {
 Future<void> hiveInitialization() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.registerAdapter(AccountAdapter());
-  Hive.registerAdapter(SubscriptionAdapter());
-  Hive.registerAdapter(SystemSettingsAdapter());
-  Hive.registerAdapter(UserSettingsAdapter());
-  Hive.registerAdapter(TrainingAdapter());
-  Hive.registerAdapter(ExerciseAdapter());
-  Hive.registerAdapter(VisitAdapter());
+  Hive
+    ..registerAdapter(AccountAdapter())
+    ..registerAdapter(SubscriptionAdapter())
+    ..registerAdapter(SystemSettingsAdapter())
+    ..registerAdapter(UserSettingsAdapter())
+    ..registerAdapter(TrainingAdapter())
+    ..registerAdapter(ExerciseAdapter())
+    ..registerAdapter(VisitAdapter());
   await Hive.openBox<Account>('account');
   await Hive.openBox<SystemSettings>('system_settings');
   await Hive.openBox<UserSettings>('user_settings');
