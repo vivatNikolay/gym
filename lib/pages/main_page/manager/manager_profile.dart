@@ -16,9 +16,9 @@ import 'manager_profile_edit.dart';
 import 'widgets/add_membership_dialog.dart';
 
 class ManagerProfile extends StatefulWidget {
-  final String email;
+  final String id;
 
-  const ManagerProfile({required this.email, Key? key}) : super(key: key);
+  const ManagerProfile({required this.id, Key? key}) : super(key: key);
 
   @override
   State<ManagerProfile> createState() => _ManagerProfileState();
@@ -27,7 +27,7 @@ class ManagerProfile extends StatefulWidget {
 class _ManagerProfileState extends State<ManagerProfile> {
   final AccountHttpService _accountHttpService = AccountHttpService();
   final VisitHttpService _visitHttpService = VisitHttpService();
-  late String email;
+  late String _id;
   late Future<Account>? _futureAccount;
   bool _addMembershipEnabled = true;
   bool _addVisitEnabled = true;
@@ -40,7 +40,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
   void initState() {
     super.initState();
 
-    email = widget.email;
+    _id = widget.id;
   }
 
   @override
@@ -55,7 +55,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
 
   void _updateSportsman() {
     setState(() {
-      _futureAccount = _accountHttpService.getSportsmenByEmail(_managerAcc, email);
+      _futureAccount = _accountHttpService.getSportsman(_managerAcc, _id);
     });
   }
 
@@ -109,9 +109,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                 await Navigator.of(context).push(
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            ManagerProfileEdit(
-                                                account: snapshot.data!,
-                                                isEdit: true)));
+                                            ManagerProfileEdit(account: snapshot.data!)));
                                 _updateSportsman();
                               },
                             ),
@@ -148,7 +146,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                               context: context,
                                               builder: (context) =>
                                                   AddMembershipDialog(
-                                                      snapshot.data!.email));
+                                                      snapshot.data!.id));
                                           _updateSportsman();
                                         }
                                       } else {

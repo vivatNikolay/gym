@@ -85,7 +85,7 @@ class _QrScanPageState extends State<QrScanPage> {
     qrController?.pauseCamera();
     await Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (context) => ManagerProfile(email: result!)))
+            builder: (context) => ManagerProfile(id: result!)))
     .then((value) => qrController!.resumeCamera());
   }
 }

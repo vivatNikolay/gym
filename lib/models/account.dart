@@ -7,27 +7,30 @@ part 'account.g.dart';
 @HiveType(typeId: 0)
 class Account extends HiveObject{
   @HiveField(0)
-  String email;
+  String id;
   @HiveField(1)
-  String lastName;
+  String email;
   @HiveField(2)
-  String password;
+  String lastName;
   @HiveField(3)
-  String phone;
+  String password;
   @HiveField(4)
-  String firstName;
+  String phone;
   @HiveField(5)
-  bool gender;
+  String firstName;
   @HiveField(6)
-  int iconNum;
+  bool gender;
   @HiveField(7)
-  DateTime dateOfBirth;
+  int iconNum;
   @HiveField(8)
-  List<Subscription> subscriptions = List.empty();
+  DateTime dateOfBirth;
   @HiveField(9)
+  List<Subscription> subscriptions = List.empty();
+  @HiveField(10)
   String role;
 
   Account({
+    required this.id,
     required this.email,
     required this.lastName,
     required this.password,
@@ -40,18 +43,13 @@ class Account extends HiveObject{
     required this.role
   });
 
-  factory Account.emptySportsman() {
-    return Account(email: '', lastName: '', password: '', phone: '',
-        firstName: '', gender: true, iconNum: 1, dateOfBirth: DateTime.utc(2000),
-    subscriptions: List.empty(), role: 'USER');
-  }
-
   factory Account.fromJson(Map<String, dynamic> json) {
     List<Subscription> subscriptions = (List.from(json["subscriptions"]))
         .map((i) => Subscription.fromJson(i))
         .toList();
 
     return Account(
+        id: json["id"],
         email: json["email"],
         lastName: json["lastName"],
         password: json["password"],
@@ -66,6 +64,7 @@ class Account extends HiveObject{
   }
 
   Map<String, dynamic> toJson() => {
+      'id': id,
       'email': email,
       'lastName': lastName,
       'password': password,
@@ -81,7 +80,7 @@ class Account extends HiveObject{
   @override
   String toString() {
     return 'Account{'
-        'email: $email, lastName: $lastName, password: $password, phone: $phone, '
+        'id: $id, email: $email, lastName: $lastName, password: $password, phone: $phone, '
         'firstName: $firstName, gender: $gender, iconNum: $iconNum,'
         ' dateOfBirth: $dateOfBirth, subscription: $subscriptions},'
         'role: $role';

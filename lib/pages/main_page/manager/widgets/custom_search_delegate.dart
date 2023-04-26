@@ -103,7 +103,7 @@ class CustomSearchDelegate extends SearchDelegate {
                       onTap: () async {
                         await Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
-                                ManagerProfile(email: data[index].email)));
+                                ManagerProfile(id: data[index].id)));
                       },
                     ),
                   );

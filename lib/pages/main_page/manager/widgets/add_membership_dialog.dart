@@ -9,8 +9,8 @@ import '../../../../providers/account_provider.dart';
 import '../../../../providers/user_settings_provider.dart';
 
 class AddMembershipDialog extends StatefulWidget {
-  final String email;
-  const AddMembershipDialog(this.email, {Key? key}) : super(key: key);
+  final String id;
+  const AddMembershipDialog(this.id, {Key? key}) : super(key: key);
 
   @override
   State<AddMembershipDialog> createState() => _AddMembershipDialogState();
@@ -129,7 +129,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
     try {
       await _httpService.addMembership(
           managerAcc,
-          widget.email,
+          widget.id,
           _dateRange.start.toString().substring(0, 10),
           _dateRange.end.toString().substring(0, 10),
           _numberOfVisitsController.text);

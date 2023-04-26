@@ -7,10 +7,10 @@ import 'http_service.dart';
 
 class SubscriptionHttpService extends HttpService<Subscription> {
 
-  Future<void> addMembership(Account ownAccount, String email,
+  Future<void> addMembership(Account ownAccount, String id,
       String dateOfStart, String dateOfEnd, String numberOfVisits) async {
     final params = {
-      "email": email,
+      "id": id,
       "dateOfStart": dateOfStart,
       "dateOfEnd": dateOfEnd,
       "numberOfVisits": numberOfVisits

@@ -50,7 +50,7 @@ class ProfileBox extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          account.email ?? '',
+          account.email,
           style: const TextStyle(
             color: Colors.white,
             fontSize: 18.0,

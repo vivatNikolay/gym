@@ -96,13 +96,13 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.14),
             QrItem(
-              data: account.email,
+              data: account.id,
               onTap: () {
                 ScreenBrightness().setScreenBrightness(1);
                 showDialog(
                   context: context,
                   builder: (context) => QrDialog(
-                    data: account.email,
+                    data: account.id,
                   ),
                 ).then((value) => ScreenBrightness().resetScreenBrightness());
               },

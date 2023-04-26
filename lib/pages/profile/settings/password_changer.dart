@@ -60,6 +60,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
                   try {
                     await Provider.of<AccountPr>(context, listen: false).put(
                         Account(
+                            id: account.id,
                             email: account.email,
                             lastName: account.lastName,
                             password: _newPass2Controller.text,

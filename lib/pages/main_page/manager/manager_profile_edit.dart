@@ -13,11 +13,10 @@ import '../../widgets/my_text_field.dart';
 import '../../widgets/my_text_form_field.dart';
 
 class ManagerProfileEdit extends StatefulWidget {
-  final Account account;
-  final bool isEdit;
+  final Account? account;
 
   const ManagerProfileEdit(
-      {required this.account, required this.isEdit, Key? key})
+      {this.account, Key? key})
       : super(key: key);
 
   @override
@@ -27,39 +26,43 @@ class ManagerProfileEdit extends StatefulWidget {
 
 class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   final _formKey = GlobalKey<FormState>();
-  bool _isInit = true;
-  late Account _managerAcc;
-
-  late Account _account;
-  late bool _isEdit;
-  final AccountHttpService _httpService = AccountHttpService();
-  String _email = '';
-  String _name = '';
-  String _lastName = '';
-  String _phone = '';
-  late DateTime _pickedDate;
-  late ValueNotifier<bool> _gender;
-  late ValueNotifier<int> _iconNum;
   final DateFormat formatterDate = DateFormat('dd.MM.yyyy');
   final RegExp _regExpEmail = RegExp(
       r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
       multiLine: false);
+  bool _isInit = true;
+  late Account _managerAcc;
+  late Account _account;
+  late bool _isEdit;
+  final AccountHttpService _httpService = AccountHttpService();
+  String _id = DateTime.now().millisecondsSinceEpoch.toString();
+  String _email = '';
+  String _name = '';
+  String _lastName = '';
+  String _phone = '';
+  DateTime _pickedDate = DateTime.utc(2000);
+  ValueNotifier<bool> _gender = ValueNotifier(true);
+  ValueNotifier<int> _iconNum = ValueNotifier(1);
+
   bool _saveEnabled = true;
 
   @override
   void initState() {
     super.initState();
+    _isEdit = widget.account != null;
+    if (_isEdit) {
+      _account = widget.account!;
 
-    _account = widget.account;
-    _isEdit = widget.isEdit;
+      _id = _account.id;
+      _email = _account.email;
+      _name = _account.firstName;
+      _lastName = _account.lastName;
+      _phone = _account.phone;
+      _pickedDate = _account.dateOfBirth;
+      _gender = ValueNotifier(_account.gender);
+      _iconNum = ValueNotifier(_account.iconNum);
+    }
 
-    _email = _account.email;
-    _name = _account.firstName;
-    _lastName = _account.lastName;
-    _phone = _account.phone;
-    _pickedDate = _account.dateOfBirth;
-    _gender = ValueNotifier(_account.gender);
-    _iconNum = ValueNotifier(_account.iconNum);
   }
 
   @override
@@ -81,6 +84,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
       try {
         if (_isEdit) {
           await _httpService.edit(_managerAcc, Account(
+              id: _id,
               email: _email,
               lastName: _lastName,
               password: _account.password,
@@ -94,6 +98,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
         } else {
           await _httpService.create(_managerAcc,
               Account(
+                  id: _id,
                   email: _email,
                   lastName: _lastName,
                   password: '1111',
@@ -102,17 +107,20 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                   gender: _gender.value,
                   iconNum: _iconNum.value,
                   dateOfBirth: _pickedDate,
-                  subscriptions: _account.subscriptions,
-                  role: _account.role));
+                  subscriptions: List.empty(),
+                  role: 'USER'));
         }
         Navigator.of(context).pop();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(e.toString()),
         ));
+      } finally {
+        setState(() => _saveEnabled = true);
       }
+    } else {
+      setState(() => _saveEnabled = true);
     }
-    setState(() => _saveEnabled = true);
   }
 
   @override
@@ -195,7 +203,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             const SizedBox(height: 5),
             MyTextFormField(
               initialValue: _lastName,
-              fieldName: 'Имя',
+              fieldName: 'Фамилия',
               fontSize: 20,
               textAlign: TextAlign.center,
               validator: (value) {
@@ -288,6 +296,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               await _httpService.edit(
                   managerAcc,
                   Account(
+                      id: _id,
                       email: _account.email,
                       lastName: _account.lastName,
                       password: '1111',

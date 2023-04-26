@@ -101,9 +101,9 @@ class AccountHttpService extends HttpService<Account>{
     return accounts;
   }
 
-  Future<Account> getSportsmenByEmail(Account account, String email) async {
+  Future<Account> getSportsman(Account account, String id) async {
     final queryParameters = {
-      'email': email,
+      'id': id,
     };
     final uri = Uri.http(url, '/manager/sportsman', queryParameters);
     try {

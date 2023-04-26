@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/account.dart';
 import '../../training_list/widgets/floating_add_button.dart';
 import '../../widgets/main_scaffold.dart';
 import '../widgets/qr_item.dart';
@@ -25,8 +24,7 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
       floatingActionButton: FloatingAddButton(
         text: 'Создать аккаунт',
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ManagerProfileEdit(
-                account: Account.emptySportsman(), isEdit: false))),
+            builder: (context) => const ManagerProfileEdit())),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 20, 12, 10),
