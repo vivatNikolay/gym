@@ -1,18 +1,20 @@
-import 'package:hive/hive.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'exercise.dart';
 
-part 'training.g.dart';
-
-@HiveType(typeId: 3)
-class Training extends HiveObject{
-  @HiveField(0)
+class Training {
+  String id;
   String name;
-  @HiveField(1)
-  List<Exercise> exercises;
 
   Training({
-    required this.name,
-    required this.exercises
+    required this.id,
+    required this.name
   });
+
+  factory Training.fromDocument(DocumentSnapshot doc) {
+
+    return Training(
+      id: doc.id,
+      name: doc.data().toString().contains('name') ? doc.get('name') : ''
+    );
+  }
 }

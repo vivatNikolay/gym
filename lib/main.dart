@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +9,6 @@ import 'models/visit.dart';
 import 'models/account.dart';
 import 'models/subscription.dart';
 import 'pages/login/login.dart';
-import 'models/training.dart';
-import 'models/exercise.dart';
 import 'models/system_settings.dart';
 import 'pages/home.dart';
 import 'pages/main_page/manager/widgets/qr_scan_page.dart';
@@ -18,31 +17,27 @@ import 'pages/profile/settings/password_changer.dart';
 import 'providers/account_provider.dart';
 import 'providers/system_settings_provider.dart';
 import 'providers/user_settings_provider.dart';
-import 'providers/training_provider.dart';
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await hiveInitialization();
 
   runApp(const MyApp());
 }
 
 Future<void> hiveInitialization() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive
     ..registerAdapter(AccountAdapter())
     ..registerAdapter(SubscriptionAdapter())
     ..registerAdapter(SystemSettingsAdapter())
     ..registerAdapter(UserSettingsAdapter())
-    ..registerAdapter(TrainingAdapter())
-    ..registerAdapter(ExerciseAdapter())
     ..registerAdapter(VisitAdapter());
   await Hive.openBox<Account>('account');
   await Hive.openBox<SystemSettings>('system_settings');
   await Hive.openBox<UserSettings>('user_settings');
-  await Hive.openBox<Training>('training');
 }
 
 class MyApp extends StatelessWidget {
@@ -56,9 +51,6 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider.value(
             value: UserSettingsPr(),
-          ),
-          ChangeNotifierProvider.value(
-            value: TrainingPr(),
           ),
           ChangeNotifierProvider.value(
             value: AccountPr(),

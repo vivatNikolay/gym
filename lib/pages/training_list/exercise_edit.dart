@@ -1,14 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../helpers/constants.dart';
 import '../../models/exercise.dart';
+import '../../models/user_settings.dart';
+import '../../providers/user_settings_provider.dart';
 import '../widgets/my_text_form_field.dart';
 
 class ExerciseEdit extends StatefulWidget {
-  final Exercise exercise;
+  final Exercise? exercise;
+  final String trainingId;
 
-  const ExerciseEdit({required this.exercise, Key? key}) : super(key: key);
+  const ExerciseEdit({required this.trainingId, this.exercise, Key? key}) : super(key: key);
 
   @override
   State<ExerciseEdit> createState() => _ExerciseEditState();
@@ -16,8 +21,9 @@ class ExerciseEdit extends StatefulWidget {
 
 class _ExerciseEditState extends State<ExerciseEdit> {
   final _formKey = GlobalKey<FormState>();
-  late Exercise exercise;
-  late String _name;
+  bool _isInit = true;
+  Exercise? exercise;
+  String _name = '';
   late int _sets;
   late int _reps;
   double? _weight;
@@ -27,11 +33,27 @@ class _ExerciseEditState extends State<ExerciseEdit> {
   void initState() {
     super.initState();
     exercise = widget.exercise;
-    _name = exercise.name;
-    _sets = exercise.sets;
-    _reps = exercise.reps;
-    _weight = exercise.weight;
-    _duration = exercise.duration;
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final UserSettings settings =
+          Provider.of<UserSettingsPr>(context, listen: false).settings;
+
+      _sets = settings.defaultExerciseSets;
+      _reps = settings.defaultExerciseReps;
+
+      if (exercise != null) {
+        _name = exercise!.name;
+        _sets = exercise!.sets;
+        _reps = exercise!.reps;
+        _weight = exercise!.weight;
+        _duration = exercise!.duration;
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   void _save() {
@@ -40,11 +62,30 @@ class _ExerciseEditState extends State<ExerciseEdit> {
 
     if (isValid) {
       _formKey.currentState!.save();
-      exercise.name = _name;
-      exercise.sets = _sets;
-      exercise.reps = _reps;
-      exercise.weight = _weight;
-      exercise.duration = _duration;
+      if (exercise != null) {
+        FirebaseFirestore.instance.collection('trainings')
+            .doc(widget.trainingId)
+            .collection('exercises')
+            .doc(exercise!.id)
+            .update({
+          'name': _name,
+          'reps': _reps,
+          'sets': _sets,
+          'weight': _weight,
+          'duration': _duration,
+        });
+      } else {
+        FirebaseFirestore.instance.collection('trainings')
+            .doc(widget.trainingId)
+            .collection('exercises')
+            .add({
+          'name': _name,
+          'reps': _reps,
+          'sets': _sets,
+          'weight': _weight,
+          'duration': _duration,
+        });
+      }
       Navigator.of(context).pop();
     }
   }

@@ -1,13 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../helpers/constants.dart';
 import '../../pages/training_list/training_edit.dart';
 import '../../models/training.dart';
-import '../../providers/training_provider.dart';
-import '../widgets/my_text_field.dart';
+import '../../providers/account_provider.dart';
 import '../widgets/main_scaffold.dart';
 import '../widgets/confirm_dialog.dart';
+import 'widgets/add_training_dialog.dart';
 import 'widgets/training_card.dart';
 import 'widgets/floating_add_button.dart';
 
@@ -16,80 +16,77 @@ class TrainingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Training> trainings = Provider.of<TrainingPr>(context).trainings;
+    final accountId =
+        Provider.of<AccountPr>(context, listen: false).account!.id;
 
     return MainScaffold(
       title: 'Тренировки',
       floatingActionButton: FloatingAddButton(
         text: 'Добавить тренировку',
-        onPressed: () => creationDialog(context),
-      ),
-      body: SingleChildScrollView(
-        child: ListView.builder(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 80),
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: trainings.length,
-          itemBuilder: (_, index) => TrainingCard(
-            title: trainings[index].name,
-            subtitle:
-                '${trainings[index].exercises.length.toString()} упражнений',
-            onDelete: () => deletionDialog(context, trainings[index]),
-            onTap: () async {
-              await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => TrainingEdit(trainings[index].key)));
-            },
-          ),
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => const AddTrainingDialog(),
         ),
       ),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('trainings')
+              .where('userId', isEqualTo: accountId)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapTraining) {
+            if (snapTraining.hasError) {
+              return const Center(child: Text('Тренировки не загрузились'));
+            }
+            if (snapTraining.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            List<Training> trainings = List.from(snapTraining.data!.docs)
+                .map((i) => Training.fromDocument(i))
+                .toList();
+            return SingleChildScrollView(
+              child: ListView.builder(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 80),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: trainings.length,
+                itemBuilder: (_, index) => StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('trainings')
+                        .doc(trainings[index].id)
+                        .collection('exercises')
+                        .snapshots(),
+                    builder:
+                        (context, AsyncSnapshot<QuerySnapshot> snapExercise) {
+                      return TrainingCard(
+                        title: trainings[index].name,
+                        subtitle:
+                            '${snapExercise.data != null ? snapExercise.data!.size : 0} упражнений',
+                        onDelete: () =>
+                            deletionDialog(context, trainings[index].id),
+                        onTap: () async {
+                          await Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => TrainingEdit(
+                                  trainings[index].id, trainings[index].name)));
+                        },
+                      );
+                    }),
+              ),
+            );
+          }),
     );
   }
 
-  Future creationDialog(BuildContext context) {
-    TextEditingController _nameController = TextEditingController();
-    ValueNotifier<bool> _nameValidator = ValueNotifier(true);
-    return showDialog(
-        context: context,
-        builder: (context) => StatefulBuilder(
-              builder: (context, setState) => AlertDialog(
-                title: const Text('Тренировка'),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0)),
-                content: MyTextField(
-                  autofocus: true,
-                  fieldName: 'Название',
-                  controller: _nameController,
-                  validation: _nameValidator,
-                ),
-                backgroundColor: Theme.of(context).backgroundColor,
-                actions: [
-                  TextButton(
-                    child: const Text('Добавить',
-                        style: TextStyle(color: mainColor, fontSize: 18)),
-                    onPressed: () async {
-                      setState(() => _nameValidator.value =
-                          _nameController.text.isNotEmpty);
-                      if (_nameValidator.value) {
-                        Provider.of<TrainingPr>(context, listen: false)
-                            .put(Training(
-                          name: _nameController.text.trim(),
-                          exercises: List.empty(growable: true),
-                        ));
-                        Navigator.of(context).pop();
-                      }
-                    },
-                  )
-                ],
-              ),
-            ));
-  }
-
-  deletionDialog(BuildContext context, Training training) => showDialog(
+  deletionDialog(BuildContext context, String trainingId) => showDialog(
         context: context,
         builder: (context) => ConfirmDialog(
           onNo: () => Navigator.of(context).pop(),
-          onYes: () {
-            Provider.of<TrainingPr>(context, listen: false).delete(training);
+          onYes: () async {
+            await FirebaseFirestore.instance
+                .collection('trainings')
+                .doc(trainingId)
+                .delete();
             Navigator.of(context).pop();
           },
         ),

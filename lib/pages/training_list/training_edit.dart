@@ -1,29 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../helpers/constants.dart';
 import '../../models/exercise.dart';
-import '../../models/user_settings.dart';
-import '../../models/training.dart';
 import '../../pages/training_list/exercise_edit.dart';
 import '../../pages/training_list/widgets/floating_add_button.dart';
-import '../../providers/training_provider.dart';
-import '../../providers/user_settings_provider.dart';
 import 'widgets/training_card.dart';
 
 class TrainingEdit extends StatelessWidget {
-  final int trainingKey;
+  final String trainingId;
+  final String trainingName;
 
-  const TrainingEdit(this.trainingKey, {Key? key}) : super(key: key);
+  const TrainingEdit(this.trainingId, this.trainingName, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final UserSettings _settings =
-        Provider.of<UserSettingsPr>(context, listen: false).settings;
-    final Training training =
-        Provider.of<TrainingPr>(context).findByKey(trainingKey);
-    List<Exercise> exercises = training.exercises;
-
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -39,50 +30,60 @@ class TrainingEdit extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text(training.name),
+          title: Text(trainingName),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingAddButton(
           text: 'Добавить упражнение',
-          onPressed: () async {
-            Exercise newExercise = Exercise(
-                name: '',
-                reps: _settings.defaultExerciseReps,
-                sets: _settings.defaultExerciseSets);
-            await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ExerciseEdit(exercise: newExercise)));
-            if (newExercise.name.isNotEmpty) {
-              exercises.add(newExercise);
-              Provider.of<TrainingPr>(context, listen: false).put(training);
-            }
-          },
+          onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ExerciseEdit(trainingId: trainingId))),
         ),
-        body: SingleChildScrollView(
-            child: ListView.builder(
-                padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: exercises.length,
-                itemBuilder: (_, index) {
-                  return TrainingCard(
-                    title: exercises[index].name,
-                    subtitle:
-                        '${exercises[index].reps} / ${exercises[index].sets}',
-                    onDelete: () {
-                      exercises.remove(exercises[index]);
-                      Provider.of<TrainingPr>(context, listen: false)
-                          .put(training);
-                    },
-                    onTap: () async {
-                      await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              ExerciseEdit(exercise: exercises[index])));
-                      Provider.of<TrainingPr>(context, listen: false)
-                          .put(training);
-                    },
-                  );
-                })),
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('trainings').doc(trainingId).collection('exercises').snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return const Center(child: Text('Упражнения не загрузились'));
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            List<Exercise> exercises = List.from(snapshot.data!.docs)
+                .map((i) => Exercise.fromDocument(i))
+                .toList();
+            return SingleChildScrollView(
+                child: ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: exercises.length,
+                    itemBuilder: (_, index) {
+                      return TrainingCard(
+                        title: exercises[index].name,
+                        subtitle:
+                            '${exercises[index].reps} / ${exercises[index].sets}',
+                        onDelete: () => _deleteExercise(exercises[index].id!),
+                        onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => ExerciseEdit(
+                                    trainingId: trainingId,
+                                    exercise: exercises[index]))),
+                      );
+                    }),
+            );
+          }
+        ),
       ),
     );
+  }
+
+  Future<void> _deleteExercise(String id) async {
+    await FirebaseFirestore.instance
+        .collection('trainings')
+        .doc(trainingId)
+        .collection('exercises')
+        .doc(id)
+        .delete();
   }
 }
