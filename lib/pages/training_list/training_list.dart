@@ -32,6 +32,7 @@ class TrainingList extends StatelessWidget {
           stream: FirebaseFirestore.instance
               .collection('trainings')
               .where('userId', isEqualTo: accountId)
+              .orderBy('creationDate')
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapTraining) {
             if (snapTraining.hasError) {

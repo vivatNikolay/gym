@@ -34,6 +34,7 @@ class AddTrainingDialog extends StatelessWidget {
               FirebaseFirestore.instance.collection('trainings').add({
                 'name': _nameController.text,
                 'userId': accountId,
+                'creationDate': Timestamp.now(),
               });
             }
             Navigator.of(context).pop();

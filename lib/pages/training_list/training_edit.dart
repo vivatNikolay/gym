@@ -39,8 +39,13 @@ class TrainingEdit extends StatelessWidget {
               builder: (context) => ExerciseEdit(trainingId: trainingId))),
         ),
         body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('trainings').doc(trainingId).collection('exercises').snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            stream: FirebaseFirestore.instance
+                .collection('trainings')
+                .doc(trainingId)
+                .collection('exercises')
+                .orderBy('creationDate')
+                .snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
               return const Center(child: Text('Упражнения не загрузились'));
             }

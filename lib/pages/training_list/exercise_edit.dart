@@ -84,6 +84,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
           'sets': _sets,
           'weight': _weight,
           'duration': _duration,
+          'creationDate': Timestamp.now(),
         });
       }
       Navigator.of(context).pop();
