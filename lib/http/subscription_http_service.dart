@@ -27,7 +27,7 @@ class SubscriptionHttpService extends HttpService<Subscription> {
         throw 'Ошибка при добавлении';
       }
     } on SocketException {
-      throw 'Нет подключения к интернету';
+      throw 'Нет интернет соединения';
     } on Exception {
       throw 'Ошибка';
     }

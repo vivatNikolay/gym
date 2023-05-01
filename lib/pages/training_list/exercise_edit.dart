@@ -39,7 +39,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
   void didChangeDependencies() {
     if (_isInit) {
       final UserSettings settings =
-          Provider.of<UserSettingsPr>(context, listen: false).settings;
+          Provider.of<UserSettingsPr>(context, listen: false).settings!;
 
       _sets = settings.defaultExerciseSets;
       _reps = settings.defaultExerciseReps;

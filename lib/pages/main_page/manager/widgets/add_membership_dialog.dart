@@ -35,7 +35,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
   @override
   void didChangeDependencies() {
     if (isInit) {
-      final UserSettings _settings = Provider.of<UserSettingsPr>(context, listen: false).settings;
+      final UserSettings _settings = Provider.of<UserSettingsPr>(context, listen: false).settings!;
       _dateRange = DateTimeRange(
         start: _now,
         end: DateTime(_now.year, _now.month + _settings.defaultMembershipTime, _now.day),

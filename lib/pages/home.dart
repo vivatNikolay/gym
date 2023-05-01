@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/custom_icons.dart';
+import '../providers/user_settings_provider.dart';
 import '../helpers/constants.dart';
 import '../providers/account_provider.dart';
 import 'main_page/manager/manager_qr_page.dart';
@@ -26,7 +27,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final account = Provider.of<AccountPr>(context, listen: false).account;
+    final account = Provider.of<AccountPr>(context, listen: false).account!;
+    Provider.of<UserSettingsPr>(context, listen: false).create(account.id);
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -41,7 +43,7 @@ class _HomeState extends State<Home> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: widgetsByRole(account!.role).elementAt(_selectedIndex),
+        body: widgetsByRole(account.role).elementAt(_selectedIndex),
         bottomNavigationBar: widgetsByRole(account.role).length > 1
             ? ClipRRect(
                 borderRadius: const BorderRadius.only(

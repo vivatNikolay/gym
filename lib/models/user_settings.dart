@@ -1,22 +1,23 @@
-import 'package:hive/hive.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-part 'user_settings.g.dart';
-
-@HiveType(typeId: 6)
-class UserSettings extends HiveObject {
-  @HiveField(0)
+class UserSettings {
   int defaultExerciseSets;
-  @HiveField(1)
   int defaultExerciseReps;
-  @HiveField(2)
   int defaultMembershipTime;
-  @HiveField(3)
   int defaultMembershipNumber;
 
-  UserSettings({
-    this.defaultExerciseSets = 5,
-    this.defaultExerciseReps = 10,
-    this.defaultMembershipTime = 1,
-    this.defaultMembershipNumber = 10
-  });
+  UserSettings(
+      {required this.defaultExerciseSets,
+      required this.defaultExerciseReps,
+      required this.defaultMembershipTime,
+      required this.defaultMembershipNumber});
+
+  factory UserSettings.fromDocument(DocumentSnapshot doc) {
+    return UserSettings(
+      defaultExerciseSets: doc.data().toString().contains('defaultExerciseSets') ? doc.get('defaultExerciseSets') : 5,
+      defaultExerciseReps: doc.data().toString().contains('defaultExerciseReps') ? doc.get('defaultExerciseReps') : 10,
+      defaultMembershipTime: doc.data().toString().contains('defaultMembershipTime') ? doc.get('defaultMembershipTime') : 1,
+      defaultMembershipNumber: doc.data().toString().contains('defaultMembershipNumber') ? doc.get('defaultMembershipNumber') : 10,
+    );
+  }
 }

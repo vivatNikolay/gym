@@ -8,13 +8,13 @@ import '../../../helpers/constants.dart';
 import '../../../pages/profile/settings/widgets/setting_name.dart';
 import '../../../pages/profile/settings/widgets/setting_pack.dart';
 import '../../../pages/profile/settings/widgets/setting_title.dart';
+import '../../../providers/account_provider.dart';
 import '../../../providers/system_settings_provider.dart';
 import '../../../providers/user_settings_provider.dart';
 
 class Settings extends StatefulWidget {
-  final bool isManager;
-
-  const Settings({required this.isManager, Key? key}) : super(key: key);
+  static const routeName = '/settings';
+  const Settings({Key? key}) : super(key: key);
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -72,10 +72,11 @@ class _SettingsState extends State<Settings> {
   }
 
   Widget optionalPart() {
+    final account = Provider.of<AccountPr>(context, listen: false).account!;
     return Consumer<UserSettingsPr>(
         builder: (ctx, _userSettingsPr, _) {
-          UserSettings _userSettings = _userSettingsPr.settings;
-          return widget.isManager
+          UserSettings _userSettings = _userSettingsPr.settings!;
+          return account.role == 'MANAGER'
               ? Column(
             children: [
               SettingTitle(text: 'Абонемент'),
@@ -93,7 +94,7 @@ class _SettingsState extends State<Settings> {
                   onChanged: (value) {
                     _userSettings.defaultMembershipTime =
                         value.toInt();
-                    _userSettingsPr.put(_userSettings);
+                    _userSettingsPr.put(_userSettings, account.id);
                   },
                 ),
                 const SizedBox(height: 15),
@@ -109,7 +110,7 @@ class _SettingsState extends State<Settings> {
                   onChanged: (value) {
                     _userSettings.defaultMembershipNumber =
                         value.toInt();
-                    _userSettingsPr.put(_userSettings);
+                    _userSettingsPr.put(_userSettings, account.id);
                   },
                 ),
                 const SizedBox(height: 15),
@@ -133,7 +134,7 @@ class _SettingsState extends State<Settings> {
                   onChanged: (value) {
                     _userSettings.defaultExerciseSets =
                         value.toInt();
-                    _userSettingsPr.put(_userSettings);
+                    _userSettingsPr.put(_userSettings, account.id);
                   },
                 ),
                 const SizedBox(height: 15),
@@ -149,7 +150,7 @@ class _SettingsState extends State<Settings> {
                   onChanged: (value) {
                     _userSettings.defaultExerciseReps =
                         value.toInt();
-                    _userSettingsPr.put(_userSettings);
+                    _userSettingsPr.put(_userSettings, account.id);
                   },
                 ),
                 const SizedBox(height: 15),

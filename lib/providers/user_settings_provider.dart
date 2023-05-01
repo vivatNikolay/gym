@@ -1,19 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/user_settings.dart';
-import '../db/user_settings_db_service.dart';
 
 class UserSettingsPr extends ChangeNotifier {
 
-  UserSettings _settings = UserSettingsDBService().getFirst();
+  UserSettings? _settings;
 
-  UserSettings get settings {
+  UserSettings? get settings {
     return _settings;
   }
 
-  void put(UserSettings settings) {
+  Future<void> create(String accountId) async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('userSettings')
+        .doc(accountId)
+        .get();
+    _settings = UserSettings.fromDocument(doc);
+    notifyListeners();
+  }
+
+  Future<void> put(UserSettings settings, String accountId) async {
     _settings = settings;
-    UserSettingsDBService().put(settings);
+    await FirebaseFirestore.instance
+        .collection('userSettings')
+        .doc(accountId)
+        .set({
+      'defaultMembershipTime': settings.defaultMembershipTime,
+      'defaultMembershipNumber': settings.defaultMembershipNumber,
+      'defaultExerciseSets': settings.defaultExerciseSets,
+      'defaultExerciseReps': settings.defaultExerciseReps,
+    });
     notifyListeners();
   }
 }

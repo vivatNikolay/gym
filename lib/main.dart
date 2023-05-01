@@ -14,6 +14,7 @@ import 'pages/home.dart';
 import 'pages/main_page/manager/widgets/qr_scan_page.dart';
 import 'pages/profile/profile_edit/profile_edit.dart';
 import 'pages/profile/settings/password_changer.dart';
+import 'pages/profile/settings/settings.dart';
 import 'providers/account_provider.dart';
 import 'providers/system_settings_provider.dart';
 import 'providers/user_settings_provider.dart';
@@ -33,7 +34,6 @@ Future<void> hiveInitialization() async {
     ..registerAdapter(AccountAdapter())
     ..registerAdapter(SubscriptionAdapter())
     ..registerAdapter(SystemSettingsAdapter())
-    ..registerAdapter(UserSettingsAdapter())
     ..registerAdapter(VisitAdapter());
   await Hive.openBox<Account>('account');
   await Hive.openBox<SystemSettings>('system_settings');
@@ -70,6 +70,7 @@ class MyApp extends StatelessWidget {
               PasswordChanger.routeName: (ctx) => const PasswordChanger(),
               ProfileEdit.routeName: (ctx) => const ProfileEdit(),
               QrScanPage.routeName: (ctx) => const QrScanPage(),
+              Settings.routeName: (ctx) => const Settings(),
             },
           );
         },

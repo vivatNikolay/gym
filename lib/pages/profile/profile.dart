@@ -41,9 +41,7 @@ class Profile extends StatelessWidget {
             minLeadingWidth: 24,
             title: const Text('Настройки', style: TextStyle(fontSize: 18)),
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      Settings(isManager: account.role == 'MANAGER')));
+              Navigator.of(context).pushNamed(Settings.routeName);
             },
           ),
           ListTile(
