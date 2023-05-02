@@ -12,11 +12,18 @@ class UserSettingsPr extends ChangeNotifier {
   }
 
   Future<void> create(String accountId) async {
-    DocumentSnapshot doc = await FirebaseFirestore.instance
-        .collection('userSettings')
-        .doc(accountId)
-        .get();
-    _settings = UserSettings.fromDocument(doc);
+    if (_settings == null) {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('userSettings')
+          .doc(accountId)
+          .get();
+      _settings = UserSettings.fromDocument(doc);
+      notifyListeners();
+    }
+  }
+
+  void delete() {
+    _settings = null;
     notifyListeners();
   }
 

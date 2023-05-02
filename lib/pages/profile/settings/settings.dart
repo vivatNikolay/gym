@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
+import '../../../models/account.dart';
 import '../../../models/user_settings.dart';
 import '../../../pages/profile/settings/password_changer.dart';
 import '../../../helpers/constants.dart';
@@ -14,6 +15,7 @@ import '../../../providers/user_settings_provider.dart';
 
 class Settings extends StatefulWidget {
   static const routeName = '/settings';
+
   const Settings({Key? key}) : super(key: key);
 
   @override
@@ -21,11 +23,57 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  bool _isInit = true;
+  late bool _isDarkMode;
+  late bool _oldIsDarkMode;
+  late UserSettings _userSettings;
+  late UserSettings _oldUserSettings;
+  late Account _account;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      _account = Provider.of<AccountPr>(context, listen: false).account!;
+      _oldIsDarkMode =
+          Provider.of<SystemSettingsPr>(context, listen: false).isDarkMode;
+      _oldUserSettings =
+          Provider.of<UserSettingsPr>(context, listen: false).settings!;
+      _isDarkMode = _oldIsDarkMode;
+      _userSettings = UserSettings(
+          defaultExerciseSets: _oldUserSettings.defaultExerciseSets,
+          defaultExerciseReps: _oldUserSettings.defaultExerciseReps,
+          defaultMembershipTime: _oldUserSettings.defaultMembershipTime,
+          defaultMembershipNumber: _oldUserSettings.defaultMembershipNumber);
+    }
+    _isInit = false;
+
+    super.didChangeDependencies();
+  }
+
+  void _save() {
+    if (_userSettings != _oldUserSettings) {
+      Provider.of<UserSettingsPr>(context, listen: false)
+          .put(_userSettings, _account.id);
+    }
+    if (_isDarkMode != _oldIsDarkMode) {
+      Provider.of<SystemSettingsPr>(context, listen: false)
+          .toggleTheme(_isDarkMode);
+    }
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Настройки'),
+        actions: [
+          IconButton(
+            onPressed: _save,
+            padding: const EdgeInsets.only(right: 12),
+            icon: const Icon(Icons.check),
+          ),
+        ],
       ),
       body: Container(
         width: double.infinity,
@@ -36,20 +84,19 @@ class _SettingsState extends State<Settings> {
           children: [
             SettingTitle(text: 'Главные'),
             SettingPack(children: [
-              Consumer<SystemSettingsPr>(
-                builder: (ctx, systemSettingsPr, _) => ListTile(
-                  leading: const Icon(Icons.dark_mode_outlined),
-                  minLeadingWidth: 24,
-                  title: const Text('Темная тема'),
-                  subtitle: Text(
-                      systemSettingsPr.isDarkMode ? 'включено' : 'выключено'),
-                  trailing: Switch(
-                    value: systemSettingsPr.isDarkMode,
-                    onChanged: (value) {
-                      systemSettingsPr.toggleTheme(value);
-                    },
-                    activeColor: mainColor,
-                  ),
+              ListTile(
+                leading: const Icon(Icons.dark_mode_outlined),
+                minLeadingWidth: 24,
+                title: const Text('Темная тема'),
+                subtitle: Text(_isDarkMode ? 'включено' : 'выключено'),
+                trailing: Switch(
+                  value: _isDarkMode,
+                  onChanged: (value) {
+                    setState(() {
+                      _isDarkMode = value;
+                    });
+                  },
+                  activeColor: mainColor,
                 ),
               ),
             ]),
@@ -72,12 +119,8 @@ class _SettingsState extends State<Settings> {
   }
 
   Widget optionalPart() {
-    final account = Provider.of<AccountPr>(context, listen: false).account!;
-    return Consumer<UserSettingsPr>(
-        builder: (ctx, _userSettingsPr, _) {
-          UserSettings _userSettings = _userSettingsPr.settings!;
-          return account.role == 'MANAGER'
-              ? Column(
+    return _account.role == 'MANAGER'
+        ? Column(
             children: [
               SettingTitle(text: 'Абонемент'),
               SettingPack(children: [
@@ -92,9 +135,9 @@ class _SettingsState extends State<Settings> {
                   activeColor: mainColor,
                   value: _userSettings.defaultMembershipTime,
                   onChanged: (value) {
-                    _userSettings.defaultMembershipTime =
-                        value.toInt();
-                    _userSettingsPr.put(_userSettings, account.id);
+                    setState(() {
+                      _userSettings.defaultMembershipTime = value.toInt();
+                    });
                   },
                 ),
                 const SizedBox(height: 15),
@@ -108,16 +151,16 @@ class _SettingsState extends State<Settings> {
                   activeColor: mainColor,
                   value: _userSettings.defaultMembershipNumber,
                   onChanged: (value) {
-                    _userSettings.defaultMembershipNumber =
-                        value.toInt();
-                    _userSettingsPr.put(_userSettings, account.id);
+                    setState(() {
+                      _userSettings.defaultMembershipNumber = value.toInt();
+                    });
                   },
                 ),
                 const SizedBox(height: 15),
               ]),
             ],
           )
-              : Column(
+        : Column(
             children: [
               SettingTitle(text: 'Тренировки'),
               SettingPack(children: [
@@ -132,9 +175,9 @@ class _SettingsState extends State<Settings> {
                   activeColor: mainColor,
                   value: _userSettings.defaultExerciseSets,
                   onChanged: (value) {
-                    _userSettings.defaultExerciseSets =
-                        value.toInt();
-                    _userSettingsPr.put(_userSettings, account.id);
+                    setState(() {
+                      _userSettings.defaultExerciseSets = value.toInt();
+                    });
                   },
                 ),
                 const SizedBox(height: 15),
@@ -148,15 +191,14 @@ class _SettingsState extends State<Settings> {
                   activeColor: mainColor,
                   value: _userSettings.defaultExerciseReps,
                   onChanged: (value) {
-                    _userSettings.defaultExerciseReps =
-                        value.toInt();
-                    _userSettingsPr.put(_userSettings, account.id);
+                    setState(() {
+                      _userSettings.defaultExerciseReps = value.toInt();
+                    });
                   },
                 ),
                 const SizedBox(height: 15),
               ]),
             ],
           );
-        });
   }
 }

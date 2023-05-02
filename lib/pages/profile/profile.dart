@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../http/visit_http_service.dart';
 import '../../models/visit.dart';
+import '../../providers/user_settings_provider.dart';
 import '../../providers/account_provider.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
@@ -51,6 +52,7 @@ class Profile extends StatelessWidget {
             onTap: () async {
               Navigator.of(context).pop();
               Provider.of<AccountPr>(context, listen: false).delete();
+              Provider.of<UserSettingsPr>(context, listen: false).delete();
             },
           ),
         ],

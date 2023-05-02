@@ -20,4 +20,21 @@ class UserSettings {
       defaultMembershipNumber: doc.data().toString().contains('defaultMembershipNumber') ? doc.get('defaultMembershipNumber') : 10,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserSettings &&
+          runtimeType == other.runtimeType &&
+          defaultExerciseSets == other.defaultExerciseSets &&
+          defaultExerciseReps == other.defaultExerciseReps &&
+          defaultMembershipTime == other.defaultMembershipTime &&
+          defaultMembershipNumber == other.defaultMembershipNumber;
+
+  @override
+  int get hashCode =>
+      defaultExerciseSets.hashCode ^
+      defaultExerciseReps.hashCode ^
+      defaultMembershipTime.hashCode ^
+      defaultMembershipNumber.hashCode;
 }
