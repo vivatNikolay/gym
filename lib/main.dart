@@ -5,16 +5,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'models/user_settings.dart';
-import 'models/visit.dart';
 import 'models/account.dart';
-import 'models/subscription.dart';
 import 'pages/login/login.dart';
 import 'models/system_settings.dart';
 import 'pages/home.dart';
 import 'pages/main_page/manager/widgets/qr_scan_page.dart';
 import 'pages/profile/profile_edit/profile_edit.dart';
 import 'pages/profile/settings/password_changer.dart';
-import 'pages/profile/settings/settings.dart';
+import 'pages/profile/settings/settings_page.dart';
 import 'providers/account_provider.dart';
 import 'providers/system_settings_provider.dart';
 import 'providers/user_settings_provider.dart';
@@ -32,9 +30,7 @@ Future<void> hiveInitialization() async {
   await Hive.initFlutter();
   Hive
     ..registerAdapter(AccountAdapter())
-    ..registerAdapter(SubscriptionAdapter())
-    ..registerAdapter(SystemSettingsAdapter())
-    ..registerAdapter(VisitAdapter());
+    ..registerAdapter(SystemSettingsAdapter());
   await Hive.openBox<Account>('account');
   await Hive.openBox<SystemSettings>('system_settings');
   await Hive.openBox<UserSettings>('user_settings');
@@ -70,7 +66,7 @@ class MyApp extends StatelessWidget {
               PasswordChanger.routeName: (ctx) => const PasswordChanger(),
               ProfileEdit.routeName: (ctx) => const ProfileEdit(),
               QrScanPage.routeName: (ctx) => const QrScanPage(),
-              Settings.routeName: (ctx) => const Settings(),
+              SettingsPage.routeName: (ctx) => const SettingsPage(),
             },
           );
         },

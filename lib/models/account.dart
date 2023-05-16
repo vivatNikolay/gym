@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-import '../models/subscription.dart';
-
 part 'account.g.dart';
 
 @HiveType(typeId: 0)
@@ -24,8 +22,6 @@ class Account extends HiveObject{
   int iconNum;
   @HiveField(8)
   DateTime dateOfBirth;
-  @HiveField(9)
-  List<Subscription> subscriptions = List.empty();
   @HiveField(10)
   String role;
 
@@ -39,14 +35,10 @@ class Account extends HiveObject{
     required this.gender,
     required this.iconNum,
     required this.dateOfBirth,
-    required this.subscriptions,
     required this.role
   });
 
   factory Account.fromJson(Map<String, dynamic> json) {
-    List<Subscription> subscriptions = (List.from(json["subscriptions"]))
-        .map((i) => Subscription.fromJson(i))
-        .toList();
 
     return Account(
         id: json["id"],
@@ -58,7 +50,6 @@ class Account extends HiveObject{
         gender: json["gender"],
         iconNum: json["iconNum"],
         dateOfBirth: DateTime.parse(json["dateOfBirth"].toString()),
-        subscriptions: subscriptions,
         role: json["role"]
     );
   }
@@ -73,16 +64,14 @@ class Account extends HiveObject{
       'gender': gender,
       'iconNum': iconNum,
       'dateOfBirth': dateOfBirth.toString().substring(0, 10),
-      'subscriptions': subscriptions.map((e) => e.toJson()).toList(),
       'role': role
   };
 
   @override
   String toString() {
-    return 'Account{'
-        'id: $id, email: $email, lastName: $lastName, password: $password, phone: $phone, '
-        'firstName: $firstName, gender: $gender, iconNum: $iconNum,'
-        ' dateOfBirth: $dateOfBirth, subscription: $subscriptions},'
-        'role: $role';
+    return 'Account{id: $id, email: $email, lastName: $lastName,'
+        ' password: $password, phone: $phone, firstName: $firstName,'
+        ' gender: $gender, iconNum: $iconNum, dateOfBirth: $dateOfBirth,'
+        ' role: $role}';
   }
 }

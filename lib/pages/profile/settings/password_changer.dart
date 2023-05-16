@@ -69,7 +69,6 @@ class _PasswordChangerState extends State<PasswordChanger> {
                             gender: account.gender,
                             iconNum: account.iconNum,
                             dateOfBirth: account.dateOfBirth,
-                            subscriptions: account.subscriptions,
                             role: account.role));
                     Navigator.of(context).pop();
                   } catch (e) {

@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../helpers/subscription_progress.dart';
+import '../../../models/visit.dart';
+import '../widgets/subscription_progress.dart';
 import '../../../http/account_http_service.dart';
-import '../../../http/visit_http_service.dart';
 import '../../../models/subscription.dart';
 import '../../../models/account.dart';
 import '../../../models/custom_icons.dart';
@@ -26,7 +27,6 @@ class ManagerProfile extends StatefulWidget {
 
 class _ManagerProfileState extends State<ManagerProfile> {
   final AccountHttpService _accountHttpService = AccountHttpService();
-  final VisitHttpService _visitHttpService = VisitHttpService();
   late String _id;
   late Future<Account>? _futureAccount;
   bool _addMembershipEnabled = true;
@@ -109,105 +109,135 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                 await Navigator.of(context).push(
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            ManagerProfileEdit(account: snapshot.data!)));
+                                            ManagerProfileEdit(
+                                                account: snapshot.data!)));
                                 _updateSportsman();
                               },
                             ),
                             const SizedBox(height: 4),
                             Card(
                               elevation: 2,
-                              child: ListTile(
-                                leading: const Icon(CustomIcons.sub,
-                                    size: 26, color: mainColor),
-                                minLeadingWidth: 22,
-                                title: const Text(
-                                  'Абонемент',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                subtitle: Text(
-                                  SubscriptionProgress.getString(
-                                      snapshot.data!.subscriptions),
-                                ),
-                                trailing: AbsorbPointer(
-                                  absorbing: !_addMembershipEnabled,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.add,
-                                        size: 32, color: mainColor),
-                                    onPressed: () async {
-                                      setState(
-                                          () => _addMembershipEnabled = false);
-                                      ScaffoldMessenger.of(context)
-                                          .clearSnackBars();
-                                      if (isMembershipInactive(
-                                          snapshot.data!.subscriptions)) {
-                                        if (isMembershipStarted(
-                                            snapshot.data!.subscriptions)) {
-                                          await showDialog(
-                                              context: context,
-                                              builder: (context) =>
-                                                  AddMembershipDialog(
-                                                      snapshot.data!.id));
-                                          _updateSportsman();
+                              child: StreamBuilder(
+                                  stream:
+                                      Subscription.getSubscriptionStreamByUser(
+                                          snapshot.data!.id),
+                                  builder: (context,
+                                      AsyncSnapshot<QuerySnapshot>
+                                          subSnapshot) {
+                                    Subscription? subscription;
+                                    if (subSnapshot.connectionState == ConnectionState.waiting) {
+                                      return const ListTile(
+                                        title: Center(child: CircularProgressIndicator()),
+                                      );
+                                    }
+                                    if (!subSnapshot.hasError &&
+                                        subSnapshot.hasData && subSnapshot.data!.docs.isNotEmpty) {
+                                      subscription = Subscription.fromDocument(
+                                          subSnapshot.data!.docs.first);
+                                    }
+                                    return ListTile(
+                                      leading: const Icon(CustomIcons.sub,
+                                          size: 26, color: mainColor),
+                                      minLeadingWidth: 22,
+                                      title: const Text(
+                                        'Абонемент',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      subtitle: SubscriptionProgress(
+                                        subscription: subscription,
+                                      ),
+                                      trailing: AbsorbPointer(
+                                        absorbing: !_addMembershipEnabled,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.add,
+                                              size: 32, color: mainColor),
+                                          onPressed: () async {
+                                            setState(() =>
+                                                _addMembershipEnabled = false);
+                                            ScaffoldMessenger.of(context)
+                                                .clearSnackBars();
+                                            if (_isMembershipInactive(
+                                                subscription)) {
+                                              if (_checkStartDate(
+                                                  subscription)) {
+                                                await showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AddMembershipDialog(
+                                                            snapshot.data!.id));
+                                              }
+                                            } else {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    AbsorbPointer(
+                                                  absorbing: !_addVisitEnabled,
+                                                  child: ConfirmDialog(
+                                                    textConfirmation:
+                                                        'Добавить посещение в абонемент?',
+                                                    onNo: () =>
+                                                        Navigator.of(context)
+                                                            .pop(),
+                                                    onYes: () async {
+                                                      setState(() =>
+                                                          _addVisitEnabled =
+                                                              false);
+                                                      try {
+                                                        await _addMembershipVisit(
+                                                            snapshot.data!.id,
+                                                            subscription!);
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                const SnackBar(
+                                                                    content: Text(
+                                                                        'Посещение добавлено в абонемент')));
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      } catch (e) {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(SnackBar(
+                                                                content: Text(e
+                                                                    .toString())));
+                                                      }
+                                                      setState(() =>
+                                                          _addVisitEnabled =
+                                                              true);
+                                                    },
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            setState(() =>
+                                                _addMembershipEnabled = true);
+                                          },
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        if (subscription != null) {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      VisitsList(
+                                                        title:
+                                                            'История абонемента',
+                                                        accountId:
+                                                            snapshot.data!.id,
+                                                        subscriptionId:
+                                                            subscription!.id,
+                                                      )));
                                         }
-                                      } else {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => AbsorbPointer(
-                                            absorbing: !_addVisitEnabled,
-                                            child: ConfirmDialog(
-                                              textConfirmation:
-                                                  'Добавить посещение в абонемент?',
-                                              onNo: () =>
-                                                  Navigator.of(context).pop(),
-                                              onYes: () async {
-                                                setState(() => _addVisitEnabled = false);
-                                                try {
-                                                  await _visitHttpService
-                                                      .addVisitToMembership(
-                                                      snapshot.data!,
-                                                      _managerAcc);
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(const SnackBar(
-                                                      content: Text(
-                                                          'Посещение добавлено в абонемент')));
-                                                  _updateSportsman();
-                                                  Navigator.of(context).pop();
-                                                } catch (e) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                          content: Text(e.toString())));
-                                                }
-                                                setState(() => _addVisitEnabled = true);
-                                              },
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                      setState(() => _addMembershipEnabled = true);
-                                    },
-                                  ),
-                                ),
-                                onTap: () async {
-                                  if (snapshot.data!.subscriptions.isNotEmpty) {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (context) => VisitsList(
-                                                  visits: snapshot
-                                                      .data!
-                                                      .subscriptions
-                                                      .last
-                                                      .visits,
-                                                  title: 'История абонемента',
-                                                )));
-                                  }
-                                },
-                              ),
+                                      },
+                                    );
+                                  }),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 2),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
                                     'Разовое посещение',
@@ -230,21 +260,20 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                           child: ConfirmDialog(
                                             textConfirmation:
                                                 'Добавить разовое?',
-                                            onNo: () => Navigator.of(context).pop(),
+                                            onNo: () =>
+                                                Navigator.of(context).pop(),
                                             onYes: () async {
                                               setState(() =>
                                                   _addVisitEnabled = false);
                                               ScaffoldMessenger.of(context)
                                                   .clearSnackBars();
                                               try {
-                                                await _visitHttpService
-                                                    .addSingleVisit(
-                                                    snapshot.data!,
-                                                    _managerAcc);
+                                                await Visit.addVisit(
+                                                    snapshot.data!.id, null);
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(const SnackBar(
-                                                    content: Text(
-                                                        'Добавлено разовое посещение')));
+                                                        content: Text(
+                                                            'Добавлено разовое посещение')));
                                                 Navigator.of(context).pop();
                                               } catch (e) {
                                                 ScaffoldMessenger.of(context)
@@ -276,24 +305,22 @@ class _ManagerProfileState extends State<ManagerProfile> {
     );
   }
 
-  bool isMembershipInactive(List<Subscription> subscriptions) {
-    if (subscriptions.isEmpty) {
+  bool _isMembershipInactive(Subscription? subscription) {
+    if (subscription == null) {
       return true;
     }
-    Subscription subscription = subscriptions.last;
     if (subscription.dateOfEnd.isBefore(DateTime.now()) ||
         subscription.dateOfStart.isAfter(DateTime.now()) ||
-        subscription.visits.length >= subscription.numberOfVisits) {
+        subscription.visitCounter >= subscription.numberOfVisits) {
       return true;
     }
     return false;
   }
 
-  bool isMembershipStarted(List<Subscription> subscriptions) {
-    if (subscriptions.isEmpty) {
+  bool _checkStartDate(Subscription? subscription) {
+    if (subscription == null) {
       return true;
     }
-    Subscription subscription = subscriptions.last;
     if (subscription.dateOfStart.isAfter(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Абонемент не начат'),
@@ -301,5 +328,11 @@ class _ManagerProfileState extends State<ManagerProfile> {
       return false;
     }
     return true;
+  }
+
+  Future<void> _addMembershipVisit(String userId, Subscription subscription) async {
+    int newVisitCounter = subscription.visitCounter + 1;
+    await Subscription.updateSubscription(subscription.id, newVisitCounter);
+    await Visit.addVisit(userId, subscription.id);
   }
 }

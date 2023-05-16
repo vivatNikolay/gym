@@ -13,16 +13,16 @@ import '../../../providers/account_provider.dart';
 import '../../../providers/system_settings_provider.dart';
 import '../../../providers/user_settings_provider.dart';
 
-class Settings extends StatefulWidget {
+class SettingsPage extends StatefulWidget {
   static const routeName = '/settings';
 
-  const Settings({Key? key}) : super(key: key);
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsPageState extends State<SettingsPage> {
   bool _isInit = true;
   late bool _isDarkMode;
   late bool _oldIsDarkMode;

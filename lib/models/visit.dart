@@ -1,28 +1,50 @@
-import 'package:hive/hive.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-part 'visit.g.dart';
-
-@HiveType(typeId: 2)
-class Visit extends HiveObject{
-  @HiveField(0)
+class Visit {
+  String id;
   DateTime date;
 
   Visit({
+    required this.id,
     required this.date
   });
 
-  factory Visit.fromJson(Map<String, dynamic> json) {
+  factory Visit.fromDocument(DocumentSnapshot doc) {
     return Visit(
-        date: DateTime.parse(json["date"].toString()),
+      id: doc.id,
+      date: doc.data().toString().contains('date') ? doc.get('date').toDate() : DateTime.now(),
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'date': date.toString().substring(0, 10)
-  };
+  static Future<void> addVisit(String userId, String? subscriptionId) async {
+    await FirebaseFirestore.instance.collection('visits').add({
+      'date': Timestamp.now(),
+      'userId': userId,
+      'subscriptionId': subscriptionId,
+    });
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getVisitStreamByUser(
+      String userId) {
+    return FirebaseFirestore.instance
+        .collection('visits')
+        .where('userId', isEqualTo: userId)
+        .orderBy('date')
+        .snapshots();
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getVisitStreamByUserAndSub(
+      String userId, String subscriptionId) {
+    return FirebaseFirestore.instance
+        .collection('visits')
+        .where('userId', isEqualTo: userId)
+        .where('subscriptionId', isEqualTo: subscriptionId)
+        .orderBy('date')
+        .snapshots();
+  }
 
   @override
   String toString() {
-    return 'Visit{date: $date}';
+    return 'Visit{id: $id, date: $date}';
   }
 }

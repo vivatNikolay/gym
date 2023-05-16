@@ -93,7 +93,6 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               gender: _gender.value,
               iconNum: _iconNum.value,
               dateOfBirth: _pickedDate,
-              subscriptions: _account.subscriptions,
               role: _account.role));
         } else {
           await _httpService.create(_managerAcc,
@@ -107,7 +106,6 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                   gender: _gender.value,
                   iconNum: _iconNum.value,
                   dateOfBirth: _pickedDate,
-                  subscriptions: List.empty(),
                   role: 'USER'));
         }
         Navigator.of(context).pop();
@@ -305,7 +303,6 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                       gender: _account.gender,
                       iconNum: _account.iconNum,
                       dateOfBirth: _account.dateOfBirth,
-                      subscriptions: _account.subscriptions,
                       role: _account.role));
               Navigator.of(context).pop();
             } catch (e) {

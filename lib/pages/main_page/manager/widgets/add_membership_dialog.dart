@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../http/subscription_http_service.dart';
+import '../../../../models/subscription.dart';
 import '../../../../models/user_settings.dart';
 import '../../../../helpers/constants.dart';
-import '../../../../providers/account_provider.dart';
 import '../../../../providers/user_settings_provider.dart';
 
 class AddMembershipDialog extends StatefulWidget {
@@ -17,7 +16,6 @@ class AddMembershipDialog extends StatefulWidget {
 }
 
 class _AddMembershipDialogState extends State<AddMembershipDialog> {
-  final SubscriptionHttpService _httpService  = SubscriptionHttpService();
   final DateFormat formatterDate = DateFormat('dd.MM.yy');
   final DateTime _now = DateTime.now();
   late DateTimeRange _dateRange;
@@ -124,15 +122,17 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
   }
 
   Future<void> save(BuildContext context) async {
-    final managerAcc = Provider.of<AccountPr>(context, listen: false).account!;
     ScaffoldMessenger.of(context).clearSnackBars();
+    if (int.tryParse(_numberOfVisitsController.text) == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Кол-во посещений должно быть числом')));
+    }
     try {
-      await _httpService.addMembership(
-          managerAcc,
+      await Subscription.addSubscription(
           widget.id,
-          _dateRange.start.toString().substring(0, 10),
-          _dateRange.end.toString().substring(0, 10),
-          _numberOfVisitsController.text);
+          _dateRange.start.millisecondsSinceEpoch,
+          _dateRange.end.millisecondsSinceEpoch,
+          int.parse(_numberOfVisitsController.text));
       Navigator.of(context).pop();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -59,7 +59,6 @@ class _ProfileEditState extends State<ProfileEdit> {
             gender: _gender.value,
             iconNum: _iconNum.value,
             dateOfBirth: _account.dateOfBirth,
-            subscriptions: _account.subscriptions,
             role: _account.role));
         Navigator.of(context).pop();
       } catch (e) {

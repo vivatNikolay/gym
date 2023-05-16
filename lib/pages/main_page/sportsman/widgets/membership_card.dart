@@ -5,12 +5,10 @@ import '../../../../models/custom_icons.dart';
 
 class MembershipCard extends StatelessWidget {
   final Widget subtitle;
-  final Widget trailing;
   final VoidCallback onTap;
 
   const MembershipCard(
       {required this.subtitle,
-      required this.trailing,
       required this.onTap,
       Key? key})
       : super(key: key);
@@ -49,7 +47,6 @@ class MembershipCard extends StatelessWidget {
                   style: TextStyle(fontSize: 23),
                 ),
                 subtitle: subtitle,
-                trailing: trailing,
                 onTap: onTap,
               ),
             ),

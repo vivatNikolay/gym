@@ -1,55 +1,65 @@
-import 'package:hive/hive.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'visit.dart';
-
-part 'subscription.g.dart';
-
-@HiveType(typeId: 1)
 class Subscription {
-  @HiveField(0)
-  int id;
-  @HiveField(1)
+  String id;
   DateTime dateOfStart;
-  @HiveField(2)
   DateTime dateOfEnd;
-  @HiveField(3)
   int numberOfVisits;
-  @HiveField(4)
-  List<Visit> visits = List.empty();
+  int visitCounter;
 
   Subscription({
     required this.id,
     required this.dateOfStart,
     required this.dateOfEnd,
     required this.numberOfVisits,
-    required this.visits
+    required this.visitCounter,
   });
 
-  factory Subscription.fromJson(Map<String, dynamic> json) {
-    List<Visit> visits = (List.from(json["visits"])).map((i) => Visit.fromJson(i)).toList();
-
+  factory Subscription.fromDocument(DocumentSnapshot doc) {
     return Subscription(
-      id : json["id"],
-      dateOfStart : DateTime.parse(json["dateOfStart"].toString()),
-      dateOfEnd : DateTime.parse(json["dateOfEnd"].toString()),
-      numberOfVisits : json["numberOfVisits"],
-      visits: visits,
+        id: doc.id,
+        dateOfStart: doc.data().toString().contains('dateOfStart') ? DateTime.fromMillisecondsSinceEpoch(doc.get('dateOfStart')) : DateTime.now(),
+        dateOfEnd: doc.data().toString().contains('dateOfEnd') ? DateTime.fromMillisecondsSinceEpoch(doc.get('dateOfEnd')) : DateTime.now(),
+        numberOfVisits: doc.data().toString().contains('numberOfVisits') ? doc.get('numberOfVisits') : 0,
+        visitCounter: doc.data().toString().contains('visitCounter') ? doc.get('visitCounter') : 0,
     );
   }
 
-  Map<String, dynamic> toJson() => {
-      'id': id,
-      'dateOfStart': dateOfStart.toString().substring(0, 10),
-      'dateOfEnd': dateOfEnd.toString().substring(0, 10),
+  static Future<void> addSubscription(String userId, int dateOfStart, int dateOfEnd, int numberOfVisits) async {
+    await FirebaseFirestore.instance.collection('subscriptions').add({
+      'userId': userId,
+      'dateOfStart': dateOfStart,
+      'dateOfEnd': dateOfEnd,
       'numberOfVisits': numberOfVisits,
-      'visits': visits.map((e) => e.toJson()).toList(),
-  };
+      'visitCounter': 0,
+    });
+  }
+
+  static Future<void> updateSubscription(String subscriptionId, int visitCounter) async {
+    await FirebaseFirestore.instance
+        .collection('subscriptions')
+        .doc(subscriptionId)
+        .update({
+      'visitCounter': visitCounter,
+    });
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getSubscriptionStreamByUser(
+      String userId) {
+    return FirebaseFirestore.instance
+        .collection('subscriptions')
+        .where('userId',
+        isEqualTo: userId)
+        .orderBy('dateOfEnd')
+        .limit(1)
+        .snapshots();
+  }
 
   @override
   String toString() {
     return 'Subscription{'
         'id: $id, dateOfStart: $dateOfStart, dateOfEnd: $dateOfEnd, '
-        'numberOfVisits: $numberOfVisits, visitCounter: $visits'
+        'numberOfVisits: $numberOfVisits, visitCounter: $visitCounter'
         '}';
   }
 }

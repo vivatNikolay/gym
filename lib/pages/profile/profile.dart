@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../http/visit_http_service.dart';
-import '../../models/visit.dart';
 import '../../providers/user_settings_provider.dart';
 import '../../providers/account_provider.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
 import '../widgets/visits_list.dart';
-import 'settings/settings.dart';
+import 'settings/settings_page.dart';
 import 'widgets/profile_box.dart';
 
 class Profile extends StatelessWidget {
@@ -42,7 +40,7 @@ class Profile extends StatelessWidget {
             minLeadingWidth: 24,
             title: const Text('Настройки', style: TextStyle(fontSize: 18)),
             onTap: () {
-              Navigator.of(context).pushNamed(Settings.routeName);
+              Navigator.of(context).pushNamed(SettingsPage.routeName);
             },
           ),
           ListTile(
@@ -67,21 +65,12 @@ class Profile extends StatelessWidget {
           leading: const Icon(Icons.history, color: mainColor),
           minLeadingWidth: 24,
           title: const Text('История', style: TextStyle(fontSize: 18)),
-          onTap: () async {
-            try {
-              List<Visit> visits = await VisitHttpService()
-                  .getByAccount(account);
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      VisitsList(
-                        visits: visits,
-                        title: 'История всех посещений',
-                      )));
-            } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(e.toString()),
-              ));
-            }
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => VisitsList(
+                      title: 'История всех посещений',
+                      accountId: account.id,
+                    )));
           },
         ),
       ];

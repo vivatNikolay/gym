@@ -1,33 +1,66 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/visit.dart';
 
-class VisitsList extends StatelessWidget {
+class VisitsList extends StatefulWidget {
+  final String title;
+  final String accountId;
+  final String? subscriptionId;
+
+  const VisitsList(
+      {required this.title,
+      required this.accountId,
+      this.subscriptionId,
+      Key? key})
+      : super(key: key);
+
+  @override
+  State<VisitsList> createState() => _VisitsListState();
+}
+
+class _VisitsListState extends State<VisitsList> {
   final DateFormat _formatterDate = DateFormat('dd.MM.yy');
   final DateFormat _formatterWeekDay = DateFormat('E');
-  final List<Visit> visits;
-  final String title;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> _stream;
 
-  VisitsList({required this.title, required this.visits, Key? key})
-      : super(key: key);
+  @override
+  void initState() {
+    _stream = widget.subscriptionId != null
+        ? Visit.getVisitStreamByUserAndSub(
+            widget.accountId, widget.subscriptionId!)
+        : Visit.getVisitStreamByUser(widget.accountId);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
       ),
-      body: buildBody(),
+      body: StreamBuilder(
+          stream: _stream,
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return const Center(child: Text('Посещения не загрузились'));
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            List<Visit> visits = List.from(snapshot.data!.docs)
+                .map((i) => Visit.fromDocument(i))
+                .toList();
+            if (visits.isNotEmpty) {
+              return listView(visits);
+            } else {
+              return emptyMess();
+            }
+          }),
     );
-  }
-
-  Widget buildBody() {
-    if (visits.isNotEmpty) {
-      return listView(visits);
-    } else {
-      return emptyMess();
-    }
   }
 
   ListView listView(List<Visit> visits) {
@@ -51,7 +84,7 @@ class VisitsList extends StatelessWidget {
   Center emptyMess() {
     return const Center(
         child: Text(
-      'Истрории нет',
+      'Посещений нет',
       style: TextStyle(fontSize: 23.0),
     ));
   }

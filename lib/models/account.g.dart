@@ -26,7 +26,6 @@ class AccountAdapter extends TypeAdapter<Account> {
       gender: fields[6] as bool,
       iconNum: fields[7] as int,
       dateOfBirth: fields[8] as DateTime,
-      subscriptions: (fields[9] as List).cast<Subscription>(),
       role: fields[10] as String,
     );
   }
@@ -34,7 +33,7 @@ class AccountAdapter extends TypeAdapter<Account> {
   @override
   void write(BinaryWriter writer, Account obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,8 +52,6 @@ class AccountAdapter extends TypeAdapter<Account> {
       ..write(obj.iconNum)
       ..writeByte(8)
       ..write(obj.dateOfBirth)
-      ..writeByte(9)
-      ..write(obj.subscriptions)
       ..writeByte(10)
       ..write(obj.role);
   }

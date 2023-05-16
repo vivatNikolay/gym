@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
-import '../../../../helpers/subscription_progress.dart';
+import '../widgets/subscription_progress.dart';
+import '../../../models/subscription.dart';
 import '../../../providers/account_provider.dart';
 import '../../widgets/visits_list.dart';
 import '../../widgets/main_scaffold.dart';
@@ -19,7 +21,6 @@ class SportsmanQrPage extends StatefulWidget {
 
 class _SportsmanQrPageState extends State<SportsmanQrPage>
     with SingleTickerProviderStateMixin {
-  Future<void>? _future;
   late AnimationController _animationController;
 
   @override
@@ -46,52 +47,35 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
       body: SingleChildScrollView(
         child: Column(
           children: [
-            MembershipCard(
-              subtitle: FutureBuilder(
-                future: _future,
-                builder: (context, snapshot) {
-                  WidgetsBinding.instance.addPostFrameCallback(
-                      (_) => ScaffoldMessenger.of(context).clearSnackBars());
-                  if (snapshot.hasError) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) =>
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(snapshot.error!.toString()),
-                        )));
-                  }
-                  return Text(
-                    SubscriptionProgress.getString(account.subscriptions),
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontStyle: FontStyle.italic,
-                    ),
+            StreamBuilder(
+              stream: Subscription.getSubscriptionStreamByUser(account.id),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                Subscription? subscription;
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Card(
+                    child: Center(child: CircularProgressIndicator()),
                   );
-                },
-              ),
-              trailing: IconButton(
-                onPressed: () {
-                  _animationController.forward(from: 0.0);
-                  setState(() {
-                    _future = Provider.of<AccountPr>(context, listen: false).get(account.email, account.password);
-                  });
-                },
-                icon: RotationTransition(
-                    turns: _animationController,
-                    child: const Icon(Icons.refresh, size: 32)),
-              ),
-              onTap: () {
-                setState(() {
-                  _future = Provider.of<AccountPr>(context, listen: false).get(account.email, account.password);
-                });
-                if (account.subscriptions.isNotEmpty) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => VisitsList(
-                            visits: account
-                                .subscriptions
-                                .last
-                                .visits,
-                            title: 'История абонемента',
-                          )));
                 }
+                if (!snapshot.hasError && snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                  subscription =
+                      Subscription.fromDocument(snapshot.data!.docs.first);
+                }
+                return MembershipCard(
+                  subtitle: SubscriptionProgress(
+                    subscription: subscription,
+                    fontSize: 17,
+                  ),
+                  onTap: () {
+                    if (subscription != null) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => VisitsList(
+                                accountId: account.id,
+                                subscriptionId: subscription!.id,
+                                title: 'История абонемента',
+                              )));
+                    }
+                  },
+                );
               },
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.14),
