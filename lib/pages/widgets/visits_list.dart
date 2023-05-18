@@ -7,12 +7,12 @@ import '../../models/visit.dart';
 class VisitsList extends StatefulWidget {
   final String title;
   final String accountId;
-  final String? subscriptionId;
+  final String? membershipId;
 
   const VisitsList(
       {required this.title,
       required this.accountId,
-      this.subscriptionId,
+      this.membershipId,
       Key? key})
       : super(key: key);
 
@@ -27,9 +27,9 @@ class _VisitsListState extends State<VisitsList> {
 
   @override
   void initState() {
-    _stream = widget.subscriptionId != null
-        ? Visit.getVisitStreamByUserAndSub(
-            widget.accountId, widget.subscriptionId!)
+    _stream = widget.membershipId != null
+        ? Visit.getVisitStreamByUserAndMembership(
+            widget.accountId, widget.membershipId!)
         : Visit.getVisitStreamByUser(widget.accountId);
     super.initState();
   }

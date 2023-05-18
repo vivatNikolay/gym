@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
-import '../widgets/subscription_progress.dart';
-import '../../../models/subscription.dart';
+import '../widgets/membership_progress.dart';
+import '../../../models/membership.dart';
 import '../../../providers/account_provider.dart';
 import '../../widgets/visits_list.dart';
 import '../../widgets/main_scaffold.dart';
@@ -48,29 +48,29 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
         child: Column(
           children: [
             StreamBuilder(
-              stream: Subscription.getSubscriptionStreamByUser(account.id),
+              stream: Membership.getMembershipStreamByUser(account.id),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                Subscription? subscription;
+                Membership? membership;
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Card(
                     child: Center(child: CircularProgressIndicator()),
                   );
                 }
                 if (!snapshot.hasError && snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-                  subscription =
-                      Subscription.fromDocument(snapshot.data!.docs.first);
+                  membership =
+                      Membership.fromDocument(snapshot.data!.docs.first);
                 }
                 return MembershipCard(
-                  subtitle: SubscriptionProgress(
-                    subscription: subscription,
+                  subtitle: MembershipProgress(
+                    membership: membership,
                     fontSize: 17,
                   ),
                   onTap: () {
-                    if (subscription != null) {
+                    if (membership != null) {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => VisitsList(
                                 accountId: account.id,
-                                subscriptionId: subscription!.id,
+                                membershipId: membership!.id,
                                 title: 'История абонемента',
                               )));
                     }

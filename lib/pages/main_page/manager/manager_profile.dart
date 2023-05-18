@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/visit.dart';
-import '../widgets/subscription_progress.dart';
+import '../widgets/membership_progress.dart';
 import '../../../http/account_http_service.dart';
-import '../../../models/subscription.dart';
+import '../../../models/membership.dart';
 import '../../../models/account.dart';
 import '../../../models/custom_icons.dart';
 import '../../../helpers/constants.dart';
@@ -119,21 +119,21 @@ class _ManagerProfileState extends State<ManagerProfile> {
                               elevation: 2,
                               child: StreamBuilder(
                                   stream:
-                                      Subscription.getSubscriptionStreamByUser(
+                                  Membership.getMembershipStreamByUser(
                                           snapshot.data!.id),
                                   builder: (context,
                                       AsyncSnapshot<QuerySnapshot>
-                                          subSnapshot) {
-                                    Subscription? subscription;
-                                    if (subSnapshot.connectionState == ConnectionState.waiting) {
+                                          memSnapshot) {
+                                    Membership? membership;
+                                    if (memSnapshot.connectionState == ConnectionState.waiting) {
                                       return const ListTile(
                                         title: Center(child: CircularProgressIndicator()),
                                       );
                                     }
-                                    if (!subSnapshot.hasError &&
-                                        subSnapshot.hasData && subSnapshot.data!.docs.isNotEmpty) {
-                                      subscription = Subscription.fromDocument(
-                                          subSnapshot.data!.docs.first);
+                                    if (!memSnapshot.hasError &&
+                                        memSnapshot.hasData && memSnapshot.data!.docs.isNotEmpty) {
+                                      membership = Membership.fromDocument(
+                                          memSnapshot.data!.docs.first);
                                     }
                                     return ListTile(
                                       leading: const Icon(CustomIcons.sub,
@@ -143,8 +143,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                         'Абонемент',
                                         style: TextStyle(fontSize: 20),
                                       ),
-                                      subtitle: SubscriptionProgress(
-                                        subscription: subscription,
+                                      subtitle: MembershipProgress(
+                                        membership: membership,
                                       ),
                                       trailing: AbsorbPointer(
                                         absorbing: !_addMembershipEnabled,
@@ -157,9 +157,9 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                             ScaffoldMessenger.of(context)
                                                 .clearSnackBars();
                                             if (_isMembershipInactive(
-                                                subscription)) {
+                                                membership)) {
                                               if (_checkStartDate(
-                                                  subscription)) {
+                                                  membership)) {
                                                 await showDialog(
                                                     context: context,
                                                     builder: (context) =>
@@ -185,7 +185,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                                       try {
                                                         await _addMembershipVisit(
                                                             snapshot.data!.id,
-                                                            subscription!);
+                                                            membership!);
                                                         ScaffoldMessenger.of(
                                                                 context)
                                                             .showSnackBar(
@@ -215,7 +215,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                         ),
                                       ),
                                       onTap: () {
-                                        if (subscription != null) {
+                                        if (membership != null) {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
@@ -224,8 +224,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                                             'История абонемента',
                                                         accountId:
                                                             snapshot.data!.id,
-                                                        subscriptionId:
-                                                            subscription!.id,
+                                                        membershipId:
+                                                          membership!.id,
                                                       )));
                                         }
                                       },
@@ -305,23 +305,23 @@ class _ManagerProfileState extends State<ManagerProfile> {
     );
   }
 
-  bool _isMembershipInactive(Subscription? subscription) {
-    if (subscription == null) {
+  bool _isMembershipInactive(Membership? membership) {
+    if (membership == null) {
       return true;
     }
-    if (subscription.dateOfEnd.isBefore(DateTime.now()) ||
-        subscription.dateOfStart.isAfter(DateTime.now()) ||
-        subscription.visitCounter >= subscription.numberOfVisits) {
+    if (membership.dateOfEnd.isBefore(DateTime.now()) ||
+        membership.dateOfStart.isAfter(DateTime.now()) ||
+        membership.visitCounter >= membership.numberOfVisits) {
       return true;
     }
     return false;
   }
 
-  bool _checkStartDate(Subscription? subscription) {
-    if (subscription == null) {
+  bool _checkStartDate(Membership? membership) {
+    if (membership == null) {
       return true;
     }
-    if (subscription.dateOfStart.isAfter(DateTime.now())) {
+    if (membership.dateOfStart.isAfter(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Абонемент не начат'),
       ));
@@ -330,9 +330,9 @@ class _ManagerProfileState extends State<ManagerProfile> {
     return true;
   }
 
-  Future<void> _addMembershipVisit(String userId, Subscription subscription) async {
-    int newVisitCounter = subscription.visitCounter + 1;
-    await Subscription.updateSubscription(subscription.id, newVisitCounter);
-    await Visit.addVisit(userId, subscription.id);
+  Future<void> _addMembershipVisit(String userId, Membership membership) async {
+    int newVisitCounter = membership.visitCounter + 1;
+    await Membership.updateMembership(membership.id, newVisitCounter);
+    await Visit.addVisit(userId, membership.id);
   }
 }

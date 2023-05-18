@@ -16,11 +16,11 @@ class Visit {
     );
   }
 
-  static Future<void> addVisit(String userId, String? subscriptionId) async {
+  static Future<void> addVisit(String userId, String? membershipId) async {
     await FirebaseFirestore.instance.collection('visits').add({
       'date': Timestamp.now(),
       'userId': userId,
-      'subscriptionId': subscriptionId,
+      'membershipId': membershipId,
     });
   }
 
@@ -33,12 +33,12 @@ class Visit {
         .snapshots();
   }
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getVisitStreamByUserAndSub(
-      String userId, String subscriptionId) {
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getVisitStreamByUserAndMembership(
+      String userId, String membershipId) {
     return FirebaseFirestore.instance
         .collection('visits')
         .where('userId', isEqualTo: userId)
-        .where('subscriptionId', isEqualTo: subscriptionId)
+        .where('membershipId', isEqualTo: membershipId)
         .orderBy('date')
         .snapshots();
   }

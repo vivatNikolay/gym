@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Subscription {
+class Membership {
   String id;
   DateTime dateOfStart;
   DateTime dateOfEnd;
   int numberOfVisits;
   int visitCounter;
 
-  Subscription({
+  Membership({
     required this.id,
     required this.dateOfStart,
     required this.dateOfEnd,
@@ -15,8 +15,8 @@ class Subscription {
     required this.visitCounter,
   });
 
-  factory Subscription.fromDocument(DocumentSnapshot doc) {
-    return Subscription(
+  factory Membership.fromDocument(DocumentSnapshot doc) {
+    return Membership(
         id: doc.id,
         dateOfStart: doc.data().toString().contains('dateOfStart') ? DateTime.fromMillisecondsSinceEpoch(doc.get('dateOfStart')) : DateTime.now(),
         dateOfEnd: doc.data().toString().contains('dateOfEnd') ? DateTime.fromMillisecondsSinceEpoch(doc.get('dateOfEnd')) : DateTime.now(),
@@ -25,8 +25,8 @@ class Subscription {
     );
   }
 
-  static Future<void> addSubscription(String userId, int dateOfStart, int dateOfEnd, int numberOfVisits) async {
-    await FirebaseFirestore.instance.collection('subscriptions').add({
+  static Future<void> addMembership(String userId, int dateOfStart, int dateOfEnd, int numberOfVisits) async {
+    await FirebaseFirestore.instance.collection('memberships').add({
       'userId': userId,
       'dateOfStart': dateOfStart,
       'dateOfEnd': dateOfEnd,
@@ -35,19 +35,19 @@ class Subscription {
     });
   }
 
-  static Future<void> updateSubscription(String subscriptionId, int visitCounter) async {
+  static Future<void> updateMembership(String membershipId, int visitCounter) async {
     await FirebaseFirestore.instance
-        .collection('subscriptions')
-        .doc(subscriptionId)
+        .collection('memberships')
+        .doc(membershipId)
         .update({
       'visitCounter': visitCounter,
     });
   }
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getSubscriptionStreamByUser(
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getMembershipStreamByUser(
       String userId) {
     return FirebaseFirestore.instance
-        .collection('subscriptions')
+        .collection('memberships')
         .where('userId',
         isEqualTo: userId)
         .orderBy('dateOfEnd')
@@ -57,7 +57,7 @@ class Subscription {
 
   @override
   String toString() {
-    return 'Subscription{'
+    return 'Membership{'
         'id: $id, dateOfStart: $dateOfStart, dateOfEnd: $dateOfEnd, '
         'numberOfVisits: $numberOfVisits, visitCounter: $visitCounter'
         '}';

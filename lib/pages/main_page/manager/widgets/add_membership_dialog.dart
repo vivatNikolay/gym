@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../models/subscription.dart';
+import '../../../../models/membership.dart';
 import '../../../../models/user_settings.dart';
 import '../../../../helpers/constants.dart';
 import '../../../../providers/user_settings_provider.dart';
@@ -128,7 +128,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
           const SnackBar(content: Text('Кол-во посещений должно быть числом')));
     }
     try {
-      await Subscription.addSubscription(
+      await Membership.addMembership(
           widget.id,
           _dateRange.start.millisecondsSinceEpoch,
           _dateRange.end.millisecondsSinceEpoch,
