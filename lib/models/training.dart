@@ -2,19 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class Training {
-  String id;
+  String? id;
   String name;
+  String userId;
+  DateTime creationDate;
 
   Training({
-    required this.id,
-    required this.name
+    this.id,
+    required this.name,
+    required this.userId,
+    required this.creationDate,
   });
 
   factory Training.fromDocument(DocumentSnapshot doc) {
-
     return Training(
       id: doc.id,
-      name: doc.data().toString().contains('name') ? doc.get('name') : ''
+      name: doc.data().toString().contains('name') ? doc.get('name') : '',
+      userId: doc.data().toString().contains('userId') ? doc.get('userId') : '',
+      creationDate: doc.data().toString().contains('creationDate') ? DateTime.fromMillisecondsSinceEpoch(doc.get('creationDate')) : DateTime.now(),
     );
   }
+
+  Map<String, dynamic> toMap() => {
+    'name': name,
+    'userId': userId,
+    'creationDate': creationDate.millisecondsSinceEpoch,
+  };
 }

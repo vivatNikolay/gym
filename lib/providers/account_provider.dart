@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../db/account_db_service.dart';
+import '../services/account_db.dart';
 import '../http/account_http_service.dart';
 import '../models/account.dart';
 
@@ -13,25 +13,25 @@ class AccountPr extends ChangeNotifier {
   }
 
   AccountPr() {
-    _account = AccountDBService().getFirst();
+    _account = AccountDB().getFirst();
   }
 
   Future<void> put(Account acc) async {
     await AccountHttpService().update(_account!, acc);
-    await AccountDBService().put(acc);
-    _account = AccountDBService().getFirst();
+    await AccountDB().put(acc);
+    _account = AccountDB().getFirst();
     notifyListeners();
   }
 
   Future<void> delete() async {
-    await AccountDBService().deleteAll();
+    await AccountDB().deleteAll();
     _account = null;
     notifyListeners();
   }
 
   Future<void> get(String email, String pass) async {
     _account = await AccountHttpService().login(email, pass);
-    await AccountDBService().put(_account);
+    await AccountDB().put(_account);
     notifyListeners();
   }
 }

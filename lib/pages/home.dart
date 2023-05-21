@@ -76,8 +76,8 @@ class _HomeState extends State<Home> {
           break;
         }
     }
-    return const [
-      SportsmanQrPage(),
+    return [
+      const SportsmanQrPage(),
       TrainingList(),
     ];
   }

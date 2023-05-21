@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../helpers/constants.dart';
 import '../../models/system_settings.dart';
-import '../db/system_settings_db_service.dart';
+import '../services/system_settings_db.dart';
 
 class SystemSettingsPr extends ChangeNotifier {
-  final SystemSettingsDBService _dbService = SystemSettingsDBService();
+  final SystemSettingsDB _dbService = SystemSettingsDB();
 
   late ThemeMode themeMode;
   late SystemSettings _settings;
@@ -17,10 +17,10 @@ class SystemSettingsPr extends ChangeNotifier {
 
   bool get isDarkMode => themeMode == ThemeMode.dark;
 
-  void toggleTheme(bool isOn) {
+  Future<void> toggleTheme(bool isOn) async {
     themeMode = isOn ? ThemeMode.dark : ThemeMode.light;
     _settings.isDark = isOn;
-    _dbService.put(_settings);
+    await _dbService.put(_settings);
     notifyListeners();
   }
 

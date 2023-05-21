@@ -7,6 +7,8 @@ class Exercise {
   int sets;
   double? weight;
   double? duration;
+  DateTime creationDate;
+  String trainingId;
 
   Exercise({
     this.id,
@@ -14,7 +16,9 @@ class Exercise {
     required this.reps,
     required this.sets,
     this.weight,
-    this.duration
+    this.duration,
+    required this.creationDate,
+    required this.trainingId,
   });
 
   factory Exercise.fromDocument(DocumentSnapshot doc) {
@@ -25,6 +29,18 @@ class Exercise {
       sets: doc.data().toString().contains('sets') ? doc.get('sets') : 0,
       weight: doc.get('weight'),
       duration: doc.get('duration'),
+      creationDate: doc.data().toString().contains('creationDate') ? DateTime.fromMillisecondsSinceEpoch(doc.get('creationDate')) : DateTime.now(),
+      trainingId: doc.data().toString().contains('trainingId') ? doc.get('trainingId') : '',
     );
   }
+
+  Map<String, dynamic> toMap() => {
+    'name': name,
+    'reps': reps,
+    'sets': sets,
+    'weight': weight,
+    'duration': duration,
+    'creationDate': creationDate.millisecondsSinceEpoch,
+    'trainingId': trainingId,
+  };
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/visit.dart';
+import '../../services/visit_fire.dart';
 
 class VisitsList extends StatefulWidget {
   final String title;
@@ -24,13 +25,14 @@ class _VisitsListState extends State<VisitsList> {
   final DateFormat _formatterDate = DateFormat('dd.MM.yy');
   final DateFormat _formatterWeekDay = DateFormat('E');
   late Stream<QuerySnapshot<Map<String, dynamic>>> _stream;
+  final VisitFire _visitFire = VisitFire();
 
   @override
   void initState() {
     _stream = widget.membershipId != null
-        ? Visit.getVisitStreamByUserAndMembership(
+        ? _visitFire.streamByUserAndMembership(
             widget.accountId, widget.membershipId!)
-        : Visit.getVisitStreamByUser(widget.accountId);
+        : _visitFire.streamByUser(widget.accountId);
     super.initState();
   }
 

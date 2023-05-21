@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../services/membership_fire.dart';
 import '../../../../models/membership.dart';
 import '../../../../models/user_settings.dart';
 import '../../../../helpers/constants.dart';
@@ -16,6 +17,7 @@ class AddMembershipDialog extends StatefulWidget {
 }
 
 class _AddMembershipDialogState extends State<AddMembershipDialog> {
+  final MembershipFire _membershipFire = MembershipFire();
   final DateFormat formatterDate = DateFormat('dd.MM.yy');
   final DateTime _now = DateTime.now();
   late DateTimeRange _dateRange;
@@ -128,11 +130,12 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
           const SnackBar(content: Text('Кол-во посещений должно быть числом')));
     }
     try {
-      await Membership.addMembership(
-          widget.id,
-          _dateRange.start.millisecondsSinceEpoch,
-          _dateRange.end.millisecondsSinceEpoch,
-          int.parse(_numberOfVisitsController.text));
+      await _membershipFire.create(Membership(
+          dateOfStart: _dateRange.start,
+          dateOfEnd: _dateRange.end,
+          numberOfVisits: int.parse(_numberOfVisitsController.text),
+          visitCounter: 0,
+          userId: widget.id));
       Navigator.of(context).pop();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

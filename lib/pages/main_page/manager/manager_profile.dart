@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/membership_fire.dart';
+import '../../../services/visit_fire.dart';
 import '../../../models/visit.dart';
 import '../widgets/membership_progress.dart';
 import '../../../http/account_http_service.dart';
@@ -27,6 +29,8 @@ class ManagerProfile extends StatefulWidget {
 
 class _ManagerProfileState extends State<ManagerProfile> {
   final AccountHttpService _accountHttpService = AccountHttpService();
+  final VisitFire _visitFire = VisitFire();
+  final MembershipFire _membershipFire = MembershipFire();
   late String _id;
   late Future<Account>? _futureAccount;
   bool _addMembershipEnabled = true;
@@ -119,7 +123,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                               elevation: 2,
                               child: StreamBuilder(
                                   stream:
-                                  Membership.getMembershipStreamByUser(
+                                  _membershipFire.streamByUser(
                                           snapshot.data!.id),
                                   builder: (context,
                                       AsyncSnapshot<QuerySnapshot>
@@ -268,8 +272,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                               ScaffoldMessenger.of(context)
                                                   .clearSnackBars();
                                               try {
-                                                await Visit.addVisit(
-                                                    snapshot.data!.id, null);
+                                                await _addSingleVisit(snapshot.data!.id);
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(const SnackBar(
                                                         content: Text(
@@ -330,9 +333,14 @@ class _ManagerProfileState extends State<ManagerProfile> {
     return true;
   }
 
+  Future<void> _addSingleVisit(String userId) async {
+    await _visitFire.create(Visit(date: DateTime.now(), userId: userId));
+  }
+
   Future<void> _addMembershipVisit(String userId, Membership membership) async {
-    int newVisitCounter = membership.visitCounter + 1;
-    await Membership.updateMembership(membership.id, newVisitCounter);
-    await Visit.addVisit(userId, membership.id);
+    membership.visitCounter += 1;
+    await _membershipFire.put(membership);
+    await _visitFire.create(Visit(date: DateTime.now(), userId: userId,
+        membershipId: membership.id));
   }
 }

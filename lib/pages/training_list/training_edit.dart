@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/exercise_fire.dart';
 import '../../helpers/constants.dart';
 import '../../models/exercise.dart';
 import '../../pages/training_list/exercise_edit.dart';
@@ -8,10 +9,11 @@ import '../../pages/training_list/widgets/floating_add_button.dart';
 import 'widgets/training_card.dart';
 
 class TrainingEdit extends StatelessWidget {
+  final ExerciseFire _exerciseFire = ExerciseFire();
   final String trainingId;
   final String trainingName;
 
-  const TrainingEdit(this.trainingId, this.trainingName, {Key? key}) : super(key: key);
+  TrainingEdit(this.trainingId, this.trainingName, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +41,7 @@ class TrainingEdit extends StatelessWidget {
               builder: (context) => ExerciseEdit(trainingId: trainingId))),
         ),
         body: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('trainings')
-                .doc(trainingId)
-                .collection('exercises')
-                .orderBy('creationDate')
-                .snapshots(),
+            stream: _exerciseFire.streamByTrainingId(trainingId),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
               return const Center(child: Text('Упражнения не загрузились'));
@@ -84,11 +81,6 @@ class TrainingEdit extends StatelessWidget {
   }
 
   Future<void> _deleteExercise(String id) async {
-    await FirebaseFirestore.instance
-        .collection('trainings')
-        .doc(trainingId)
-        .collection('exercises')
-        .doc(id)
-        .delete();
+    await _exerciseFire.delete(id);
   }
 }

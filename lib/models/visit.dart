@@ -1,50 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Visit {
-  String id;
+  String? id;
   DateTime date;
+  String userId;
+  String? membershipId;
 
   Visit({
-    required this.id,
-    required this.date
+    this.id,
+    required this.date,
+    required this.userId,
+    this.membershipId,
   });
 
   factory Visit.fromDocument(DocumentSnapshot doc) {
     return Visit(
       id: doc.id,
-      date: doc.data().toString().contains('date') ? doc.get('date').toDate() : DateTime.now(),
+      date: doc.data().toString().contains('date') ? DateTime.fromMillisecondsSinceEpoch(doc.get('date')) : DateTime.now(),
+      userId: doc.data().toString().contains('userId') ? doc.get('userId') : '',
+      membershipId: doc.data().toString().contains('membershipId') ? doc.get('membershipId') : null,
     );
   }
 
-  static Future<void> addVisit(String userId, String? membershipId) async {
-    await FirebaseFirestore.instance.collection('visits').add({
-      'date': Timestamp.now(),
-      'userId': userId,
-      'membershipId': membershipId,
-    });
-  }
-
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getVisitStreamByUser(
-      String userId) {
-    return FirebaseFirestore.instance
-        .collection('visits')
-        .where('userId', isEqualTo: userId)
-        .orderBy('date')
-        .snapshots();
-  }
-
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getVisitStreamByUserAndMembership(
-      String userId, String membershipId) {
-    return FirebaseFirestore.instance
-        .collection('visits')
-        .where('userId', isEqualTo: userId)
-        .where('membershipId', isEqualTo: membershipId)
-        .orderBy('date')
-        .snapshots();
-  }
+  Map<String, dynamic> toMap() => {
+    'date': date.millisecondsSinceEpoch,
+    'userId': userId,
+    'membershipId': membershipId,
+  };
 
   @override
   String toString() {
-    return 'Visit{id: $id, date: $date}';
+    return 'Visit{id: $id, date: $date, userId: $userId,'
+        ' membershipId: $membershipId}';
   }
 }

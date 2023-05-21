@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
+import '../../services/exercise_fire.dart';
 import '../../helpers/constants.dart';
 import '../../models/exercise.dart';
 import '../../models/user_settings.dart';
@@ -20,6 +20,7 @@ class ExerciseEdit extends StatefulWidget {
 }
 
 class _ExerciseEditState extends State<ExerciseEdit> {
+  final ExerciseFire _exerciseFire = ExerciseFire();
   final _formKey = GlobalKey<FormState>();
   bool _isInit = true;
   Exercise? exercise;
@@ -63,29 +64,21 @@ class _ExerciseEditState extends State<ExerciseEdit> {
     if (isValid) {
       _formKey.currentState!.save();
       if (exercise != null) {
-        FirebaseFirestore.instance.collection('trainings')
-            .doc(widget.trainingId)
-            .collection('exercises')
-            .doc(exercise!.id)
-            .update({
-          'name': _name,
-          'reps': _reps,
-          'sets': _sets,
-          'weight': _weight,
-          'duration': _duration,
-        });
+        exercise!
+          ..trainingId = widget.trainingId
+          ..name = _name
+          ..reps = _reps
+          ..sets = _sets
+          ..weight = _weight
+          ..duration = _duration;
+        _exerciseFire.put(exercise!);
       } else {
-        FirebaseFirestore.instance.collection('trainings')
-            .doc(widget.trainingId)
-            .collection('exercises')
-            .add({
-          'name': _name,
-          'reps': _reps,
-          'sets': _sets,
-          'weight': _weight,
-          'duration': _duration,
-          'creationDate': Timestamp.now(),
-        });
+        _exerciseFire.create(Exercise(
+            name: _name,
+            reps: _reps,
+            sets: _sets,
+            creationDate: DateTime.now(),
+            trainingId: widget.trainingId));
       }
       Navigator.of(context).pop();
     }

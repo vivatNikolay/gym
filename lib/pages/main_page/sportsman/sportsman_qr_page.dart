@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
+import '../../../services/membership_fire.dart';
 import '../widgets/membership_progress.dart';
 import '../../../models/membership.dart';
 import '../../../providers/account_provider.dart';
@@ -21,6 +22,7 @@ class SportsmanQrPage extends StatefulWidget {
 
 class _SportsmanQrPageState extends State<SportsmanQrPage>
     with SingleTickerProviderStateMixin {
+  final MembershipFire _membershipFire = MembershipFire();
   late AnimationController _animationController;
 
   @override
@@ -48,7 +50,7 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
         child: Column(
           children: [
             StreamBuilder(
-              stream: Membership.getMembershipStreamByUser(account.id),
+              stream: _membershipFire.streamByUser(account.id),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 Membership? membership;
                 if (snapshot.connectionState == ConnectionState.waiting) {

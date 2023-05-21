@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../services/exercise_fire.dart';
+import '../../services/training_fire.dart';
 import '../../pages/training_list/training_edit.dart';
 import '../../models/training.dart';
 import '../../providers/account_provider.dart';
@@ -12,7 +14,11 @@ import 'widgets/training_card.dart';
 import 'widgets/floating_add_button.dart';
 
 class TrainingList extends StatelessWidget {
-  const TrainingList({Key? key}) : super(key: key);
+
+  final TrainingFire _trainingFire = TrainingFire();
+  final ExerciseFire _exerciseFire = ExerciseFire();
+
+  TrainingList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +31,11 @@ class TrainingList extends StatelessWidget {
         text: 'Добавить тренировку',
         onPressed: () => showDialog(
           context: context,
-          builder: (context) => const AddTrainingDialog(),
+          builder: (context) => AddTrainingDialog(),
         ),
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('trainings')
-              .where('userId', isEqualTo: accountId)
-              .orderBy('creationDate')
-              .snapshots(),
+          stream: _trainingFire.streamByUser(accountId),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapTraining) {
             if (snapTraining.hasError) {
               return const Center(child: Text('Тренировки не загрузились'));
@@ -53,11 +55,7 @@ class TrainingList extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: trainings.length,
                 itemBuilder: (_, index) => StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('trainings')
-                        .doc(trainings[index].id)
-                        .collection('exercises')
-                        .snapshots(),
+                    stream: _exerciseFire.streamByTrainingId(trainings[index].id),
                     builder:
                         (context, AsyncSnapshot<QuerySnapshot> snapExercise) {
                       return TrainingCard(
@@ -69,7 +67,7 @@ class TrainingList extends StatelessWidget {
                         onTap: () async {
                           await Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => TrainingEdit(
-                                  trainings[index].id, trainings[index].name)));
+                                  trainings[index].id!, trainings[index].name)));
                         },
                       );
                     }),
@@ -79,15 +77,12 @@ class TrainingList extends StatelessWidget {
     );
   }
 
-  deletionDialog(BuildContext context, String trainingId) => showDialog(
+  deletionDialog(BuildContext context, String? trainingId) => showDialog(
         context: context,
         builder: (context) => ConfirmDialog(
           onNo: () => Navigator.of(context).pop(),
           onYes: () async {
-            await FirebaseFirestore.instance
-                .collection('trainings')
-                .doc(trainingId)
-                .delete();
+            await _trainingFire.delete(trainingId);
             Navigator.of(context).pop();
           },
         ),

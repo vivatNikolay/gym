@@ -1,10 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../services/user_settings_fire.dart';
 import '../../models/user_settings.dart';
 
 class UserSettingsPr extends ChangeNotifier {
 
+  final UserSettingsFire _settingsFire = UserSettingsFire();
   UserSettings? _settings;
 
   UserSettings? get settings {
@@ -13,11 +14,7 @@ class UserSettingsPr extends ChangeNotifier {
 
   Future<void> create(String accountId) async {
     if (_settings == null) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('userSettings')
-          .doc(accountId)
-          .get();
-      _settings = UserSettings.fromDocument(doc);
+      _settings = await _settingsFire.get(accountId);
       notifyListeners();
     }
   }
@@ -29,15 +26,7 @@ class UserSettingsPr extends ChangeNotifier {
 
   Future<void> put(UserSettings settings, String accountId) async {
     _settings = settings;
-    await FirebaseFirestore.instance
-        .collection('userSettings')
-        .doc(accountId)
-        .set({
-      'defaultMembershipTime': settings.defaultMembershipTime,
-      'defaultMembershipNumber': settings.defaultMembershipNumber,
-      'defaultExerciseSets': settings.defaultExerciseSets,
-      'defaultExerciseReps': settings.defaultExerciseReps,
-    });
+    await _settingsFire.put(settings);
     notifyListeners();
   }
 }
