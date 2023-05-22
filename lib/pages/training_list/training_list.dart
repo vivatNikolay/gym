@@ -61,7 +61,7 @@ class TrainingList extends StatelessWidget {
                       return TrainingCard(
                         title: trainings[index].name,
                         subtitle:
-                            '${snapExercise.data != null ? snapExercise.data!.size : 0} упражнений',
+                            '${snapExercise.data != null ? snapExercise.data!.size : ' '} упражнений',
                         onDelete: () =>
                             deletionDialog(context, trainings[index].id),
                         onTap: () async {
@@ -80,7 +80,6 @@ class TrainingList extends StatelessWidget {
   deletionDialog(BuildContext context, String? trainingId) => showDialog(
         context: context,
         builder: (context) => ConfirmDialog(
-          onNo: () => Navigator.of(context).pop(),
           onYes: () async {
             await _trainingFire.delete(trainingId);
             Navigator.of(context).pop();

@@ -1,22 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../services/membership_fire.dart';
-import '../../../services/visit_fire.dart';
-import '../../../models/visit.dart';
-import '../widgets/membership_progress.dart';
 import '../../../http/account_http_service.dart';
-import '../../../models/membership.dart';
 import '../../../models/account.dart';
-import '../../../models/custom_icons.dart';
 import '../../../helpers/constants.dart';
 import '../../../providers/account_provider.dart';
-import '../../widgets/confirm_dialog.dart';
 import '../../widgets/profile_row.dart';
-import '../../widgets/visits_list.dart';
+import 'widgets/manager_membership_card.dart';
+import 'widgets/single_visit.dart';
 import 'manager_profile_edit.dart';
-import 'widgets/add_membership_dialog.dart';
 
 class ManagerProfile extends StatefulWidget {
   final String id;
@@ -29,12 +21,8 @@ class ManagerProfile extends StatefulWidget {
 
 class _ManagerProfileState extends State<ManagerProfile> {
   final AccountHttpService _accountHttpService = AccountHttpService();
-  final VisitFire _visitFire = VisitFire();
-  final MembershipFire _membershipFire = MembershipFire();
   late String _id;
   late Future<Account>? _futureAccount;
-  bool _addMembershipEnabled = true;
-  bool _addVisitEnabled = true;
   var _isInit = true;
   late Account _managerAcc;
 
@@ -119,184 +107,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                               },
                             ),
                             const SizedBox(height: 4),
-                            Card(
-                              elevation: 2,
-                              child: StreamBuilder(
-                                  stream:
-                                  _membershipFire.streamByUser(
-                                          snapshot.data!.id),
-                                  builder: (context,
-                                      AsyncSnapshot<QuerySnapshot>
-                                          memSnapshot) {
-                                    Membership? membership;
-                                    if (memSnapshot.connectionState == ConnectionState.waiting) {
-                                      return const ListTile(
-                                        title: Center(child: CircularProgressIndicator()),
-                                      );
-                                    }
-                                    if (!memSnapshot.hasError &&
-                                        memSnapshot.hasData && memSnapshot.data!.docs.isNotEmpty) {
-                                      membership = Membership.fromDocument(
-                                          memSnapshot.data!.docs.first);
-                                    }
-                                    return ListTile(
-                                      leading: const Icon(CustomIcons.sub,
-                                          size: 26, color: mainColor),
-                                      minLeadingWidth: 22,
-                                      title: const Text(
-                                        'Абонемент',
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      subtitle: MembershipProgress(
-                                        membership: membership,
-                                      ),
-                                      trailing: AbsorbPointer(
-                                        absorbing: !_addMembershipEnabled,
-                                        child: IconButton(
-                                          icon: const Icon(Icons.add,
-                                              size: 32, color: mainColor),
-                                          onPressed: () async {
-                                            setState(() =>
-                                                _addMembershipEnabled = false);
-                                            ScaffoldMessenger.of(context)
-                                                .clearSnackBars();
-                                            if (_isMembershipInactive(
-                                                membership)) {
-                                              if (_checkStartDate(
-                                                  membership)) {
-                                                await showDialog(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        AddMembershipDialog(
-                                                            snapshot.data!.id));
-                                              }
-                                            } else {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) =>
-                                                    AbsorbPointer(
-                                                  absorbing: !_addVisitEnabled,
-                                                  child: ConfirmDialog(
-                                                    textConfirmation:
-                                                        'Добавить посещение в абонемент?',
-                                                    onNo: () =>
-                                                        Navigator.of(context)
-                                                            .pop(),
-                                                    onYes: () async {
-                                                      setState(() =>
-                                                          _addVisitEnabled =
-                                                              false);
-                                                      try {
-                                                        await _addMembershipVisit(
-                                                            snapshot.data!.id,
-                                                            membership!);
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                                const SnackBar(
-                                                                    content: Text(
-                                                                        'Посещение добавлено в абонемент')));
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      } catch (e) {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(SnackBar(
-                                                                content: Text(e
-                                                                    .toString())));
-                                                      }
-                                                      setState(() =>
-                                                          _addVisitEnabled =
-                                                              true);
-                                                    },
-                                                  ),
-                                                ),
-                                              );
-                                            }
-                                            setState(() =>
-                                                _addMembershipEnabled = true);
-                                          },
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        if (membership != null) {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      VisitsList(
-                                                        title:
-                                                            'История абонемента',
-                                                        accountId:
-                                                            snapshot.data!.id,
-                                                        membershipId:
-                                                          membership!.id,
-                                                      )));
-                                        }
-                                      },
-                                    );
-                                  }),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 2),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    'Разовое посещение',
-                                    style: TextStyle(fontSize: 17),
-                                  ),
-                                  ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainColor,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AbsorbPointer(
-                                          absorbing: !_addVisitEnabled,
-                                          child: ConfirmDialog(
-                                            textConfirmation:
-                                                'Добавить разовое?',
-                                            onNo: () =>
-                                                Navigator.of(context).pop(),
-                                            onYes: () async {
-                                              setState(() =>
-                                                  _addVisitEnabled = false);
-                                              ScaffoldMessenger.of(context)
-                                                  .clearSnackBars();
-                                              try {
-                                                await _addSingleVisit(snapshot.data!.id);
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
-                                                        content: Text(
-                                                            'Добавлено разовое посещение')));
-                                                Navigator.of(context).pop();
-                                              } catch (e) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: Text(
-                                                            e.toString())));
-                                              }
-                                              setState(() =>
-                                                  _addVisitEnabled = true);
-                                            },
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    icon: const Icon(Icons.add),
-                                    label: const Text('Добавить'),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            ManagerMembershipCard(userId: snapshot.data!.id),
+                            SingleVisit(userId: snapshot.data!.id),
                           ],
                         ),
                       );
@@ -306,41 +118,5 @@ class _ManagerProfileState extends State<ManagerProfile> {
         ),
       ),
     );
-  }
-
-  bool _isMembershipInactive(Membership? membership) {
-    if (membership == null) {
-      return true;
-    }
-    if (membership.dateOfEnd.isBefore(DateTime.now()) ||
-        membership.dateOfStart.isAfter(DateTime.now()) ||
-        membership.visitCounter >= membership.numberOfVisits) {
-      return true;
-    }
-    return false;
-  }
-
-  bool _checkStartDate(Membership? membership) {
-    if (membership == null) {
-      return true;
-    }
-    if (membership.dateOfStart.isAfter(DateTime.now())) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Абонемент не начат'),
-      ));
-      return false;
-    }
-    return true;
-  }
-
-  Future<void> _addSingleVisit(String userId) async {
-    await _visitFire.create(Visit(date: DateTime.now(), userId: userId));
-  }
-
-  Future<void> _addMembershipVisit(String userId, Membership membership) async {
-    membership.visitCounter += 1;
-    await _membershipFire.put(membership);
-    await _visitFire.create(Visit(date: DateTime.now(), userId: userId,
-        membershipId: membership.id));
   }
 }

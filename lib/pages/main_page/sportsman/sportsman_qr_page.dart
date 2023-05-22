@@ -53,11 +53,6 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
               stream: _membershipFire.streamByUser(account.id),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 Membership? membership;
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Card(
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
                 if (!snapshot.hasError && snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                   membership =
                       Membership.fromDocument(snapshot.data!.docs.first);

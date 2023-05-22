@@ -40,10 +40,12 @@ class _SettingsPageState extends State<SettingsPage> {
           Provider.of<UserSettingsPr>(context, listen: false).settings!;
       _isDarkMode = _oldIsDarkMode;
       _userSettings = UserSettings(
-          defaultExerciseSets: _oldUserSettings.defaultExerciseSets,
-          defaultExerciseReps: _oldUserSettings.defaultExerciseReps,
-          defaultMembershipTime: _oldUserSettings.defaultMembershipTime,
-          defaultMembershipNumber: _oldUserSettings.defaultMembershipNumber);
+        id: _account.id,
+        defaultExerciseSets: _oldUserSettings.defaultExerciseSets,
+        defaultExerciseReps: _oldUserSettings.defaultExerciseReps,
+        defaultMembershipTime: _oldUserSettings.defaultMembershipTime,
+        defaultMembershipNumber: _oldUserSettings.defaultMembershipNumber,
+      );
     }
     _isInit = false;
 
@@ -53,7 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void _save() {
     if (_userSettings != _oldUserSettings) {
       Provider.of<UserSettingsPr>(context, listen: false)
-          .put(_userSettings, _account.id);
+          .put(_userSettings);
     }
     if (_isDarkMode != _oldIsDarkMode) {
       Provider.of<SystemSettingsPr>(context, listen: false)

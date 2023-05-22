@@ -37,7 +37,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
     if (isInit) {
       final UserSettings _settings = Provider.of<UserSettingsPr>(context, listen: false).settings!;
       _dateRange = DateTimeRange(
-        start: _now,
+        start: DateTime(_now.year, _now.month, _now.day),
         end: DateTime(_now.year, _now.month + _settings.defaultMembershipTime, _now.day),
       );
       _numberOfVisitsController.text = _settings.defaultMembershipNumber.toString();
@@ -98,8 +98,9 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
                   DateTimeRange? newDateRange = await showDateRangePicker(
                     context: context,
                     initialDateRange: _dateRange,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(const Duration(days: 731)),
+                    firstDate: DateTime(_now.year, _now.month, _now.day),
+                    lastDate: DateTime(_now.year, _now.month, _now.day)
+                        .add(const Duration(days: 731)),
                   );
                   if (newDateRange != null) {
                     setState(() => _dateRange = newDateRange);
@@ -131,15 +132,17 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
     }
     try {
       await _membershipFire.create(Membership(
-          dateOfStart: _dateRange.start,
-          dateOfEnd: _dateRange.end,
-          numberOfVisits: int.parse(_numberOfVisitsController.text),
-          visitCounter: 0,
-          userId: widget.id));
+        dateOfStart: _dateRange.start,
+        dateOfEnd: _dateRange.end,
+        numberOfVisits: int.parse(_numberOfVisitsController.text),
+        visitCounter: 0,
+        userId: widget.id,
+        creationDate: DateTime.now(),
+      ));
       Navigator.of(context).pop();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(e.toString()),
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Ошибка создания абонемента'),
       ));
     }
   }

@@ -27,7 +27,7 @@ class MembershipFire extends Fire<Membership> {
     return firestore
         .collection(dbName)
         .where('userId', isEqualTo: userId)
-        .orderBy('dateOfEnd')
+        .orderBy('creationDate', descending: true)
         .limit(1)
         .snapshots();
   }

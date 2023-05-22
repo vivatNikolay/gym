@@ -5,11 +5,11 @@ import '../../../../models/custom_icons.dart';
 
 class MembershipCard extends StatelessWidget {
   final Widget subtitle;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const MembershipCard(
       {required this.subtitle,
-      required this.onTap,
+      this.onTap,
       Key? key})
       : super(key: key);
 

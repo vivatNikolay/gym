@@ -24,7 +24,7 @@ class UserSettingsPr extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> put(UserSettings settings, String accountId) async {
+  Future<void> put(UserSettings settings) async {
     _settings = settings;
     await _settingsFire.put(settings);
     notifyListeners();

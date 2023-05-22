@@ -9,7 +9,7 @@ class SettingTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.centerLeft,
-        margin: const EdgeInsets.fromLTRB(6, 1, 0, 0),
+        margin: const EdgeInsets.fromLTRB(6, 4, 0, 0),
         child: Text(
           text,
           style: const TextStyle(
