@@ -12,6 +12,7 @@ import '../../../pages/profile/settings/widgets/setting_title.dart';
 import '../../../providers/account_provider.dart';
 import '../../../providers/system_settings_provider.dart';
 import '../../../providers/user_settings_provider.dart';
+import '../../widgets/loading_buttons/loading_icon_button.dart';
 
 class SettingsPage extends StatefulWidget {
   static const routeName = '/settings';
@@ -52,13 +53,13 @@ class _SettingsPageState extends State<SettingsPage> {
     super.didChangeDependencies();
   }
 
-  void _save() {
+  Future<void> _save() async {
     if (_userSettings != _oldUserSettings) {
-      Provider.of<UserSettingsPr>(context, listen: false)
+      await Provider.of<UserSettingsPr>(context, listen: false)
           .put(_userSettings);
     }
     if (_isDarkMode != _oldIsDarkMode) {
-      Provider.of<SystemSettingsPr>(context, listen: false)
+      await Provider.of<SystemSettingsPr>(context, listen: false)
           .toggleTheme(_isDarkMode);
     }
     Navigator.of(context).pop();
@@ -70,10 +71,12 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: const Text('Настройки'),
         actions: [
-          IconButton(
-            onPressed: _save,
+          Padding(
             padding: const EdgeInsets.only(right: 12),
-            icon: const Icon(Icons.check),
+            child: LoadingIconButton(
+              onPressed: () async => _save(),
+              icon: const Icon(Icons.check),
+            ),
           ),
         ],
       ),

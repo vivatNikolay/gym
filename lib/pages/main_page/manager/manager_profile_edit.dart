@@ -9,19 +9,18 @@ import '../../widgets/image_selector.dart';
 import '../../widgets/gender_switcher.dart';
 import '../../../models/account.dart';
 import '../../widgets/circle_image.dart';
+import '../../widgets/loading_buttons/loading_elevated_button.dart';
+import '../../widgets/loading_buttons/loading_icon_button.dart';
 import '../../widgets/my_text_field.dart';
 import '../../widgets/my_text_form_field.dart';
 
 class ManagerProfileEdit extends StatefulWidget {
   final Account? account;
 
-  const ManagerProfileEdit(
-      {this.account, Key? key})
-      : super(key: key);
+  const ManagerProfileEdit({this.account, Key? key}) : super(key: key);
 
   @override
-  State<ManagerProfileEdit> createState() =>
-      _ManagerProfileEditState();
+  State<ManagerProfileEdit> createState() => _ManagerProfileEditState();
 }
 
 class _ManagerProfileEditState extends State<ManagerProfileEdit> {
@@ -44,8 +43,6 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   ValueNotifier<bool> _gender = ValueNotifier(true);
   ValueNotifier<int> _iconNum = ValueNotifier(1);
 
-  bool _saveEnabled = true;
-
   @override
   void initState() {
     super.initState();
@@ -62,7 +59,6 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
       _gender = ValueNotifier(_account.gender);
       _iconNum = ValueNotifier(_account.iconNum);
     }
-
   }
 
   @override
@@ -75,7 +71,6 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   }
 
   void _trySubmit() async {
-    setState(() => _saveEnabled = false);
     ScaffoldMessenger.of(context).clearSnackBars();
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
@@ -83,19 +78,22 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
       _formKey.currentState!.save();
       try {
         if (_isEdit) {
-          await _httpService.edit(_managerAcc, Account(
-              id: _id,
-              email: _email,
-              lastName: _lastName,
-              password: _account.password,
-              phone: _phone,
-              firstName: _name,
-              gender: _gender.value,
-              iconNum: _iconNum.value,
-              dateOfBirth: _pickedDate,
-              role: _account.role));
+          await _httpService.edit(
+              _managerAcc,
+              Account(
+                  id: _id,
+                  email: _email,
+                  lastName: _lastName,
+                  password: _account.password,
+                  phone: _phone,
+                  firstName: _name,
+                  gender: _gender.value,
+                  iconNum: _iconNum.value,
+                  dateOfBirth: _pickedDate,
+                  role: _account.role));
         } else {
-          await _httpService.create(_managerAcc,
+          await _httpService.create(
+              _managerAcc,
               Account(
                   id: _id,
                   email: _email,
@@ -113,11 +111,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(e.toString()),
         ));
-      } finally {
-        setState(() => _saveEnabled = true);
       }
-    } else {
-      setState(() => _saveEnabled = true);
     }
   }
 
@@ -127,12 +121,11 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
       appBar: AppBar(
         title: const Text('Профиль'),
         actions: [
-          AbsorbPointer(
-            absorbing: !_saveEnabled,
-            child: IconButton(
-              padding: const EdgeInsets.only(right: 12),
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: LoadingIconButton(
               icon: const Icon(Icons.check, size: 28),
-              onPressed: _trySubmit,
+              onPressed: () async => _trySubmit(),
             ),
           )
         ],
@@ -148,10 +141,8 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                 image: AssetImage('images/profileImg${_iconNum.value}.png'),
                 icon: Icons.edit,
                 onTap: () async {
-                  await Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ImageSelector(iconNum: _iconNum)));
+                  await Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ImageSelector(iconNum: _iconNum)));
                   setState(() {
                     _iconNum.value;
                   });
@@ -259,12 +250,11 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             ),
             const SizedBox(height: 5),
             GenderSwitcher(
-                gender: _gender,
-                onPressedMale: () => setState(() => _gender.value = true),
-                onPressedFemale: () => setState(() => _gender.value = false),
+              gender: _gender,
+              onPressedMale: () => setState(() => _gender.value = true),
+              onPressedFemale: () => setState(() => _gender.value = false),
             ),
-            if (_isEdit)
-              _resetPassword(_managerAcc),
+            if (_isEdit) _resetPassword(_managerAcc),
           ],
         ),
       ),
@@ -274,50 +264,44 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   Widget _resetPassword(Account managerAcc) {
     return Padding(
       padding: const EdgeInsets.only(top: 12),
-      child: AbsorbPointer(
-        absorbing: !_saveEnabled,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(
-                vertical: 15,
-                horizontal: MediaQuery.of(context).size.width / 7),
-            backgroundColor: mainColor,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(30),
-              ),
+      child: LoadingElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(
+              vertical: 15, horizontal: MediaQuery.of(context).size.width / 7),
+          backgroundColor: mainColor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(30),
             ),
           ),
-          onPressed: () async {
-            setState(() => _saveEnabled = false);
-            try {
-              await _httpService.edit(
-                  managerAcc,
-                  Account(
-                      id: _id,
-                      email: _account.email,
-                      lastName: _account.lastName,
-                      password: '1111',
-                      phone: _account.phone,
-                      firstName: _account.firstName,
-                      gender: _account.gender,
-                      iconNum: _account.iconNum,
-                      dateOfBirth: _account.dateOfBirth,
-                      role: _account.role));
-              Navigator.of(context).pop();
-            } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(e.toString()),
-              ));
-            }
-            setState(() => _saveEnabled = true);
-          },
-          child: const Text(
-            'Сбросить пароль',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-            ),
+        ),
+        onPressed: () async {
+          try {
+            await _httpService.edit(
+                managerAcc,
+                Account(
+                    id: _id,
+                    email: _account.email,
+                    lastName: _account.lastName,
+                    password: '1111',
+                    phone: _account.phone,
+                    firstName: _account.firstName,
+                    gender: _account.gender,
+                    iconNum: _account.iconNum,
+                    dateOfBirth: _account.dateOfBirth,
+                    role: _account.role));
+            Navigator.of(context).pop();
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(e.toString()),
+            ));
+          }
+        },
+        child: const Text(
+          'Сбросить пароль',
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.white,
           ),
         ),
       ),

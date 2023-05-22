@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../pages/widgets/my_text_field.dart';
 import '../../../models/account.dart';
 import '../../../providers/account_provider.dart';
+import '../../widgets/loading_buttons/loading_icon_button.dart';
 
 class PasswordChanger extends StatefulWidget {
   static const routeName = '/password-changer';
@@ -21,7 +22,6 @@ class _PasswordChangerState extends State<PasswordChanger> {
   late ValueNotifier<bool> _oldPassValidator;
   late ValueNotifier<bool> _newPass1Validator;
   late ValueNotifier<bool> _newPass2Validator;
-  bool _saveEnabled = true;
 
   @override
   initState() {
@@ -48,13 +48,11 @@ class _PasswordChangerState extends State<PasswordChanger> {
       appBar: AppBar(
         title: const Text('Смена пароля'),
         actions: [
-          AbsorbPointer(
-            absorbing: !_saveEnabled,
-            child: IconButton(
-              padding: const EdgeInsets.only(right: 12),
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: LoadingIconButton(
               icon: const Icon(Icons.check, size: 28),
               onPressed: () async {
-                setState(() => _saveEnabled = false);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 if (validateFields(account)) {
                   try {
@@ -77,7 +75,6 @@ class _PasswordChangerState extends State<PasswordChanger> {
                     ));
                   }
                 }
-                setState(() => _saveEnabled = true);
               },
             ),
           ),

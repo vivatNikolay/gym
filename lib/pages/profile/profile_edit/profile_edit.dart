@@ -6,6 +6,7 @@ import '../../widgets/image_selector.dart';
 import '../../widgets/gender_switcher.dart';
 import '../../../models/account.dart';
 import '../../widgets/circle_image.dart';
+import '../../widgets/loading_buttons/loading_icon_button.dart';
 import '../../widgets/my_text_form_field.dart';
 
 class ProfileEdit extends StatefulWidget {
@@ -26,7 +27,6 @@ class _ProfileEditState extends State<ProfileEdit> {
   String _phone = '';
   late ValueNotifier<bool> _gender;
   late ValueNotifier<int> _iconNum;
-  bool _saveEnabled = true;
 
   @override
   void didChangeDependencies() {
@@ -42,7 +42,6 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   void _trySubmit() async {
-    setState(() => _saveEnabled = false);
     ScaffoldMessenger.of(context).clearSnackBars();
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
@@ -67,7 +66,6 @@ class _ProfileEditState extends State<ProfileEdit> {
         ));
       }
     }
-    setState(() => _saveEnabled = true);
   }
 
   @override
@@ -76,12 +74,11 @@ class _ProfileEditState extends State<ProfileEdit> {
       appBar: AppBar(
         title: const Text('Профиль'),
         actions: [
-          AbsorbPointer(
-            absorbing: !_saveEnabled,
-            child: IconButton(
-              padding: const EdgeInsets.only(right: 12),
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: LoadingIconButton(
               icon: const Icon(Icons.check, size: 28),
-              onPressed: _trySubmit,
+              onPressed: () async => _trySubmit(),
             ),
           )
         ],
