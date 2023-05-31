@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../helpers/constants.dart';
+import '../../../models/account.dart';
 import '../../../providers/account_provider.dart';
 import '../profile_edit/profile_edit.dart';
 
@@ -10,7 +11,8 @@ class ProfileBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final account = Provider.of<AccountPr>(context).account!;
+    Account account = Provider.of<AccountPr>(context, listen: true).account!;
+    print('PROFILE $account');
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/training.dart';
 import 'fire.dart';
 
 class TrainingFire extends Fire<Training> {
   final dbName = 'trainings';
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   @override
   Future<void> create(Training training) async {
+    training.userId = _firebaseAuth.currentUser!.uid;
     await firestore.collection(dbName).add(training.toMap());
   }
 
@@ -23,10 +26,10 @@ class TrainingFire extends Fire<Training> {
     return Training.fromDocument(doc);
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> streamByUser(String userId) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamByUser() {
     return firestore
         .collection(dbName)
-        .where('userId', isEqualTo: userId)
+        .where('userId', isEqualTo: _firebaseAuth.currentUser!.uid)
         .orderBy('creationDate')
         .snapshots();
   }

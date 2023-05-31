@@ -1,37 +1,43 @@
 import 'package:flutter/material.dart';
 
-import '../services/account_db.dart';
-import '../http/account_http_service.dart';
 import '../models/account.dart';
+import '../services/account_fire.dart';
 
 class AccountPr extends ChangeNotifier {
 
+  final AccountFire _accountFire = AccountFire();
   Account? _account;
 
   Account? get account {
     return _account;
   }
 
-  AccountPr() {
-    _account = AccountDB().getFirst();
-  }
+  AccountPr();
 
-  Future<void> put(Account acc) async {
-    await AccountHttpService().update(_account!, acc);
-    await AccountDB().put(acc);
-    _account = AccountDB().getFirst();
+  Future<void> login(String email, String pass) async {
+    await _accountFire.login(email, pass);
     notifyListeners();
   }
 
-  Future<void> delete() async {
-    await AccountDB().deleteAll();
+  Future<Account?> init() async {
+    _account = await _accountFire.init();
+    notifyListeners();
+    return _account;
+  }
+
+  Future<void> put(Account acc) async {
+    await _accountFire.put(acc);
+    _account = acc;
+    notifyListeners();
+  }
+
+  Future<void> logout() async {
+    await _accountFire.logout();
     _account = null;
     notifyListeners();
   }
 
-  Future<void> get(String email, String pass) async {
-    _account = await AccountHttpService().login(email, pass);
-    await AccountDB().put(_account);
-    notifyListeners();
+  Future<void> updatePass(String newPass) async {
+    await _accountFire.updatePass(newPass);
   }
 }

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
+import '../../../services/account_fire.dart';
 import '../../../helpers/constants.dart';
-import '../../../http/account_http_service.dart';
-import '../../../providers/account_provider.dart';
 import '../../widgets/image_selector.dart';
 import '../../widgets/gender_switcher.dart';
 import '../../../models/account.dart';
@@ -24,17 +22,14 @@ class ManagerProfileEdit extends StatefulWidget {
 }
 
 class _ManagerProfileEditState extends State<ManagerProfileEdit> {
+  final AccountFire _accountFire = AccountFire();
   final _formKey = GlobalKey<FormState>();
   final DateFormat formatterDate = DateFormat('dd.MM.yyyy');
   final RegExp _regExpEmail = RegExp(
       r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
       multiLine: false);
-  bool _isInit = true;
-  late Account _managerAcc;
   late Account _account;
   late bool _isEdit;
-  final AccountHttpService _httpService = AccountHttpService();
-  String _id = DateTime.now().millisecondsSinceEpoch.toString();
   String _email = '';
   String _name = '';
   String _lastName = '';
@@ -50,7 +45,6 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
     if (_isEdit) {
       _account = widget.account!;
 
-      _id = _account.id;
       _email = _account.email;
       _name = _account.firstName;
       _lastName = _account.lastName;
@@ -61,15 +55,6 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
     }
   }
 
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      _managerAcc = Provider.of<AccountPr>(context, listen: false).account!;
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
-
   void _trySubmit() async {
     ScaffoldMessenger.of(context).clearSnackBars();
     final isValid = _formKey.currentState!.validate();
@@ -78,35 +63,36 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
       _formKey.currentState!.save();
       try {
         if (_isEdit) {
-          await _httpService.edit(
-              _managerAcc,
+          await _accountFire.put(
               Account(
-                  id: _id,
+                  id: _account.id,
                   email: _email,
                   lastName: _lastName,
-                  password: _account.password,
                   phone: _phone,
                   firstName: _name,
                   gender: _gender.value,
                   iconNum: _iconNum.value,
                   dateOfBirth: _pickedDate,
                   role: _account.role));
+          Navigator.of(context).pop();
         } else {
-          await _httpService.create(
-              _managerAcc,
-              Account(
-                  id: _id,
-                  email: _email,
-                  lastName: _lastName,
-                  password: '1111',
-                  phone: _phone,
-                  firstName: _name,
-                  gender: _gender.value,
-                  iconNum: _iconNum.value,
-                  dateOfBirth: _pickedDate,
-                  role: 'USER'));
+          try {
+            await _accountFire.create(
+                Account(
+                    email: _email,
+                    lastName: _lastName,
+                    phone: _phone,
+                    firstName: _name,
+                    gender: _gender.value,
+                    iconNum: _iconNum.value,
+                    dateOfBirth: _pickedDate,
+                    role: 'USER'));
+            Navigator.of(context).pop();
+          } catch (e) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.toString())));
+          }
         }
-        Navigator.of(context).pop();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(e.toString()),
@@ -254,14 +240,14 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               onPressedMale: () => setState(() => _gender.value = true),
               onPressedFemale: () => setState(() => _gender.value = false),
             ),
-            if (_isEdit) _resetPassword(_managerAcc),
+            if (_isEdit) _resetPassword(),
           ],
         ),
       ),
     );
   }
 
-  Widget _resetPassword(Account managerAcc) {
+  Widget _resetPassword() {
     return Padding(
       padding: const EdgeInsets.only(top: 12),
       child: LoadingElevatedButton(
@@ -277,19 +263,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
         ),
         onPressed: () async {
           try {
-            await _httpService.edit(
-                managerAcc,
-                Account(
-                    id: _id,
-                    email: _account.email,
-                    lastName: _account.lastName,
-                    password: '1111',
-                    phone: _account.phone,
-                    firstName: _account.firstName,
-                    gender: _account.gender,
-                    iconNum: _account.iconNum,
-                    dateOfBirth: _account.dateOfBirth,
-                    role: _account.role));
+            await _accountFire.resetPass(widget.account);
             Navigator.of(context).pop();
           } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -52,7 +52,6 @@ class _ProfileEditState extends State<ProfileEdit> {
             id: _account.id,
             email: _account.email,
             lastName: _account.lastName,
-            password: _account.password,
             phone: _phone,
             firstName: _name,
             gender: _gender.value,

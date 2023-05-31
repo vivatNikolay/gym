@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../services/exercise_fire.dart';
 import '../../services/training_fire.dart';
 import '../../pages/training_list/training_edit.dart';
 import '../../models/training.dart';
-import '../../providers/account_provider.dart';
 import '../widgets/main_scaffold.dart';
 import '../widgets/confirm_dialog.dart';
 import 'widgets/add_training_dialog.dart';
@@ -22,9 +20,6 @@ class TrainingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accountId =
-        Provider.of<AccountPr>(context, listen: false).account!.id;
-
     return MainScaffold(
       title: 'Тренировки',
       floatingActionButton: FloatingAddButton(
@@ -35,7 +30,7 @@ class TrainingList extends StatelessWidget {
         ),
       ),
       body: StreamBuilder(
-          stream: _trainingFire.streamByUser(accountId),
+          stream: _trainingFire.streamByUser(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapTraining) {
             if (snapTraining.hasError) {
               return const Center(child: Text('Тренировки не загрузились'));

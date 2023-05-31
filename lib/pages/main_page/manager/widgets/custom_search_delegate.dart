@@ -1,19 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
+import '../../../../services/account_fire.dart';
 import '../../../../helpers/constants.dart';
-import '../../../../http/account_http_service.dart';
 import '../../../../models/account.dart';
-import '../../../../providers/account_provider.dart';
 import '../manager_profile.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
-  final AccountHttpService _httpService = AccountHttpService();
+  final AccountFire _accountFire = AccountFire();
 
   CustomSearchDelegate()
       : super(
           searchFieldLabel: 'Поиск спортсмена',
-          keyboardType: TextInputType.text,
+          keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.search,
         );
 
@@ -55,15 +54,14 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    final managerAcc = Provider.of<AccountPr>(context, listen: false).account!;
     if (query.trim() == '') {
       return const Center(
-        child: Text('Введите что-нибудь'),
+        child: Text('Введите email'),
       );
     }
-    return FutureBuilder<List<Account>>(
-        future: _httpService.getSportsmenByQuery(managerAcc, query.trim()),
-        builder: (context, snapshot) {
+    return FutureBuilder(
+        future: _accountFire.findByQuery(query),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return const Center(
@@ -81,8 +79,10 @@ class CustomSearchDelegate extends SearchDelegate {
                   child: CircularProgressIndicator(),
                 );
               }
-              List<Account>? data = snapshot.data;
-              if (data!.isEmpty) {
+              List<Account> data = List.from(snapshot.data!.docs)
+                  .map((i) => Account.fromDocument(i))
+                  .toList();
+              if (data.isEmpty) {
                 return const Center(
                   child: Text('Не найден'),
                 );
@@ -103,7 +103,7 @@ class CustomSearchDelegate extends SearchDelegate {
                       onTap: () async {
                         await Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
-                                ManagerProfile(id: data[index].id)));
+                                ManagerProfile(id: data[index].id!)));
                       },
                     ),
                   );
@@ -116,7 +116,7 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return const Center(
-      child: Text('Поиск по имени и фамилии'),
+      child: Text('Поиск по email'),
     );
   }
 }

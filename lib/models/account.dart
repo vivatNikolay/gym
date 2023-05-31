@@ -1,35 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 
-part 'account.g.dart';
-
-@HiveType(typeId: 0)
 class Account extends HiveObject{
-  @HiveField(0)
-  String id;
-  @HiveField(1)
+  String? id;
   String email;
-  @HiveField(2)
   String lastName;
-  @HiveField(3)
-  String password;
-  @HiveField(4)
   String phone;
-  @HiveField(5)
   String firstName;
-  @HiveField(6)
   bool gender;
-  @HiveField(7)
   int iconNum;
-  @HiveField(8)
   DateTime dateOfBirth;
-  @HiveField(10)
   String role;
 
   Account({
-    required this.id,
+    this.id,
     required this.email,
     required this.lastName,
-    required this.password,
     required this.phone,
     required this.firstName,
     required this.gender,
@@ -38,40 +24,35 @@ class Account extends HiveObject{
     required this.role
   });
 
-  factory Account.fromJson(Map<String, dynamic> json) {
-
+  factory Account.fromDocument(DocumentSnapshot doc) {
     return Account(
-        id: json["id"],
-        email: json["email"],
-        lastName: json["lastName"],
-        password: json["password"],
-        phone: json["phone"],
-        firstName: json["firstName"],
-        gender: json["gender"],
-        iconNum: json["iconNum"],
-        dateOfBirth: DateTime.parse(json["dateOfBirth"].toString()),
-        role: json["role"]
+      id: doc.id,
+      email: doc.data().toString().contains('email') ? doc.get('email') : '',
+      lastName: doc.data().toString().contains('lastName') ? doc.get('lastName') : '',
+      phone: doc.data().toString().contains('phone') ? doc.get('phone') : '',
+      firstName: doc.data().toString().contains('firstName') ? doc.get('firstName') : '',
+      gender: doc.data().toString().contains('gender') ? doc.get('gender') : true,
+      iconNum: doc.data().toString().contains('iconNum') ? doc.get('iconNum') : 1,
+      dateOfBirth: doc.data().toString().contains('dateOfBirth') ? DateTime.fromMillisecondsSinceEpoch(doc.get('dateOfBirth')) : DateTime.now(),
+      role: doc.data().toString().contains('role') ? doc.get('role') : '',
     );
   }
 
-  Map<String, dynamic> toJson() => {
-      'id': id,
-      'email': email,
-      'lastName': lastName,
-      'password': password,
-      'phone': phone,
-      'firstName': firstName,
-      'gender': gender,
-      'iconNum': iconNum,
-      'dateOfBirth': dateOfBirth.toString().substring(0, 10),
-      'role': role
+  Map<String, dynamic> toMap() => {
+    'email': email,
+    'lastName': lastName,
+    'phone': phone,
+    'firstName': firstName,
+    'gender': gender,
+    'iconNum': iconNum,
+    'dateOfBirth': dateOfBirth.millisecondsSinceEpoch,
+    'role': role,
   };
 
   @override
   String toString() {
     return 'Account{id: $id, email: $email, lastName: $lastName,'
-        ' password: $password, phone: $phone, firstName: $firstName,'
-        ' gender: $gender, iconNum: $iconNum, dateOfBirth: $dateOfBirth,'
-        ' role: $role}';
+        ' phone: $phone, firstName: $firstName, gender: $gender,'
+        ' iconNum: $iconNum, dateOfBirth: $dateOfBirth, role: $role}';
   }
 }

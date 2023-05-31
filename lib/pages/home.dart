@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/account.dart';
 import '../models/custom_icons.dart';
 import '../providers/user_settings_provider.dart';
 import '../helpers/constants.dart';
@@ -17,6 +18,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool _isInit = true;
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -26,9 +28,18 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      Provider.of<AccountPr>(context, listen: false).init();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final account = Provider.of<AccountPr>(context, listen: false).account!;
-    Provider.of<UserSettingsPr>(context, listen: false).create(account.id);
+    Account? account = Provider.of<AccountPr>(context).account;
+    Provider.of<UserSettingsPr>(context, listen: false).init();
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -41,25 +52,29 @@ class _HomeState extends State<Home> {
         ),
         color: Theme.of(context).backgroundColor,
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: widgetsByRole(account.role).elementAt(_selectedIndex),
-        bottomNavigationBar: widgetsByRole(account.role).length > 1
-            ? ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(30.0),
-                ),
-                child: BottomNavigationBar(
-                  selectedItemColor: mainColor,
-                  items: bottomItemsByRole(account.role),
-                  currentIndex: _selectedIndex,
-                  onTap: _onItemTapped,
-                  iconSize: 26,
-                  backgroundColor: Theme.of(context).primaryColor,
-                ),
-              )
-            : null,
-      ),
+      child: account != null
+          ? Scaffold(
+              backgroundColor: Colors.transparent,
+              body: widgetsByRole(account.role).elementAt(_selectedIndex),
+              bottomNavigationBar: widgetsByRole(account.role).length > 1
+                  ? ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(30.0),
+                      ),
+                      child: BottomNavigationBar(
+                        selectedItemColor: mainColor,
+                        items: bottomItemsByRole(account.role),
+                        currentIndex: _selectedIndex,
+                        onTap: _onItemTapped,
+                        iconSize: 26,
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                    )
+                  : null,
+            )
+          : const Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 

@@ -12,9 +12,9 @@ class UserSettingsPr extends ChangeNotifier {
     return _settings;
   }
 
-  Future<void> create(String accountId) async {
+  Future<void> init() async {
     if (_settings == null) {
-      _settings = await _settingsFire.get(accountId);
+      _settings = await _settingsFire.init();
       notifyListeners();
     }
   }

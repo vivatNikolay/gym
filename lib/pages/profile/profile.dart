@@ -49,7 +49,7 @@ class Profile extends StatelessWidget {
             title: const Text('Выход', style: TextStyle(fontSize: 18)),
             onTap: () async {
               Navigator.of(context).pop();
-              Provider.of<AccountPr>(context, listen: false).delete();
+              Provider.of<AccountPr>(context, listen: false).logout();
               Provider.of<UserSettingsPr>(context, listen: false).delete();
             },
           ),
@@ -69,7 +69,7 @@ class Profile extends StatelessWidget {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => VisitsList(
                       title: 'История всех посещений',
-                      accountId: account.id,
+                      accountId: account.id!,
                     )));
           },
         ),

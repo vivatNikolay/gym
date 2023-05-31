@@ -77,6 +77,8 @@ class _ExerciseEditState extends State<ExerciseEdit> {
             name: _name,
             reps: _reps,
             sets: _sets,
+            weight: _weight,
+            duration: _duration,
             creationDate: DateTime.now(),
             trainingId: widget.trainingId));
       }

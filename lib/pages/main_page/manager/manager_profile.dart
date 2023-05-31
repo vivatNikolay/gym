@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../http/account_http_service.dart';
+import '../../../services/account_fire.dart';
 import '../../../models/account.dart';
 import '../../../helpers/constants.dart';
-import '../../../providers/account_provider.dart';
+import '../../home.dart';
 import '../../widgets/profile_row.dart';
 import 'widgets/manager_membership_card.dart';
 import 'widgets/single_visit.dart';
@@ -20,11 +19,10 @@ class ManagerProfile extends StatefulWidget {
 }
 
 class _ManagerProfileState extends State<ManagerProfile> {
-  final AccountHttpService _accountHttpService = AccountHttpService();
+  final AccountFire _accountFire = AccountFire();
   late String _id;
   late Future<Account>? _futureAccount;
   var _isInit = true;
-  late Account _managerAcc;
 
   _ManagerProfileState();
 
@@ -38,7 +36,6 @@ class _ManagerProfileState extends State<ManagerProfile> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      _managerAcc = Provider.of<AccountPr>(context, listen: false).account!;
       _updateSportsman();
     }
     _isInit = false;
@@ -47,7 +44,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
 
   void _updateSportsman() {
     setState(() {
-      _futureAccount = _accountHttpService.getSportsman(_managerAcc, _id);
+      _futureAccount = _accountFire.get(_id);
     });
   }
 
@@ -55,7 +52,9 @@ class _ManagerProfileState extends State<ManagerProfile> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const Home()),
+            (route) => false);
         return Future.value(true);
       },
       child: Scaffold(
@@ -107,8 +106,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                               },
                             ),
                             const SizedBox(height: 4),
-                            ManagerMembershipCard(userId: snapshot.data!.id),
-                            SingleVisit(userId: snapshot.data!.id),
+                            ManagerMembershipCard(userId: snapshot.data!.id!),
+                            SingleVisit(userId: snapshot.data!.id!),
                           ],
                         ),
                       );

@@ -1,11 +1,9 @@
-import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'models/user_settings.dart';
-import 'models/account.dart';
 import 'pages/login/login.dart';
 import 'models/system_settings.dart';
 import 'pages/home.dart';
@@ -13,12 +11,12 @@ import 'pages/main_page/manager/widgets/qr_scan_page.dart';
 import 'pages/profile/profile_edit/profile_edit.dart';
 import 'pages/profile/settings/password_changer.dart';
 import 'pages/profile/settings/settings_page.dart';
+import 'pages/splash.dart';
 import 'providers/account_provider.dart';
 import 'providers/system_settings_provider.dart';
 import 'providers/user_settings_provider.dart';
 
 void main() async {
-  HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await hiveInitialization();
@@ -28,12 +26,8 @@ void main() async {
 
 Future<void> hiveInitialization() async {
   await Hive.initFlutter();
-  Hive
-    ..registerAdapter(AccountAdapter())
-    ..registerAdapter(SystemSettingsAdapter());
-  await Hive.openBox<Account>('account');
+  Hive.registerAdapter(SystemSettingsAdapter());
   await Hive.openBox<SystemSettings>('system_settings');
-  await Hive.openBox<UserSettings>('user_settings');
 }
 
 class MyApp extends StatelessWidget {
@@ -54,14 +48,25 @@ class MyApp extends StatelessWidget {
         ],
         builder: (context, _) {
           final systemSettingsPr = Provider.of<SystemSettingsPr>(context);
-          final account = Provider.of<AccountPr>(context).account;
 
           return MaterialApp(
             title: 'Gym',
             darkTheme: MyThemes.dark,
             theme: MyThemes.light,
             themeMode: systemSettingsPr.themeMode,
-            home: account != null ? const Home() : const Login(),
+            home: StreamBuilder(
+              stream: FirebaseAuth.instance.userChanges(),
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Splash();
+                }
+                if (snapshot.hasData) {
+                  return const Home();
+                } else {
+                  return const Login();
+                }
+              },
+            ),
             routes: {
               PasswordChanger.routeName: (ctx) => const PasswordChanger(),
               ProfileEdit.routeName: (ctx) => const ProfileEdit(),
@@ -71,13 +76,4 @@ class MyApp extends StatelessWidget {
           );
         },
       );
-}
-
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-  }
 }

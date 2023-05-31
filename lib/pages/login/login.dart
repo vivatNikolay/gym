@@ -36,14 +36,18 @@ class _LoginState extends State<Login> {
       try {
         _errorMess = '';
         await Provider.of<AccountPr>(context, listen: false)
-            .get(_email.trim(), _password);
+            .login(_email.trim(), _password);
       } catch (e) {
         _errorMess = e.toString();
+        setState(() {
+          _isLoading = false;
+        });
       }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -107,11 +111,11 @@ class _LoginState extends State<Login> {
                 const SizedBox(
                   height: 15,
                 ),
-                if (_isLoading) const CircularProgressIndicator(),
-                if (!_isLoading)
-                LoginButton(
-                  onPressed: _trySubmit,
-                ),
+                _isLoading
+                    ? const CircularProgressIndicator()
+                    : LoginButton(
+                        onPressed: _trySubmit,
+                      ),
                 Text(_errorMess),
               ],
             ),

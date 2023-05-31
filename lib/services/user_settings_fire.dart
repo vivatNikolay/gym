@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/user_settings.dart';
 import 'fire.dart';
 
 class UserSettingsFire extends Fire<UserSettings> {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final dbName = 'userSettings';
 
   @override
@@ -23,11 +25,17 @@ class UserSettingsFire extends Fire<UserSettings> {
     return UserSettings.fromDocument(doc);
   }
 
+  Future<UserSettings> init() async {
+    DocumentSnapshot doc = await firestore.collection(dbName)
+        .doc(_firebaseAuth.currentUser!.uid).get();
+    return UserSettings.fromDocument(doc);
+  }
+
   @override
   Future<void> put(UserSettings userSettings) async {
     await firestore
         .collection(dbName)
-        .doc(userSettings.id)
-        .update(userSettings.toMap());
+        .doc(_firebaseAuth.currentUser!.uid)
+        .set(userSettings.toMap());
   }
 }

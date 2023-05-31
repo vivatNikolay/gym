@@ -41,7 +41,6 @@ class _SettingsPageState extends State<SettingsPage> {
           Provider.of<UserSettingsPr>(context, listen: false).settings!;
       _isDarkMode = _oldIsDarkMode;
       _userSettings = UserSettings(
-        id: _account.id,
         defaultExerciseSets: _oldUserSettings.defaultExerciseSets,
         defaultExerciseReps: _oldUserSettings.defaultExerciseReps,
         defaultMembershipTime: _oldUserSettings.defaultMembershipTime,

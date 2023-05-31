@@ -12,26 +12,19 @@ import '../../../widgets/visits_list.dart';
 import '../../widgets/membership_progress.dart';
 import 'add_membership_dialog.dart';
 
-class ManagerMembershipCard extends StatefulWidget {
+class ManagerMembershipCard extends StatelessWidget {
   final String userId;
-
-  const ManagerMembershipCard({required this.userId, Key? key})
-      : super(key: key);
-
-  @override
-  State<ManagerMembershipCard> createState() => _ManagerMembershipCardState();
-}
-
-class _ManagerMembershipCardState extends State<ManagerMembershipCard> {
   final MembershipFire _membershipFire = MembershipFire();
   final VisitFire _visitFire = VisitFire();
+
+  ManagerMembershipCard({required this.userId, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
       child: StreamBuilder(
-          stream: _membershipFire.streamByUser(widget.userId),
+          stream: _membershipFire.streamByUser(userId),
           builder: (context, AsyncSnapshot<QuerySnapshot> memSnapshot) {
             Membership? membership;
             if (!memSnapshot.hasError &&
@@ -55,19 +48,18 @@ class _ManagerMembershipCardState extends State<ManagerMembershipCard> {
                 onPressed: () async {
                   ScaffoldMessenger.of(context).clearSnackBars();
                   if (_isMembershipInactive(membership)) {
-                    if (_checkStartDate(membership)) {
+                    if (_checkStartDate(membership, context)) {
                       await showDialog(
                           context: context,
-                          builder: (context) =>
-                              AddMembershipDialog(widget.userId));
+                          builder: (context) => AddMembershipDialog(userId));
                     }
                   } else {
                     showDialog(
                       context: context,
                       builder: (context) => ConfirmDialog(
                         textConfirmation: 'Добавить посещение в абонемент?',
-                        onYes: () async => _addMembershipVisit(
-                            widget.userId, membership!, context),
+                        onYes: () async =>
+                            _addMembershipVisit(userId, membership!, context),
                       ),
                     );
                   }
@@ -78,7 +70,7 @@ class _ManagerMembershipCardState extends State<ManagerMembershipCard> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => VisitsList(
                             title: 'История абонемента',
-                            accountId: widget.userId,
+                            accountId: userId,
                             membershipId: membership!.id,
                           )));
                 }
@@ -117,7 +109,7 @@ class _ManagerMembershipCardState extends State<ManagerMembershipCard> {
     return false;
   }
 
-  bool _checkStartDate(Membership? membership) {
+  bool _checkStartDate(Membership? membership, BuildContext context) {
     DateTime today =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     if (membership == null) {

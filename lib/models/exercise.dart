@@ -27,8 +27,8 @@ class Exercise {
       name: doc.data().toString().contains('name') ? doc.get('name') : '',
       reps: doc.data().toString().contains('reps') ? doc.get('reps') : 0,
       sets: doc.data().toString().contains('sets') ? doc.get('sets') : 0,
-      weight: doc.get('weight'),
-      duration: doc.get('duration'),
+      weight: doc.data().toString().contains('weight') ? doc.get('weight') : null,
+      duration: doc.data().toString().contains('duration') ? doc.get('duration') : null,
       creationDate: doc.data().toString().contains('creationDate') ? DateTime.fromMillisecondsSinceEpoch(doc.get('creationDate')) : DateTime.now(),
       trainingId: doc.data().toString().contains('trainingId') ? doc.get('trainingId') : '',
     );
