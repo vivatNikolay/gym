@@ -11,6 +11,7 @@ class MyTextFormField extends StatelessWidget {
   final bool? autofocus;
   final void Function(String?)? onSaved;
   final String? Function(String?)? validator;
+  final int? maxLength;
 
   const MyTextFormField(
       {this.initialValue,
@@ -23,6 +24,7 @@ class MyTextFormField extends StatelessWidget {
       this.autofocus,
       this.onSaved,
       this.validator,
+      this.maxLength,
       Key? key})
       : super(key: key);
 
@@ -32,7 +34,7 @@ class MyTextFormField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 11),
       child: TextFormField(
         initialValue: initialValue,
-        maxLength: 255,
+        maxLength: maxLength ?? 255,
         style: TextStyle(
           fontSize: fontSize,
         ),

@@ -87,7 +87,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
               textAlign: TextAlign.center,
               fontSize: 18,
               obscureText: true,
-              errorText: 'Повтор не совпадает',
+              errorText: 'Пароль не совпадает',
             ),
           ],
         ),

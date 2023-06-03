@@ -78,10 +78,13 @@ class _LoginState extends State<Login> {
                 const FieldName(text: 'Логин'),
                 MyTextFormField(
                   validator: (value) {
-                    if (value != null && _regExpEmail.hasMatch(value.trim())) {
-                      return null;
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Поле пустое';
                     }
-                    return 'Неверный логин';
+                    if (!_regExpEmail.hasMatch(value.trim())) {
+                      return 'Неверный формат логина';
+                    }
+                    return null;
                   },
                   keyboardType: TextInputType.emailAddress,
                   onSaved: (value) {
@@ -96,10 +99,10 @@ class _LoginState extends State<Login> {
                 const FieldName(text: 'Пароль'),
                 MyTextFormField(
                   validator: (value) {
-                    if (value != null && value.isNotEmpty) {
-                      return null;
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Поле пустое';
                     }
-                    return 'Неверный пароль';
+                    return null;
                   },
                   obscureText: true,
                   onSaved: (value) {

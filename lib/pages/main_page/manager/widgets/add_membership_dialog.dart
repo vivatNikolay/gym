@@ -52,6 +52,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
 
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -126,9 +127,13 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
 
   Future<void> save(BuildContext context) async {
     ScaffoldMessenger.of(context).clearSnackBars();
-    if (int.tryParse(_numberOfVisitsController.text) == null) {
+    if (int.tryParse(_numberOfVisitsController.text) == null ||
+        _numberOfVisitsController.text == '0' ||
+        _dateRange.duration.inDays == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Кол-во посещений должно быть числом')));
+          const SnackBar(content: Text('Ошибка создания абонемента')));
+      Navigator.of(context).pop();
+      return;
     }
     try {
       await _membershipFire.create(Membership(
@@ -141,8 +146,8 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
       ));
       Navigator.of(context).pop();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Ошибка создания абонемента'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.toString()),
       ));
     }
   }

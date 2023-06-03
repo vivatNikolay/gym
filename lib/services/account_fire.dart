@@ -19,7 +19,7 @@ class AccountFire extends Fire<Account> {
   Future<void> create(Account account) async {
     try {
       UserCredential userCredential =
-          await _firebaseAuth.createUserWithEmailAndPassword(
+          await _firebaseAuth.createUserWithEmailAndPassword( //ВХОДИТ В АККАУНТ ПОСЛЕ СОЗДАНИЯ!!
               email: account.email, password: '111111');
       await firestore
           .collection(dbName)
@@ -29,7 +29,7 @@ class AccountFire extends Fire<Account> {
       if (e.code == 'email-already-in-use') {
         throw 'Email уже используется';
       }
-      throw e.message ?? 'Ошибка при создании пользователя';
+      throw 'Ошибка создания пользователя';
     }
   }
 
@@ -44,7 +44,7 @@ class AccountFire extends Fire<Account> {
       if (e.code == 'wrong-password') {
         throw 'Неверный пароль';
       }
-      throw e.message ?? 'Ошибка при аутентификации';
+      throw 'Ошибка аутентификации';
     }
   }
 
@@ -77,7 +77,12 @@ class AccountFire extends Fire<Account> {
 
   @override
   Future<void> put(Account account) async {
-    await firestore.collection(dbName).doc(account.id).update(account.toMap());
+    try {
+      await firestore.collection(dbName).doc(account.id).update(
+          account.toMap());
+    } catch (e) {
+      throw 'Ошибка редактирования пользователя';
+    }
   }
 
   Future<QuerySnapshot> findByQuery(String email) async {
@@ -98,7 +103,7 @@ class AccountFire extends Fire<Account> {
       }
     } on FirebaseException catch (e) {
       if (e.code == 'weak-password') {
-        throw 'Слабый пароль';
+        throw 'Длина пароля меньше 6 символов';
       }
       throw e.message ?? 'Слабый пароль';
     }

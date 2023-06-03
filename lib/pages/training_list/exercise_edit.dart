@@ -179,6 +179,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                         _weight = double.parse(value);
                       }
                     },
+                    maxLength: 8,
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -205,6 +206,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                         _duration = double.parse(value);
                       }
                     },
+                    maxLength: 8,
                   ),
                 ),
               ],

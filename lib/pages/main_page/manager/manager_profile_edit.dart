@@ -76,22 +76,16 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
                   role: _account.role));
           Navigator.of(context).pop();
         } else {
-          try {
-            await _accountFire.create(
-                Account(
-                    email: _email,
-                    lastName: _lastName,
-                    phone: _phone,
-                    firstName: _name,
-                    gender: _gender.value,
-                    iconNum: _iconNum.value,
-                    dateOfBirth: _pickedDate,
-                    role: 'USER'));
-            Navigator.of(context).pop();
-          } catch (e) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(e.toString())));
-          }
+          await _accountFire.create(Account(
+              email: _email,
+              lastName: _lastName,
+              phone: _phone,
+              firstName: _name,
+              gender: _gender.value,
+              iconNum: _iconNum.value,
+              dateOfBirth: _pickedDate,
+              role: 'USER'));
+          Navigator.of(context).pop();
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
