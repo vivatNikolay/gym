@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../manager_profile.dart';
@@ -56,7 +57,7 @@ class _QrScanPageState extends State<QrScanPage> {
         color: Colors.white30
     ),
     child: Text(
-      result != null ? 'Результат : ${result!}' : 'Отсканируйте QR-код',
+      result != null ? '${'result'.i18n()} : ${result!}' : 'scan qr-code'.i18n(),
       maxLines: 3,
       style: const TextStyle(color: Colors.white, fontSize: 18),
     ),

@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
+import 'models/available_locale.dart';
 import 'pages/login/login.dart';
 import 'models/system_settings.dart';
 import 'pages/home.dart';
@@ -47,9 +50,18 @@ class MyApp extends StatelessWidget {
           ),
         ],
         builder: (context, _) {
+          LocalJsonLocalization.delegate.directories = ['i18n'];
           final systemSettingsPr = Provider.of<SystemSettingsPr>(context);
 
           return MaterialApp(
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              LocalJsonLocalization.delegate,
+            ],
+            supportedLocales: AvailableLocale.values.map((e) => e['locale']),
+            locale: systemSettingsPr.locale,
             title: 'Gym',
             darkTheme: MyThemes.dark,
             theme: MyThemes.light,

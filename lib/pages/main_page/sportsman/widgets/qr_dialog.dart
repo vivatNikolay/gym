@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../../helpers/constants.dart';
@@ -39,9 +40,9 @@ class QrDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text(
-                'Закрыть',
-                style: TextStyle(
+              child: Text(
+                'close'.i18n(),
+                style: const TextStyle(
                   fontSize: 19,
                   color: Colors.white,
                 ),

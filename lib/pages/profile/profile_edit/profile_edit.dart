@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/account_provider.dart';
@@ -71,7 +72,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Профиль'),
+        title: Text('profile'.i18n()),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -102,14 +103,14 @@ class _ProfileEditState extends State<ProfileEdit> {
             const SizedBox(height: 10),
             MyTextFormField(
               initialValue: _name,
-              fieldName: 'Имя',
+              fieldName: 'name'.i18n(),
               fontSize: 20,
               textAlign: TextAlign.center,
               validator: (value) {
                 if (value != null && value.isNotEmpty) {
                   return null;
                 }
-                return 'Поле пустое';
+                return 'emptyField'.i18n();
               },
               keyboardType: TextInputType.text,
               onSaved: (value) {
@@ -121,14 +122,14 @@ class _ProfileEditState extends State<ProfileEdit> {
             const SizedBox(height: 5),
             MyTextFormField(
               initialValue: _phone,
-              fieldName: 'Телефон',
+              fieldName: 'phone'.i18n(),
               fontSize: 20,
               textAlign: TextAlign.center,
               validator: (value) {
                 if (value != null && value.isNotEmpty) {
                   return null;
                 }
-                return 'Поле пустое';
+                return 'emptyField'.i18n();
               },
               keyboardType: TextInputType.phone,
               onSaved: (value) {

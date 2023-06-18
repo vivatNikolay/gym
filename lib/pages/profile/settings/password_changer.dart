@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
 import '../../../pages/widgets/my_text_field.dart';
@@ -40,7 +41,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Смена пароля'),
+        title: Text('changingPassword'.i18n()),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -74,7 +75,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
             MyTextField(
               controller: _newPass1Controller,
               validation: _newPass1Validator,
-              fieldName: 'Новый пароль',
+              fieldName: 'newPassword'.i18n(),
               textAlign: TextAlign.center,
               fontSize: 18,
               obscureText: true,
@@ -83,11 +84,11 @@ class _PasswordChangerState extends State<PasswordChanger> {
             MyTextField(
               controller: _newPass2Controller,
               validation: _newPass2Validator,
-              fieldName: 'Повтор пароля',
+              fieldName: 'repeatPassword'.i18n(),
               textAlign: TextAlign.center,
               fontSize: 18,
               obscureText: true,
-              errorText: 'Пароль не совпадает',
+              errorText: 'passwordIsNotSame'.i18n(),
             ),
           ],
         ),

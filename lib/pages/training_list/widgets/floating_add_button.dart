@@ -4,9 +4,9 @@ import '../../../helpers/constants.dart';
 
 class FloatingAddButton extends StatelessWidget {
   final String text;
-  VoidCallback? onPressed;
+  final VoidCallback? onPressed;
 
-  FloatingAddButton({required this.text, this.onPressed, Key? key}) : super(key: key);
+  const FloatingAddButton({required this.text, this.onPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

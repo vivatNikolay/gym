@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 class SearchField extends StatelessWidget {
   final VoidCallback onTap;
@@ -21,7 +22,10 @@ class SearchField extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Поиск', style: TextStyle(fontSize: 18),),
+            Text(
+              'search'.i18n(),
+              style: const TextStyle(fontSize: 18),
+            ),
             Icon(
               Icons.search,
               color: color,

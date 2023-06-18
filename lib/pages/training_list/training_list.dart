@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import '../../services/exercise_fire.dart';
 import '../../services/training_fire.dart';
@@ -21,9 +22,9 @@ class TrainingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      title: 'Тренировки',
+      title: 'trainings'.i18n(),
       floatingActionButton: FloatingAddButton(
-        text: 'Добавить тренировку',
+        text: 'addTraining'.i18n(),
         onPressed: () => showDialog(
           context: context,
           builder: (context) => AddTrainingDialog(),
@@ -33,7 +34,7 @@ class TrainingList extends StatelessWidget {
           stream: _trainingFire.streamByUser(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapTraining) {
             if (snapTraining.hasError) {
-              return const Center(child: Text('Тренировки не загрузились'));
+              return Center(child: Text('trainingDidNotLoad'.i18n()));
             }
             if (snapTraining.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -56,7 +57,7 @@ class TrainingList extends StatelessWidget {
                       return TrainingCard(
                         title: trainings[index].name,
                         subtitle:
-                            '${snapExercise.data != null ? snapExercise.data!.size : ' '} упражнений',
+                            '${snapExercise.data != null ? snapExercise.data!.size : ' '} ${'exercises'.i18n()}',
                         onDelete: () =>
                             deletionDialog(context, trainings[index].id),
                         onTap: () async {

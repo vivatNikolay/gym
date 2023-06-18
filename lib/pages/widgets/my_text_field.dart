@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -42,7 +43,7 @@ class MyTextField extends StatelessWidget {
           errorText: validation.value
               ? null
               : controller.text.isEmpty
-                  ? 'Поле пустое'
+                  ? 'emptyField'.i18n()
                   : errorText,
           labelText: fieldName,
         ),

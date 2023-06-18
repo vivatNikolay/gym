@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SettingTitle extends StatelessWidget {
-  String text;
+  final String text;
 
-  SettingTitle({required this.text, Key? key}) : super(key: key);
+  const SettingTitle({required this.text, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
 import '../models/account.dart';
@@ -101,10 +102,10 @@ class _HomeState extends State<Home> {
     switch (role) {
       case 'MANAGER':
         {
-          return const [
+          return [
             BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code),
-              label: 'QR-код',
+              icon: const Icon(Icons.qr_code),
+              label: 'qrCode'.i18n(),
             ),
           ];
         }
@@ -113,14 +114,14 @@ class _HomeState extends State<Home> {
           break;
         }
     }
-    return const [
+    return [
       BottomNavigationBarItem(
-        icon: Icon(Icons.qr_code),
-        label: 'QR-код',
+        icon: const Icon(Icons.qr_code),
+        label: 'qrCode'.i18n(),
       ),
       BottomNavigationBarItem(
-        icon: Icon(CustomIcons.dumbbell),
-        label: 'Тренировки',
+        icon: const Icon(CustomIcons.dumbbell),
+        label: 'trainings'.i18n(),
       ),
     ];
   }

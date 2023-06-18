@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import '../../../services/account_fire.dart';
 import '../../../models/account.dart';
@@ -59,7 +60,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Спортсмен'),
+          title: Text('sportsman'.i18n()),
         ),
         body: Container(
           width: double.infinity,

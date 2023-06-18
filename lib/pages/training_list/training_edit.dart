@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import '../../services/exercise_fire.dart';
 import '../../helpers/constants.dart';
@@ -36,7 +37,7 @@ class TrainingEdit extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingAddButton(
-          text: 'Добавить упражнение',
+          text: 'addExercise'.i18n(),
           onPressed: () => Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ExerciseEdit(trainingId: trainingId))),
         ),
@@ -44,7 +45,7 @@ class TrainingEdit extends StatelessWidget {
             stream: _exerciseFire.streamByTrainingId(trainingId),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
-              return const Center(child: Text('Упражнения не загрузились'));
+              return Center(child: Text('exerciseDidNotLoad'.i18n()));
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(

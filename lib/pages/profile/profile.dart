@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/user_settings_provider.dart';
@@ -38,7 +39,10 @@ class Profile extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.settings_outlined, color: mainColor),
             minLeadingWidth: 24,
-            title: const Text('Настройки', style: TextStyle(fontSize: 18)),
+            title: Text(
+              'settings'.i18n(),
+              style: const TextStyle(fontSize: 18),
+            ),
             onTap: () {
               Navigator.of(context).pushNamed(SettingsPage.routeName);
             },
@@ -46,7 +50,10 @@ class Profile extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout, color: mainColor),
             minLeadingWidth: 24,
-            title: const Text('Выход', style: TextStyle(fontSize: 18)),
+            title: Text(
+              'logout'.i18n(),
+              style: const TextStyle(fontSize: 18),
+            ),
             onTap: () async {
               Navigator.of(context).pop();
               Provider.of<AccountPr>(context, listen: false).logout();
@@ -64,11 +71,14 @@ class Profile extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.history, color: mainColor),
           minLeadingWidth: 24,
-          title: const Text('История', style: TextStyle(fontSize: 18)),
+          title: Text(
+            'history'.i18n(),
+            style: const TextStyle(fontSize: 18),
+          ),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => VisitsList(
-                      title: 'История всех посещений',
+                      title: 'historyOfAllVisits'.i18n(),
                       accountId: account.id!,
                     )));
           },

@@ -2,34 +2,40 @@ import 'package:flutter/material.dart';
 
 import '../../helpers/constants.dart';
 import '../../models/system_settings.dart';
+import '../models/available_locale.dart';
 import '../services/system_settings_db.dart';
 
 class SystemSettingsPr extends ChangeNotifier {
   final SystemSettingsDB _dbService = SystemSettingsDB();
 
   late ThemeMode themeMode;
+  late Locale locale;
   late SystemSettings _settings;
 
   SystemSettingsPr() {
-    _settings = _dbService.getFirst() ?? SystemSettings(isDark: true);
-    themeMode = initThemeMode();
+    _settings = _dbService.getFirst() ??
+        SystemSettings(
+            isDark: true,
+            locale: AvailableLocale.values.indexOf(AvailableLocale.ru));
+    initSettings();
+  }
+
+  void initSettings() {
+    _dbService.put(_settings);
+    themeMode = _settings.isDark ? ThemeMode.dark : ThemeMode.light;
+    locale = AvailableLocale.values[_settings.locale]['locale'];
   }
 
   bool get isDarkMode => themeMode == ThemeMode.dark;
 
-  Future<void> toggleTheme(bool isOn) async {
-    themeMode = isOn ? ThemeMode.dark : ThemeMode.light;
-    _settings.isDark = isOn;
+  SystemSettings get settings => _settings;
+
+  Future<void> put(SystemSettings settings) async {
+    _settings = settings;
+    themeMode = settings.isDark ? ThemeMode.dark : ThemeMode.light;
+    locale = AvailableLocale.values[_settings.locale]['locale'];
     await _dbService.put(_settings);
     notifyListeners();
-  }
-
-  ThemeMode initThemeMode() {
-    _dbService.put(_settings);
-    if (_settings.isDark) {
-      return ThemeMode.dark;
-    }
-    return ThemeMode.light;
   }
 }
 
@@ -126,5 +132,6 @@ class MyThemes {
       ),
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: Colors.white60,
-      ));
+      ),
+  );
 }

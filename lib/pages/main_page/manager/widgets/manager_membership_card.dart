@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import '../../../../helpers/constants.dart';
 import '../../../../models/custom_icons.dart';
@@ -36,9 +37,9 @@ class ManagerMembershipCard extends StatelessWidget {
             return ListTile(
               leading: const Icon(CustomIcons.sub, size: 26, color: mainColor),
               minLeadingWidth: 22,
-              title: const Text(
-                'Абонемент',
-                style: TextStyle(fontSize: 20),
+              title: Text(
+                'membership'.i18n(),
+                style: const TextStyle(fontSize: 20),
               ),
               subtitle: MembershipProgress(
                 membership: membership,
@@ -57,7 +58,7 @@ class ManagerMembershipCard extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) => ConfirmDialog(
-                        textConfirmation: 'Добавить посещение в абонемент?',
+                        textConfirmation: 'addVisitToMembership'.i18n(),
                         onYes: () async =>
                             _addMembershipVisit(userId, membership!, context),
                       ),
@@ -69,7 +70,7 @@ class ManagerMembershipCard extends StatelessWidget {
                 if (membership != null) {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => VisitsList(
-                            title: 'История абонемента',
+                            title: 'membershipHistory'.i18n(),
                             accountId: userId,
                             membershipId: membership!.id,
                           )));
@@ -87,7 +88,7 @@ class ManagerMembershipCard extends StatelessWidget {
     await _visitFire.create(Visit(
         date: DateTime.now(), userId: userId, membershipId: membership.id));
     ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Посещение добавлено в абонемент')));
+        SnackBar(content: Text('visitAddedToMembership'.i18n())));
     Navigator.of(context).pop();
   }
 
@@ -116,8 +117,8 @@ class ManagerMembershipCard extends StatelessWidget {
       return true;
     }
     if (membership.dateOfStart.isAfter(today)) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Абонемент не начат'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('membershipDidNotStart'.i18n()),
       ));
       return false;
     }

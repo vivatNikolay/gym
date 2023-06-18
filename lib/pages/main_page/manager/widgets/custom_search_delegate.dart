@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import '../../../../services/account_fire.dart';
 import '../../../../helpers/constants.dart';
@@ -11,7 +12,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   CustomSearchDelegate()
       : super(
-          searchFieldLabel: 'Поиск спортсмена',
+          searchFieldLabel: 'sportsmanSearch'.i18n(),
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.search,
         );
@@ -55,8 +56,8 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     if (query.trim() == '') {
-      return const Center(
-        child: Text('Введите email'),
+      return Center(
+        child: Text('inputEmail'.i18n()),
       );
     }
     return FutureBuilder(
@@ -83,8 +84,8 @@ class CustomSearchDelegate extends SearchDelegate {
                   .map((i) => Account.fromDocument(i))
                   .toList();
               if (data.isEmpty) {
-                return const Center(
-                  child: Text('Не найден'),
+                return Center(
+                  child: Text('notFound'.i18n()),
                 );
               }
               return ListView.builder(
@@ -115,8 +116,8 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return const Center(
-      child: Text('Поиск по email'),
+    return Center(
+      child: Text('searchByEmail'.i18n()),
     );
   }
 }

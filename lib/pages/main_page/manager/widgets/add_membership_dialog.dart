@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../services/membership_fire.dart';
@@ -56,7 +57,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Добавить абонемент'),
+      title: Text('addMembership'.i18n()),
       titlePadding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 4.0),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0)),
@@ -66,15 +67,15 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Отмена',
-              style: TextStyle(color: mainColor, fontSize: 18)),
+          child: Text('cancel'.i18n(),
+              style: const TextStyle(color: mainColor, fontSize: 18)),
         ),
         TextButton(
           onPressed: () async {
             await save(context);
           },
-          child: const Text('Сохранить',
-              style: TextStyle(color: mainColor, fontSize: 18)),
+          child: Text('save'.i18n(),
+              style: const TextStyle(color: mainColor, fontSize: 18)),
         ),
       ],
       content: Column(
@@ -83,8 +84,8 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
           Row(
             children: [
               Text(
-                'Начало: ${formatterDate.format(_dateRange.start)}\n'
-                'Конец:   ${formatterDate.format(_dateRange.end)}',
+                '${'start'.i18n()}: ${formatterDate.format(_dateRange.start)}\n'
+                '${'end'.i18n()}:   ${formatterDate.format(_dateRange.end)}',
                 style: const TextStyle(fontSize: 18),
               ),
               ElevatedButton(
@@ -114,8 +115,8 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
           TextField(
             controller: _numberOfVisitsController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              label: Text('Кол-во посещений'),
+            decoration: InputDecoration(
+              label: Text('numberOfVisits'.i18n()),
               counterText: '',
             ),
             maxLength: 4,
@@ -131,7 +132,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
         _numberOfVisitsController.text == '0' ||
         _dateRange.duration.inDays == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Ошибка создания абонемента')));
+          SnackBar(content: Text('createMembershipError'.i18n())));
       Navigator.of(context).pop();
       return;
     }

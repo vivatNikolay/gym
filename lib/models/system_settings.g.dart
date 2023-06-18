@@ -18,15 +18,18 @@ class SystemSettingsAdapter extends TypeAdapter<SystemSettings> {
     };
     return SystemSettings(
       isDark: fields[0] as bool,
+      locale: fields[1] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, SystemSettings obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.isDark);
+      ..write(obj.isDark)
+      ..writeByte(1)
+      ..write(obj.locale);
   }
 
   @override

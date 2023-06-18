@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
+import '../../../models/system_settings.dart';
 import '../../../models/account.dart';
 import '../../../models/user_settings.dart';
 import '../../../pages/profile/settings/password_changer.dart';
@@ -13,6 +15,7 @@ import '../../../providers/account_provider.dart';
 import '../../../providers/system_settings_provider.dart';
 import '../../../providers/user_settings_provider.dart';
 import '../../widgets/loading_buttons/loading_icon_button.dart';
+import 'widgets/locale_selector_dialog.dart';
 
 class SettingsPage extends StatefulWidget {
   static const routeName = '/settings';
@@ -25,8 +28,8 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool _isInit = true;
-  late bool _isDarkMode;
-  late bool _oldIsDarkMode;
+  late SystemSettings _systemSettings;
+  late SystemSettings _oldSystemSettings;
   late UserSettings _userSettings;
   late UserSettings _oldUserSettings;
   late Account _account;
@@ -35,11 +38,12 @@ class _SettingsPageState extends State<SettingsPage> {
   void didChangeDependencies() {
     if (_isInit) {
       _account = Provider.of<AccountPr>(context, listen: false).account!;
-      _oldIsDarkMode =
-          Provider.of<SystemSettingsPr>(context, listen: false).isDarkMode;
+      _oldSystemSettings =
+          Provider.of<SystemSettingsPr>(context, listen: false).settings;
+      _systemSettings = SystemSettings(
+          isDark: _oldSystemSettings.isDark, locale: _oldSystemSettings.locale);
       _oldUserSettings =
           Provider.of<UserSettingsPr>(context, listen: false).settings!;
-      _isDarkMode = _oldIsDarkMode;
       _userSettings = UserSettings(
         defaultExerciseSets: _oldUserSettings.defaultExerciseSets,
         defaultExerciseReps: _oldUserSettings.defaultExerciseReps,
@@ -57,9 +61,9 @@ class _SettingsPageState extends State<SettingsPage> {
       await Provider.of<UserSettingsPr>(context, listen: false)
           .put(_userSettings);
     }
-    if (_isDarkMode != _oldIsDarkMode) {
+    if (_systemSettings != _oldSystemSettings) {
       await Provider.of<SystemSettingsPr>(context, listen: false)
-          .toggleTheme(_isDarkMode);
+          .put(_systemSettings);
     }
     Navigator.of(context).pop();
   }
@@ -68,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Настройки'),
+        title: Text('settings'.i18n()),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -86,31 +90,47 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ListView(
           padding: const EdgeInsets.all(10.0),
           children: [
-            SettingTitle(text: 'Главные'),
+            SettingTitle(text: 'main'.i18n()),
             SettingPack(children: [
               ListTile(
                 leading: const Icon(Icons.dark_mode_outlined),
                 minLeadingWidth: 24,
-                title: const Text('Темная тема'),
-                subtitle: Text(_isDarkMode ? 'включено' : 'выключено'),
+                title: Text('darkMode'.i18n()),
+                subtitle: Text(_systemSettings.isDark ? 'enable'.i18n() : 'disable'.i18n()),
                 trailing: Switch(
-                  value: _isDarkMode,
+                  value: _systemSettings.isDark,
                   onChanged: (value) {
                     setState(() {
-                      _isDarkMode = value;
+                      _systemSettings.isDark = value;
                     });
                   },
                   activeColor: mainColor,
                 ),
               ),
+              ListTile(
+                leading: const Icon(Icons.language),
+                minLeadingWidth: 24,
+                title: Text('changeLang'.i18n()),
+                onTap: () => showDialog(
+                  context: context,
+                  builder: (BuildContext context) => LocaleSelectorDialog(
+                    selection: _systemSettings.locale,
+                    action: (value) {
+                      setState(() {
+                        _systemSettings.locale = value;
+                      });
+                    },
+                  ),
+                ),
+              ),
             ]),
             optionalPart(),
-            SettingTitle(text: 'Безопасность'),
+            SettingTitle(text: 'security'.i18n()),
             SettingPack(children: [
               ListTile(
                 leading: const Icon(Icons.lock_outline),
                 minLeadingWidth: 24,
-                title: const Text('Сменить пароль'),
+                title: Text('changePassword'.i18n()),
                 onTap: () {
                   Navigator.of(context).pushNamed(PasswordChanger.routeName);
                 },
@@ -126,10 +146,10 @@ class _SettingsPageState extends State<SettingsPage> {
     return _account.role == 'MANAGER'
         ? Column(
             children: [
-              SettingTitle(text: 'Абонемент'),
+              SettingTitle(text: 'membership'.i18n()),
               SettingPack(children: [
                 const SizedBox(height: 15),
-                const SettingName(text: 'Стандартная длительность(мес.):'),
+                SettingName(text: '${'standardDuration'.i18n()}:'),
                 SfSlider(
                   min: 0,
                   max: 12,
@@ -145,7 +165,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 ),
                 const SizedBox(height: 15),
-                const SettingName(text: 'Стандартное кол-во посещений:'),
+                SettingName(text: '${'standardNumberOfVisits'.i18n()}:'),
                 SfSlider(
                   min: 0,
                   max: 50,
@@ -166,10 +186,10 @@ class _SettingsPageState extends State<SettingsPage> {
           )
         : Column(
             children: [
-              SettingTitle(text: 'Тренировки'),
+              SettingTitle(text: 'trainings'.i18n()),
               SettingPack(children: [
                 const SizedBox(height: 15),
-                const SettingName(text: 'Стандартное кол-во сетов:'),
+                SettingName(text: '${'standardNumberOfSets'.i18n()}:'),
                 SfSlider(
                   min: 0,
                   max: 10,
@@ -185,7 +205,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 ),
                 const SizedBox(height: 15),
-                const SettingName(text: 'Стандартное кол-во повторений:'),
+                SettingName(text: '${'standardNumberOfReps'.i18n()}:'),
                 SfSlider(
                   min: 0,
                   max: 30,

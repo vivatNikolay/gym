@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:localization/localization.dart';
 
 import '../../models/visit.dart';
 import '../../services/visit_fire.dart';
@@ -46,7 +47,7 @@ class _VisitsListState extends State<VisitsList> {
           stream: _stream,
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
-              return const Center(child: Text('Посещения не загрузились'));
+              return Center(child: Text('visitsDidNotLoad'.i18n()));
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -84,10 +85,11 @@ class _VisitsListState extends State<VisitsList> {
   }
 
   Center emptyMess() {
-    return const Center(
-        child: Text(
-      'Посещений нет',
-      style: TextStyle(fontSize: 23.0),
-    ));
+    return Center(
+      child: Text(
+        'noVisits'.i18n(),
+        style: const TextStyle(fontSize: 23.0),
+      ),
+    );
   }
 }

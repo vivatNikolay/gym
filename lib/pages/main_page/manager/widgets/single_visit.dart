@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import '../../../../helpers/constants.dart';
 import '../../../../models/visit.dart';
@@ -19,9 +20,9 @@ class SingleVisit extends StatelessWidget {
         mainAxisAlignment:
         MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Разовое посещение',
-            style: TextStyle(fontSize: 17),
+          Text(
+            'singleVisit'.i18n(),
+            style: const TextStyle(fontSize: 17),
           ),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
@@ -36,14 +37,14 @@ class SingleVisit extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) => ConfirmDialog(
-                  textConfirmation: 'Добавить разовое?',
+                  textConfirmation: 'addSingleVisit'.i18n(),
                   onYes: () async => _addSingleVisit(
                       userId, context),
                 ),
               );
             },
             icon: const Icon(Icons.add),
-            label: const Text('Добавить'),
+            label: Text('add'.i18n()),
           ),
         ],
       ),
@@ -54,7 +55,7 @@ class SingleVisit extends StatelessWidget {
     ScaffoldMessenger.of(context).clearSnackBars();
     await _visitFire.create(Visit(date: DateTime.now(), userId: userId));
     ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Добавлено разовое посещение')));
+        SnackBar(content: Text('singleVisitAdded'.i18n())));
     Navigator.of(context).pop();
   }
 }

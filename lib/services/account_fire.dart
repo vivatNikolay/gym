@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:localization/localization.dart';
 
 import '../models/account.dart';
 import 'fire.dart';
@@ -27,9 +28,9 @@ class AccountFire extends Fire<Account> {
           .set(account.toMap());
     } on FirebaseException catch (e) {
       if (e.code == 'email-already-in-use') {
-        throw 'Email уже используется';
+        throw 'emailAlreadyInUse'.i18n();
       }
-      throw 'Ошибка создания пользователя';
+      throw 'userCreationError'.i18n();
     }
   }
 
@@ -39,12 +40,12 @@ class AccountFire extends Fire<Account> {
           email: email, password: password);
     } on FirebaseException catch (e) {
       if (e.code == 'user-not-found') {
-        throw 'Пользователь не найден';
+        throw 'userNotFound'.i18n();
       }
       if (e.code == 'wrong-password') {
-        throw 'Неверный пароль';
+        throw 'wrongPassword'.i18n();
       }
-      throw 'Ошибка аутентификации';
+      throw 'authError'.i18n();
     }
   }
 
@@ -81,7 +82,7 @@ class AccountFire extends Fire<Account> {
       await firestore.collection(dbName).doc(account.id).update(
           account.toMap());
     } catch (e) {
-      throw 'Ошибка редактирования пользователя';
+      throw 'userEditingError'.i18n();
     }
   }
 
@@ -103,9 +104,9 @@ class AccountFire extends Fire<Account> {
       }
     } on FirebaseException catch (e) {
       if (e.code == 'weak-password') {
-        throw 'Длина пароля меньше 6 символов';
+        throw 'passwordLengthLessThanSix'.i18n();
       }
-      throw e.message ?? 'Слабый пароль';
+      throw e.message ?? 'weakPassword'.i18n();
     }
   }
 }

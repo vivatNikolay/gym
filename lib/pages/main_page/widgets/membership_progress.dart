@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:localization/localization.dart';
 
 import '../../../models/membership.dart';
 
@@ -24,10 +25,10 @@ class MembershipProgress extends StatelessWidget {
 
   _getString(BuildContext context, Membership? membership) {
     if (membership == null) {
-      return 'Отсутствует';
+      return 'absent'.i18n();
     }
     return '${membership.visitCounter}/${membership.numberOfVisits}\n'
-        'c ${_formatterDate.format(membership.dateOfStart)} '
-        'по ${_formatterDate.format(membership.dateOfEnd)}';
+        '${'from'.i18n()} ${_formatterDate.format(membership.dateOfStart)} '
+        '${'to'.i18n()} ${_formatterDate.format(membership.dateOfEnd)}';
   }
 }

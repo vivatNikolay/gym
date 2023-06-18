@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/training.dart';
@@ -18,20 +19,23 @@ class AddTrainingDialog extends StatelessWidget {
         Provider.of<AccountPr>(context, listen: false).account!.id;
     TextEditingController _nameController = TextEditingController();
     return AlertDialog(
-      title: const Text('Тренировка'),
-      shape:
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      title: Text('training'.i18n()),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          12.00,
+        ),
+      ),
       content: MyTextField(
         autofocus: true,
-        fieldName: 'Название',
+        fieldName: 'title'.i18n(),
         controller: _nameController,
         validation: ValueNotifier(true),
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       actions: [
         TextButton(
-          child: const Text('Добавить',
-              style: TextStyle(color: mainColor, fontSize: 18)),
+          child: Text('add'.i18n(),
+              style: const TextStyle(color: mainColor, fontSize: 18)),
           onPressed: () async {
             if (_nameController.text.trim().isNotEmpty) {
               _trainingFire.create(Training(

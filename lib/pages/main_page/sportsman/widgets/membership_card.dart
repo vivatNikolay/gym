@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import '../../../../helpers/constants.dart';
 import '../../../../models/custom_icons.dart';
@@ -42,9 +43,9 @@ class MembershipCard extends StatelessWidget {
             flex: 5,
             child: Center(
               child: ListTile(
-                title: const Text(
-                  'Абонемент',
-                  style: TextStyle(fontSize: 23),
+                title: Text(
+                  'membership'.i18n(),
+                  style: const TextStyle(fontSize: 23),
                 ),
                 subtitle: subtitle,
                 onTap: onTap,

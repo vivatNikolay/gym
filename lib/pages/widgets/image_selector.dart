@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import 'circle_image.dart';
 
@@ -11,7 +12,7 @@ class ImageSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Выбрать аватар'),
+        title: Text('selectAvatar'.i18n()),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),

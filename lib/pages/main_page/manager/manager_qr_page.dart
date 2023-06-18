@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import '../../training_list/widgets/floating_add_button.dart';
 import '../../widgets/main_scaffold.dart';
@@ -20,9 +21,9 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      title: 'QR-код',
+      title: 'qrCode'.i18n(),
       floatingActionButton: FloatingAddButton(
-        text: 'Создать аккаунт',
+        text: 'createAccount'.i18n(),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const ManagerProfileEdit())),
       ),
@@ -38,7 +39,7 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.14),
             QrItem(
-              data: 'Scan qr-code!',
+              data: 'scan qr-code'.i18n(),
               onTap: () {
                 Navigator.of(context).pushNamed(QrScanPage.routeName);
               },

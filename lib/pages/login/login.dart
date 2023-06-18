@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
 import '../../pages/login/widgets/login_button.dart';
@@ -62,10 +63,10 @@ class _LoginState extends State<Login> {
             key: _formKey,
             child: Column(
               children: [
-                const Text(
-                  'Добро пожаловать',
+                Text(
+                  'welcome'.i18n(),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'PT-Sans',
                     fontSize: 46,
                     fontWeight: FontWeight.bold,
@@ -75,14 +76,14 @@ class _LoginState extends State<Login> {
                 const SizedBox(
                   height: 45,
                 ),
-                const FieldName(text: 'Логин'),
+                FieldName(text: 'email'.i18n()),
                 MyTextFormField(
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Поле пустое';
+                      return 'emptyField'.i18n();
                     }
                     if (!_regExpEmail.hasMatch(value.trim())) {
-                      return 'Неверный формат логина';
+                      return 'incorrectLoginFormat'.i18n();
                     }
                     return null;
                   },
@@ -96,11 +97,11 @@ class _LoginState extends State<Login> {
                 const SizedBox(
                   height: 15,
                 ),
-                const FieldName(text: 'Пароль'),
+                FieldName(text: 'password'.i18n()),
                 MyTextFormField(
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Поле пустое';
+                      return 'emptyField'.i18n();
                     }
                     return null;
                   },

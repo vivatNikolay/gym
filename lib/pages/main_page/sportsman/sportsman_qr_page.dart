@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../../services/account_fire.dart';
@@ -44,7 +45,7 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      title: 'QR-код',
+      title: 'qrCode'.i18n(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -67,7 +68,7 @@ class _SportsmanQrPageState extends State<SportsmanQrPage>
                           builder: (context) => VisitsList(
                                 accountId: _accountId,
                                 membershipId: membership!.id,
-                                title: 'История абонемента',
+                                title: 'membershipHistory'.i18n(),
                               )));
                     }
                   },

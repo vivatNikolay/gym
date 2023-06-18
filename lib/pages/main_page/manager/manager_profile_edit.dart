@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:localization/localization.dart';
 
 import '../../../services/account_fire.dart';
 import '../../../helpers/constants.dart';
@@ -99,7 +100,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Профиль'),
+        title: Text('profile'.i18n()),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -131,16 +132,16 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             MyTextFormField(
               initialValue: _email,
               fontSize: 20,
-              fieldName: 'Email',
+              fieldName: 'email'.i18n(),
               textAlign: TextAlign.center,
               readOnly: _isEdit,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Поле пустое';
+                  return 'emptyField'.i18n();
                 } else if (_regExpEmail.hasMatch(value.trim())) {
                   return null;
                 } else {
-                  return 'Неверный email';
+                  return 'incorrectEmail'.i18n();
                 }
               },
               keyboardType: TextInputType.emailAddress,
@@ -153,14 +154,14 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             const SizedBox(height: 5),
             MyTextFormField(
               initialValue: _name,
-              fieldName: 'Имя',
+              fieldName: 'name'.i18n(),
               fontSize: 20,
               textAlign: TextAlign.center,
               validator: (value) {
                 if (value != null && value.isNotEmpty) {
                   return null;
                 }
-                return 'Поле пустое';
+                return 'emptyField'.i18n();
               },
               keyboardType: TextInputType.text,
               onSaved: (value) {
@@ -172,14 +173,14 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             const SizedBox(height: 5),
             MyTextFormField(
               initialValue: _lastName,
-              fieldName: 'Фамилия',
+              fieldName: 'lastName'.i18n(),
               fontSize: 20,
               textAlign: TextAlign.center,
               validator: (value) {
                 if (value != null && value.isNotEmpty) {
                   return null;
                 }
-                return 'Поле пустое';
+                return 'emptyField'.i18n();
               },
               keyboardType: TextInputType.text,
               onSaved: (value) {
@@ -191,14 +192,14 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             const SizedBox(height: 5),
             MyTextFormField(
               initialValue: _phone,
-              fieldName: 'Телефон',
+              fieldName: 'phone'.i18n(),
               fontSize: 20,
               textAlign: TextAlign.center,
               validator: (value) {
                 if (value != null && value.isNotEmpty) {
                   return null;
                 }
-                return 'Поле пустое';
+                return 'emptyField'.i18n();
               },
               keyboardType: TextInputType.phone,
               onSaved: (value) {
@@ -212,7 +213,7 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
               controller: TextEditingController()
                 ..text = formatterDate.format(_pickedDate),
               validation: ValueNotifier(true),
-              fieldName: 'Дата рождения',
+              fieldName: 'dateOfBirth'.i18n(),
               textAlign: TextAlign.center,
               fontSize: 20,
               readOnly: true,
@@ -265,9 +266,9 @@ class _ManagerProfileEditState extends State<ManagerProfileEdit> {
             ));
           }
         },
-        child: const Text(
-          'Сбросить пароль',
-          style: TextStyle(
+        child: Text(
+          'resetPassword'.i18n(),
+          style: const TextStyle(
             fontSize: 18,
             color: Colors.white,
           ),

@@ -6,6 +6,8 @@ part 'system_settings.g.dart';
 class SystemSettings extends HiveObject {
   @HiveField(0)
   bool isDark;
+  @HiveField(1)
+  int locale;
 
-  SystemSettings({required this.isDark});
+  SystemSettings({required this.isDark, required this.locale});
 }

@@ -12,7 +12,6 @@ class ProfileBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Account account = Provider.of<AccountPr>(context, listen: true).account!;
-    print('PROFILE $account');
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +43,7 @@ class ProfileBox extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          '${account.firstName ?? ''} ${account.lastName}',
+          '${account.firstName} ${account.lastName}',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 24.0,

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import '../../helpers/constants.dart';
 
 class GenderSwitcher extends StatelessWidget {
 
-  ValueNotifier<bool> gender;
-  VoidCallback? onPressedMale;
-  VoidCallback? onPressedFemale;
+  final ValueNotifier<bool> gender;
+  final VoidCallback? onPressedMale;
+  final VoidCallback? onPressedFemale;
 
-  GenderSwitcher(
+  const GenderSwitcher(
       {required this.gender,
       this.onPressedMale,
       this.onPressedFemale,
@@ -31,7 +32,7 @@ class GenderSwitcher extends StatelessWidget {
                   : Theme.of(context).unselectedWidgetColor,
               size: 26,
             ),
-            label: Text('Муж',
+            label: Text('male'.i18n(),
                 style: TextStyle(
                   fontSize: 18,
                   color: gender.value
@@ -61,7 +62,7 @@ class GenderSwitcher extends StatelessWidget {
                   : mainColor,
               size: 26,
             ),
-            label: Text('Жен',
+            label: Text('female'.i18n(),
                 style: TextStyle(
                   fontSize: 18,
                   color: gender.value

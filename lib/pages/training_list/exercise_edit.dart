@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -90,7 +91,7 @@ class _ExerciseEditState extends State<ExerciseEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Упражнение'),
+        title: Text('exercise'.i18n()),
         actions: [
           IconButton(
             onPressed: _save,
@@ -108,14 +109,14 @@ class _ExerciseEditState extends State<ExerciseEdit> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MyTextFormField(
-                  fieldName: 'Название',
+                  fieldName: 'title'.i18n(),
                   initialValue: _name,
                   autofocus: _name.isEmpty,
                   validator: (value) {
                     if (value != null && value.isNotEmpty) {
                       return null;
                     }
-                    return 'Поле пустое';
+                    return 'emptyField'.i18n();
                   },
                   onSaved: (value) {
                     if (value != null) {
@@ -124,7 +125,10 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                   },
                 ),
                 const SizedBox(height: 15),
-                const Text('Кол-во сетов:', style: TextStyle(fontSize: 15)),
+                Text(
+                  '${'numberOfSets'.i18n()}:',
+                  style: const TextStyle(fontSize: 15),
+                ),
                 SfSlider(
                   min: 0,
                   max: 10,
@@ -140,8 +144,10 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                   },
                 ),
                 const SizedBox(height: 15),
-                const Text('Кол-во повторений:',
-                    style: TextStyle(fontSize: 15)),
+                Text(
+                  '${'numberOfReps'.i18n()}:',
+                  style: const TextStyle(fontSize: 15),
+                ),
                 SfSlider(
                   min: 0,
                   max: 30,
@@ -157,7 +163,10 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                   },
                 ),
                 const SizedBox(height: 15),
-                const Text('Вес (кг):', style: TextStyle(fontSize: 15)),
+                Text(
+                  '${'weight'.i18n()}:',
+                  style: const TextStyle(fontSize: 15),
+                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 1.8,
                   child: MyTextFormField(
@@ -165,10 +174,10 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                     validator: (value) {
                       if (value != null && value != '') {
                         if (double.tryParse(value) == null) {
-                          return 'Введите число';
+                          return 'enterNumber'.i18n();
                         }
                         if (double.parse(value) <= 0) {
-                          return 'Число должно быть больше нуля';
+                          return 'numberShouldBeAboveZero'.i18n();
                         }
                       }
                       return null;
@@ -183,8 +192,10 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                   ),
                 ),
                 const SizedBox(height: 15),
-                const Text('Длительность (мин):',
-                    style: TextStyle(fontSize: 15)),
+                Text(
+                  '${'duration'.i18n()}:',
+                  style: const TextStyle(fontSize: 15),
+                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 1.8,
                   child: MyTextFormField(
@@ -192,10 +203,10 @@ class _ExerciseEditState extends State<ExerciseEdit> {
                     validator: (value) {
                       if (value != null && value != '') {
                         if (double.tryParse(value) == null) {
-                          return 'Введите число';
+                          return 'enterNumber'.i18n();
                         }
                         if (double.parse(value) <= 0) {
-                          return 'Число должно быть больше нуля';
+                          return 'numberShouldBeAboveZero'.i18n();
                         }
                       }
                       return null;

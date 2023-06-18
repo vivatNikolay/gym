@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import '../../../helpers/constants.dart';
 
@@ -27,9 +28,9 @@ class LoginButton extends StatelessWidget {
           ),
         ),
         onPressed: onPressed,
-        child: const Text(
-          'Войти',
-          style: TextStyle(
+        child: Text(
+          'login'.i18n(),
+          style: const TextStyle(
             color: mainColor,
             fontSize: 19,
           ),
