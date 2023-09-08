@@ -22,7 +22,7 @@ class QrDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            QrImage(
+            QrImageView(
               data: data,
               size: 280,
               foregroundColor: Theme.of(context).iconTheme.color?.withOpacity(1),

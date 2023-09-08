@@ -18,7 +18,6 @@ class QrItem extends StatelessWidget {
         padding: EdgeInsets.all(MediaQuery.of(context).size.width/10.8),
         margin: const EdgeInsets.all(7),
         decoration: BoxDecoration(
-          // color: mainColor.withOpacity(0.9),
           shape: BoxShape.circle,
           gradient: RadialGradient(
             radius: 0.86,
@@ -35,7 +34,7 @@ class QrItem extends StatelessWidget {
             )
           ],
         ),
-        child: QrImage(
+        child: QrImageView(
           data: data,
           size: MediaQuery.of(context).size.width/2.28,
           foregroundColor: Colors.white,
