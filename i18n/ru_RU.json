@@ -92,5 +92,5 @@
   "userEditingError": "Ошибка редактирования пользователя",
   "passwordLengthLessThanSix": "Длина пароля меньше 6 символов",
   "weakPassword": "Слабый пароль",
-  "changeLang": "Сменить язык"
+  "changeLang": "Язык"
 }

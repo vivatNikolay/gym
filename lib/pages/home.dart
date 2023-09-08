@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
                         currentIndex: _selectedIndex,
                         onTap: _onItemTapped,
                         iconSize: 26,
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: Theme.of(context).backgroundColor,
                       ),
                     )
                   : null,

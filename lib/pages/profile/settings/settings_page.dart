@@ -3,6 +3,7 @@ import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
+import '../../../models/available_locale.dart';
 import '../../../models/system_settings.dart';
 import '../../../models/account.dart';
 import '../../../models/user_settings.dart';
@@ -96,7 +97,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 leading: const Icon(Icons.dark_mode_outlined),
                 minLeadingWidth: 24,
                 title: Text('darkMode'.i18n()),
-                subtitle: Text(_systemSettings.isDark ? 'enable'.i18n() : 'disable'.i18n()),
                 trailing: Switch(
                   value: _systemSettings.isDark,
                   onChanged: (value) {
@@ -122,6 +122,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                 ),
+                trailing: Text(AvailableLocale.values[_systemSettings.locale]['title']),
               ),
             ]),
             optionalPart(),

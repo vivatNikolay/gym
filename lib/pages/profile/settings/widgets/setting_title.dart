@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class SettingTitle extends StatelessWidget {
@@ -7,14 +9,20 @@ class SettingTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isIOS = false;
+    try {
+      isIOS = Platform.isIOS;
+    } catch (e) {
+      print('web');
+    }
     return Container(
         alignment: Alignment.centerLeft,
         margin: const EdgeInsets.fromLTRB(6, 4, 0, 0),
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
               fontSize: 17,
-              fontStyle: FontStyle.italic),
+              fontStyle: isIOS ? FontStyle.normal : FontStyle.italic),
         )
     );
   }

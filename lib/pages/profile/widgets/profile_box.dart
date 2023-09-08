@@ -36,7 +36,7 @@ class ProfileBox extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(10),
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.white.withOpacity(0.8),
               ),
             ),
           ],

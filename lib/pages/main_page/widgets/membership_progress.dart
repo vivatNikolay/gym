@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:localization/localization.dart';
@@ -14,11 +16,17 @@ class MembershipProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isIOS = false;
+    try {
+      isIOS = Platform.isIOS;
+    } catch (e) {
+      print('web');
+    }
     return Text(
       _getString(context, membership),
       style: TextStyle(
         fontSize: fontSize,
-        fontStyle: FontStyle.italic,
+        fontStyle: isIOS ? FontStyle.normal : FontStyle.italic,
       ),
     );
   }
