@@ -46,13 +46,13 @@ class MyThemes {
     brightness: Brightness.light,
     primaryColor: Colors.white,
     backgroundColor: const Color(0xFFF3F3F8),
-    appBarTheme: AppBarTheme(
-      backgroundColor: mainColor.withOpacity(0.9),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: mainColor,
       titleTextStyle:
-          const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
       titleSpacing: 18,
       centerTitle: true,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(25),
         ),
@@ -92,13 +92,13 @@ class MyThemes {
       brightness: Brightness.dark,
       backgroundColor: const Color(0xFF1C1C1E),
       scaffoldBackgroundColor: const Color(0xFF1C1C1E),
-      appBarTheme: AppBarTheme(
-        backgroundColor: mainColor.withOpacity(0.9),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: mainColor,
         titleTextStyle:
-            const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         titleSpacing: 18,
         centerTitle: true,
-        shape: const RoundedRectangleBorder(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(25),
           ),

@@ -49,7 +49,7 @@ class _HomeState extends State<Home> {
           image:
               AssetImage(_selectedIndex == 0 ? gantelImage : trainingListImage),
           fit: BoxFit.cover,
-          opacity: 0.75,
+          opacity: 0.65,
         ),
         color: Theme.of(context).backgroundColor,
       ),

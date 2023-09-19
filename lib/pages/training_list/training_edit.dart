@@ -25,7 +25,6 @@ class TrainingEdit extends StatelessWidget {
         image: const DecorationImage(
           image: AssetImage(trainingListImage),
           fit: BoxFit.cover,
-          alignment: Alignment.centerRight,
           opacity: 0.6,
         ),
         color: Theme.of(context).backgroundColor,
