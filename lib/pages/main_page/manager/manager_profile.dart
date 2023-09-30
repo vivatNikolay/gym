@@ -100,9 +100,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                               onEdit: () async {
                                 await Navigator.of(context).push(
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            ManagerProfileEdit(
-                                                account: snapshot.data!)));
+                                        builder: (context) => ManagerProfileEdit(account: snapshot.data)));
                                 _updateSportsman();
                               },
                             ),

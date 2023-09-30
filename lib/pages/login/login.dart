@@ -7,6 +7,7 @@ import '../../helpers/constants.dart';
 import '../../providers/account_provider.dart';
 import '../widgets/my_text_form_field.dart';
 import 'widgets/field_name.dart';
+import 'create_profile.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final RegExp _regExpEmail = RegExp(
-      r"^[\w\.\%\+\-\_\#\!\?\$\&\'\*\/\=\^\{\|\`]+@[A-z0-9\.\-]+\.[A-z]{2,}$",
+      r"^[\w.%+\-_#!?$&'*/=^{|`]+@[A-z0-9.\-]+\.[A-z]{2,}$",
       multiLine: false);
   bool _isLoading = false;
   String _email = '';
@@ -120,6 +121,18 @@ class _LoginState extends State<Login> {
                     : LoginButton(
                         onPressed: _trySubmit,
                       ),
+                TextButton(
+                  onPressed: () async {
+                    await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const CreateProfile()));
+                  },
+                  child: Text(
+                    'signup'.i18n(),
+                    style: const TextStyle(
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
                 Text(_errorMess),
               ],
             ),

@@ -16,15 +16,17 @@ class AccountFire extends Fire<Account> {
     return '';
   }
 
+  Future<String?> signup(String email, String pass) async {
+    UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: pass);
+    return userCredential.user?.uid;
+  }
+
   @override
   Future<void> create(Account account) async {
     try {
-      UserCredential userCredential =
-          await _firebaseAuth.createUserWithEmailAndPassword( //ВХОДИТ В АККАУНТ ПОСЛЕ СОЗДАНИЯ!!
-              email: account.email, password: '111111');
       await firestore
           .collection(dbName)
-          .doc(userCredential.user!.uid)
+          .doc(account.id)
           .set(account.toMap());
     } on FirebaseException catch (e) {
       if (e.code == 'email-already-in-use') {

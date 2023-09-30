@@ -1,10 +1,12 @@
 {
   "welcome": "Добро пожаловать",
   "login": "Войти",
+  "signup": "Зарегистрироваться",
   "email": "Email",
   "emptyField": "Поле пустое",
   "incorrectLoginFormat": "Неверный формат логина",
   "password": "Пароль",
+  "passwordRepeat": "Повтор пароля",
   "addMembership": "Добавить абонемент",
   "cancel": "Отмена",
   "save": "Сохранить",

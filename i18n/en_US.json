@@ -1,10 +1,12 @@
 {
   "welcome": "Welcome",
   "login": "Login",
+  "signup": "Sign up",
   "email": "Email",
   "emptyField": "Field is empty",
   "incorrectLoginFormat": "Incorrect login format",
   "password": "Password",
+  "passwordRepeat": "Repeat password",
   "addMembership": "Add membership",
   "cancel": "Cancel",
   "save": "Save",

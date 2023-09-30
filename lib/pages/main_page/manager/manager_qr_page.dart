@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 
-import '../../training_list/widgets/floating_add_button.dart';
 import '../../widgets/main_scaffold.dart';
 import '../widgets/qr_item.dart';
-import 'manager_profile_edit.dart';
 import 'widgets/custom_search_delegate.dart';
 import 'widgets/qr_scan_page.dart';
 import 'widgets/search_field.dart';
@@ -22,11 +20,11 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
   Widget build(BuildContext context) {
     return MainScaffold(
       title: 'qrCode'.i18n(),
-      floatingActionButton: FloatingAddButton(
+      /*floatingActionButton: FloatingAddButton(
         text: 'createAccount'.i18n(),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const ManagerProfileEdit())),
-      ),
+      ),*/
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 20, 12, 10),
         child: Column(
