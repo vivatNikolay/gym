@@ -27,7 +27,7 @@ class UserSettingsFire extends Fire<UserSettings> {
 
   Future<UserSettings> init() async {
     DocumentSnapshot doc = await firestore.collection(dbName)
-        .doc(_firebaseAuth.currentUser!.uid).get();
+        .doc(_firebaseAuth.currentUser?.uid).get();
     return UserSettings.fromDocument(doc);
   }
 

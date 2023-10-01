@@ -55,8 +55,7 @@ class Profile extends StatelessWidget {
               style: const TextStyle(fontSize: 18),
             ),
             onTap: () async {
-              Navigator.of(context).pop();
-              Provider.of<AccountPr>(context, listen: false).logout();
+              await Provider.of<AccountPr>(context, listen: false).logout();
               Provider.of<UserSettingsPr>(context, listen: false).delete();
             },
           ),

@@ -51,68 +51,60 @@ class _ManagerProfileState extends State<ManagerProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const Home()),
-            (route) => false);
-        return Future.value(true);
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('sportsman'.i18n()),
-        ),
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: Theme.of(context).backgroundColor,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(10.0),
-            child: FutureBuilder<Account>(
-                future: _futureAccount,
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return const Center(
-                        child: CircularProgressIndicator(
-                            color: mainColor, strokeWidth: 5),
-                      );
-                    default:
-                      if (snapshot.hasError) {
-                        return Center(
-                            child: Text(
-                          snapshot.error!.toString(),
-                          style: const TextStyle(fontSize: 23.0),
-                        ));
-                      }
-                      return Container(
-                        padding: const EdgeInsets.all(2),
-                        margin: const EdgeInsets.symmetric(vertical: 2),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(15.0)),
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        child: Column(
-                          children: [
-                            ProfileRow(
-                              account: snapshot.data!,
-                              onEdit: () async {
-                                await Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => ManagerProfileEdit(account: snapshot.data)));
-                                _updateSportsman();
-                              },
-                            ),
-                            const SizedBox(height: 4),
-                            ManagerMembershipCard(userId: snapshot.data!.id!),
-                            SingleVisit(userId: snapshot.data!.id!),
-                          ],
-                        ),
-                      );
-                  }
-                }),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('sportsman'.i18n()),
+      ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Theme.of(context).backgroundColor,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(10.0),
+          child: FutureBuilder<Account>(
+              future: _futureAccount,
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return const Center(
+                      child: CircularProgressIndicator(
+                          color: mainColor, strokeWidth: 5),
+                    );
+                  default:
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: Text(
+                        snapshot.error!.toString(),
+                        style: const TextStyle(fontSize: 23.0),
+                      ));
+                    }
+                    return Container(
+                      padding: const EdgeInsets.all(2),
+                      margin: const EdgeInsets.symmetric(vertical: 2),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15.0)),
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      child: Column(
+                        children: [
+                          ProfileRow(
+                            account: snapshot.data!,
+                            onEdit: () async {
+                              await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => ManagerProfileEdit(account: snapshot.data)));
+                              _updateSportsman();
+                            },
+                          ),
+                          const SizedBox(height: 4),
+                          ManagerMembershipCard(userId: snapshot.data!.id!),
+                          SingleVisit(userId: snapshot.data!.id!),
+                        ],
+                      ),
+                    );
+                }
+              }),
         ),
       ),
     );
