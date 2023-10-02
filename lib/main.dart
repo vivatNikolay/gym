@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
+import 'firebase_options.dart';
 import 'models/available_locale.dart';
 import 'pages/login/login.dart';
 import 'models/system_settings.dart';
@@ -21,7 +22,7 @@ import 'providers/user_settings_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await hiveInitialization();
 
   runApp(const MyApp());
