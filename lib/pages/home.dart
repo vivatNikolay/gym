@@ -7,6 +7,7 @@ import '../models/custom_icons.dart';
 import '../providers/user_settings_provider.dart';
 import '../helpers/constants.dart';
 import '../providers/account_provider.dart';
+import 'main_page/admin/admin_page.dart';
 import 'main_page/manager/manager_qr_page.dart';
 import 'main_page/sportsman/sportsman_qr_page.dart';
 import 'training_list/training_list.dart';
@@ -83,13 +84,11 @@ class _HomeState extends State<Home> {
     switch (role) {
       case 'MANAGER':
         {
-          return const [
-            ManagerQrPage(),
-          ];
+          return const [ManagerQrPage()];
         }
       case 'ADMIN':
         {
-          break;
+          return const [AdminPage()];
         }
     }
     return [

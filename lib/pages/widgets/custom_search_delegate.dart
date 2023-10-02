@@ -2,17 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 
-import '../../../../services/account_fire.dart';
-import '../../../../helpers/constants.dart';
-import '../../../../models/account.dart';
-import '../manager_profile.dart';
+import '../../services/account_fire.dart';
+import '../../helpers/constants.dart';
+import '../../models/account.dart';
+import '../main_page/manager/manager_profile.dart';
+import 'confirm_dialog.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   final AccountFire _accountFire = AccountFire();
+  final bool sportsmanSearch;
 
-  CustomSearchDelegate()
+  CustomSearchDelegate(this.sportsmanSearch)
       : super(
-          searchFieldLabel: 'sportsmanSearch'.i18n(),
+          searchFieldLabel: sportsmanSearch ? 'sportsmanSearch'.i18n() : 'search'.i18n(),
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.search,
         );
@@ -61,7 +63,7 @@ class CustomSearchDelegate extends SearchDelegate {
       );
     }
     return FutureBuilder(
-        future: _accountFire.findByQuery(query),
+        future: sportsmanSearch ? _accountFire.findSportsmanByQuery(query) : _accountFire.findByQuery(query),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -102,9 +104,28 @@ class CustomSearchDelegate extends SearchDelegate {
                           '${data[index].firstName} ${data[index].lastName}'),
                       subtitle: Text(data[index].email),
                       onTap: () async {
-                        await Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                ManagerProfile(id: data[index].id!)));
+                        if (sportsmanSearch) {
+                          await Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  ManagerProfile(id: data[index].id!)));
+                        } else {
+                          String textConfirmation = '';
+                          if (data[index].role == 'MANAGER') {
+                            textConfirmation = 'Назначить роль спортсмена?';
+                          } else if (data[index].role == 'USER') {
+                            textConfirmation = 'Назначить роль менеджера?';
+                          }
+                          showDialog(
+                            context: context,
+                            builder: (context) => ConfirmDialog(
+                              textConfirmation: textConfirmation,
+                              onYes: () async {
+                                _accountFire.changeRole(data[index].id, data[index].role);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          );
+                        }
                       },
                     ),
                   );

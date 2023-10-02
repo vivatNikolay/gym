@@ -89,8 +89,22 @@ class AccountFire extends Fire<Account> {
   }
 
   Future<QuerySnapshot> findByQuery(String email) async {
-    // search by query isn't free:(
     return firestore.collection(dbName).where('email', isEqualTo: email).get();
+  }
+
+  Future<QuerySnapshot> findSportsmanByQuery(String email) async {
+    return firestore.collection(dbName).where('email', isEqualTo: email).where('role', isEqualTo: 'USER').get();
+  }
+
+  Future<void> changeRole(String? id, String role) async {
+    if (id != null) {
+      if (role == 'MANAGER') {
+        await firestore.collection(dbName).doc(id).update({'role': 'USER'});
+      }
+      if (role == 'USER') {
+        await firestore.collection(dbName).doc(id).update({'role': 'MANAGER'});
+      }
+    }
   }
 
   Future<void> resetPass(Account? account) async {

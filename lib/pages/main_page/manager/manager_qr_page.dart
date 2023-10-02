@@ -3,9 +3,9 @@ import 'package:localization/localization.dart';
 
 import '../../widgets/main_scaffold.dart';
 import '../widgets/qr_item.dart';
-import 'widgets/custom_search_delegate.dart';
+import '../../widgets/custom_search_delegate.dart';
 import 'widgets/qr_scan_page.dart';
-import 'widgets/search_field.dart';
+import '../../widgets/search_field.dart';
 
 class ManagerQrPage extends StatefulWidget {
   const ManagerQrPage({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
             SearchField(
               onTap: () => showSearch(
                 context: context,
-                delegate: CustomSearchDelegate(),
+                delegate: CustomSearchDelegate(true),
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.14),
