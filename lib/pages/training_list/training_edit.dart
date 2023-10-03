@@ -27,7 +27,7 @@ class TrainingEdit extends StatelessWidget {
           fit: BoxFit.cover,
           opacity: 0.6,
         ),
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).colorScheme.background,
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,

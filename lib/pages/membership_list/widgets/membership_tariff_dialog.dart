@@ -37,7 +37,7 @@ class MembershipTariffDialog extends StatelessWidget {
           ],
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),

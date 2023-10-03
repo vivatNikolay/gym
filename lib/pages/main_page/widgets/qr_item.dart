@@ -24,7 +24,7 @@ class QrItem extends StatelessWidget {
             colors: [
               mainColor,
               mainColor,
-              Theme.of(context).backgroundColor,
+              Theme.of(context).colorScheme.background,
             ],
           ),
           boxShadow: const [

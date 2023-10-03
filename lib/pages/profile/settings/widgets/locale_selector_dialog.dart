@@ -14,7 +14,7 @@ class LocaleSelectorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

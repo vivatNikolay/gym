@@ -17,7 +17,7 @@ class ProfileRow extends StatelessWidget {
           flex: 4,
           child: CircleAvatar(
             backgroundColor:
-            Theme.of(context).backgroundColor,
+            Theme.of(context).colorScheme.background,
             radius: 50.0,
             child: Image.asset(
                 'images/profileImg${account.iconNum}.png'),
@@ -57,7 +57,7 @@ class ProfileRow extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
               padding: const EdgeInsets.all(10),
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme.of(context).colorScheme.background,
             ),
           ),
         ),

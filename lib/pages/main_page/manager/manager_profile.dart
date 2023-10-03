@@ -4,7 +4,6 @@ import 'package:localization/localization.dart';
 import '../../../services/account_fire.dart';
 import '../../../models/account.dart';
 import '../../../helpers/constants.dart';
-import '../../home.dart';
 import '../../widgets/profile_row.dart';
 import 'widgets/manager_membership_card.dart';
 import 'widgets/single_visit.dart';
@@ -58,7 +57,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).colorScheme.background,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(10.0),
           child: FutureBuilder<Account>(

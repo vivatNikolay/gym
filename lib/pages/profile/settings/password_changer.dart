@@ -68,7 +68,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).colorScheme.background,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
           children: [

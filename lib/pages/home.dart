@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
           fit: BoxFit.cover,
           opacity: 0.65,
         ),
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).colorScheme.background,
       ),
       child: account != null
           ? Scaffold(
@@ -69,7 +69,7 @@ class _HomeState extends State<Home> {
                         currentIndex: _selectedIndex,
                         onTap: _onItemTapped,
                         iconSize: 26,
-                        backgroundColor: Theme.of(context).backgroundColor,
+                        backgroundColor: Theme.of(context).colorScheme.background,
                       ),
                     )
                   : null,

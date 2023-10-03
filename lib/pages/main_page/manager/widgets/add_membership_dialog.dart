@@ -61,7 +61,7 @@ class _AddMembershipDialogState extends State<AddMembershipDialog> {
       titlePadding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 4.0),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0)),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       actions: [
         TextButton(
           onPressed: () {

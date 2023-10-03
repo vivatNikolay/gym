@@ -20,7 +20,7 @@ class MembershipCard extends StatelessWidget {
       height: 108,
       margin: const EdgeInsets.fromLTRB(8, 16, 8, 0),
       decoration: BoxDecoration(
-        color: Theme.of(context).backgroundColor.withOpacity(0.9),
+        color: Theme.of(context).colorScheme.background.withOpacity(0.9),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

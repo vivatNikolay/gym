@@ -41,11 +41,8 @@ class SystemSettingsPr extends ChangeNotifier {
 
 class MyThemes {
   static final light = ThemeData(
-    colorScheme:
-        const ColorScheme.light(primary: mainColor, secondary: mainColor),
     brightness: Brightness.light,
     primaryColor: Colors.white,
-    backgroundColor: const Color(0xFFF3F3F8),
     appBarTheme: const AppBarTheme(
       backgroundColor: mainColor,
       titleTextStyle:
@@ -84,13 +81,13 @@ class MyThemes {
         borderRadius: BorderRadius.circular(12.0),
       ),
     ),
+    colorScheme: const ColorScheme.light(primary: mainColor, secondary: mainColor).copyWith(
+      background: const Color(0xFFF3F3F8),
+    ),
   );
 
   static final dark = ThemeData(
-      colorScheme:
-          const ColorScheme.dark(primary: mainColor, secondary: mainColor),
       brightness: Brightness.dark,
-      backgroundColor: const Color(0xFF1C1C1E),
       scaffoldBackgroundColor: const Color(0xFF1C1C1E),
       appBarTheme: const AppBarTheme(
         backgroundColor: mainColor,
@@ -132,6 +129,9 @@ class MyThemes {
       ),
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: Colors.white60,
+      ),
+      colorScheme: const ColorScheme.dark(primary: mainColor, secondary: mainColor).copyWith(
+        background: const Color(0xFF1C1C1E),
       ),
   );
 }

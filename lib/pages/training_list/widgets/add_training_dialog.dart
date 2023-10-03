@@ -31,7 +31,7 @@ class AddTrainingDialog extends StatelessWidget {
         controller: _nameController,
         validation: ValueNotifier(true),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       actions: [
         TextButton(
           child: Text('add'.i18n(),
