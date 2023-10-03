@@ -7,7 +7,7 @@ import '../../../services/account_fire.dart';
 import '../../../services/membership_fire.dart';
 import '../widgets/membership_progress.dart';
 import '../../../models/membership.dart';
-import '../../widgets/visits_list.dart';
+import '../../visits_list.dart';
 import '../../widgets/main_scaffold.dart';
 import '../widgets/qr_item.dart';
 import 'widgets/membership_card.dart';

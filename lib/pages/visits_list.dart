@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:localization/localization.dart';
 
-import '../../models/visit.dart';
-import '../../services/visit_fire.dart';
+import '../models/visit.dart';
+import '../services/visit_fire.dart';
 
 class VisitsList extends StatefulWidget {
   final String title;

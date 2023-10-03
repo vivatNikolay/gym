@@ -19,6 +19,7 @@
   "notFound": "Not found",
   "searchByEmail": "Search by email",
   "membership": "Membership",
+  "memberships": "Memberships",
   "addVisitToMembership": "Add visit to membership?",
   "membershipHistory": "Membership history",
   "visitAddedToMembership": "Visit added to membership",
@@ -95,5 +96,12 @@
   "passwordLengthLessThanSix": "Password length less than six",
   "weakPassword": "Weak password",
   "changeLang": "Language",
-  "adminPage": "Admin page"
+  "adminPage": "Admin page",
+  "membershipsDidNotLoad": "Memberships did not load",
+  "noMemberships": "No memberships",
+  "membershipError": "Membership error",
+  "durationMonth": "Duration (month)",
+  "price": "Price",
+  "order": "Order",
+  "description": "Description"
 }

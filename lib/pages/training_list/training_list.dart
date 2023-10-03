@@ -10,7 +10,7 @@ import '../widgets/main_scaffold.dart';
 import '../widgets/confirm_dialog.dart';
 import 'widgets/add_training_dialog.dart';
 import 'widgets/training_card.dart';
-import 'widgets/floating_add_button.dart';
+import '../widgets/floating_add_button.dart';
 
 class TrainingList extends StatelessWidget {
 

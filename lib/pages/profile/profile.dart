@@ -6,7 +6,8 @@ import '../../providers/user_settings_provider.dart';
 import '../../providers/account_provider.dart';
 import '../../helpers/constants.dart';
 import '../../models/account.dart';
-import '../widgets/visits_list.dart';
+import '../membership_list/memberships_page.dart';
+import '../visits_list.dart';
 import 'settings/settings_page.dart';
 import 'widgets/profile_box.dart';
 
@@ -36,6 +37,17 @@ class Profile extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           ..._optionalTiles(context, account),
+          ListTile(
+            leading: const Icon(Icons.card_membership, color: mainColor),
+            minLeadingWidth: 24,
+            title: Text(
+              'memberships'.i18n(),
+              style: const TextStyle(fontSize: 18),
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamed(MembershipsPage.routeName);
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.settings_outlined, color: mainColor),
             minLeadingWidth: 24,

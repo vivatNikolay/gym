@@ -6,7 +6,7 @@ import '../../services/exercise_fire.dart';
 import '../../helpers/constants.dart';
 import '../../models/exercise.dart';
 import '../../pages/training_list/exercise_edit.dart';
-import '../../pages/training_list/widgets/floating_add_button.dart';
+import '../widgets/floating_add_button.dart';
 import 'widgets/training_card.dart';
 
 class TrainingEdit extends StatelessWidget {

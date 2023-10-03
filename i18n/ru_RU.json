@@ -19,6 +19,7 @@
   "notFound": "Не найден",
   "searchByEmail": "Поиск по email",
   "membership": "Абонемент",
+  "memberships": "Абонементы",
   "addVisitToMembership": "Добавить посещение в абонемент?",
   "membershipHistory": "История абонемента",
   "visitAddedToMembership": "Посещение добавлено в абонемент",
@@ -95,5 +96,12 @@
   "passwordLengthLessThanSix": "Длина пароля меньше 6 символов",
   "weakPassword": "Слабый пароль",
   "changeLang": "Язык",
-  "adminPage": "Админка"
+  "adminPage": "Админка",
+  "membershipsDidNotLoad": "Абонементы не загрузились",
+  "noMemberships": "Абонементов нет",
+  "membershipError": "Ошибка абонемента",
+  "durationMonth": "Длительность (мес)",
+  "price": "Цена",
+  "order": "Порядок",
+  "description": "Описание"
 }

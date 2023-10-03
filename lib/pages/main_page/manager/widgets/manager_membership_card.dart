@@ -9,7 +9,7 @@ import '../../../../models/visit.dart';
 import '../../../../services/membership_fire.dart';
 import '../../../../services/visit_fire.dart';
 import '../../../widgets/confirm_dialog.dart';
-import '../../../widgets/visits_list.dart';
+import '../../../visits_list.dart';
 import '../../widgets/membership_progress.dart';
 import 'add_membership_dialog.dart';
 

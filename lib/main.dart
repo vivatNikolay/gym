@@ -15,6 +15,7 @@ import 'pages/main_page/manager/widgets/qr_scan_page.dart';
 import 'pages/profile/profile_edit/profile_edit.dart';
 import 'pages/profile/settings/password_changer.dart';
 import 'pages/profile/settings/settings_page.dart';
+import 'pages/membership_list/memberships_page.dart';
 import 'pages/splash.dart';
 import 'providers/account_provider.dart';
 import 'providers/system_settings_provider.dart';
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
               ProfileEdit.routeName: (ctx) => const ProfileEdit(),
               QrScanPage.routeName: (ctx) => const QrScanPage(),
               SettingsPage.routeName: (ctx) => const SettingsPage(),
+              MembershipsPage.routeName: (ctx) => const MembershipsPage(),
             },
           );
         },

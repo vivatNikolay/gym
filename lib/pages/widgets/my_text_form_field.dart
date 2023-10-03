@@ -12,6 +12,7 @@ class MyTextFormField extends StatelessWidget {
   final void Function(String?)? onSaved;
   final String? Function(String?)? validator;
   final int? maxLength;
+  final int? numberOfLines;
 
   const MyTextFormField(
       {this.initialValue,
@@ -25,6 +26,7 @@ class MyTextFormField extends StatelessWidget {
       this.onSaved,
       this.validator,
       this.maxLength,
+      this.numberOfLines,
       Key? key})
       : super(key: key);
 
@@ -52,6 +54,8 @@ class MyTextFormField extends StatelessWidget {
         validator: validator,
         readOnly: readOnly ?? false,
         autofocus: autofocus ?? false,
+        minLines: numberOfLines,
+        maxLines: numberOfLines,
       ),
     );
   }
