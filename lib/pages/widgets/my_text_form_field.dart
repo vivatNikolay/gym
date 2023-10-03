@@ -55,7 +55,7 @@ class MyTextFormField extends StatelessWidget {
         readOnly: readOnly ?? false,
         autofocus: autofocus ?? false,
         minLines: numberOfLines,
-        maxLines: numberOfLines,
+        maxLines: numberOfLines ?? 1,
       ),
     );
   }
