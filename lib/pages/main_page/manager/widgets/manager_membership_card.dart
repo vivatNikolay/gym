@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 
+import '../../../membership_list/memberships_page.dart';
 import '../../../../helpers/constants.dart';
 import '../../../../models/custom_icons.dart';
 import '../../../../models/membership.dart';
@@ -11,7 +12,6 @@ import '../../../../services/visit_fire.dart';
 import '../../../widgets/confirm_dialog.dart';
 import '../../../visits_list.dart';
 import '../../widgets/membership_progress.dart';
-import 'add_membership_dialog.dart';
 
 class ManagerMembershipCard extends StatelessWidget {
   final String userId;
@@ -50,9 +50,8 @@ class ManagerMembershipCard extends StatelessWidget {
                   ScaffoldMessenger.of(context).clearSnackBars();
                   if (_isMembershipInactive(membership)) {
                     if (_checkStartDate(membership, context)) {
-                      await showDialog(
-                          context: context,
-                          builder: (context) => AddMembershipDialog(userId));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => MembershipsPage(userId: userId)));
                     }
                   } else {
                     showDialog(

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
+import '../../services/membership_fire.dart';
 import '../../helpers/constants.dart';
+import '../../models/membership.dart';
 import '../../models/membership_tariff.dart';
 import '../../providers/account_provider.dart';
 import '../../services/membership_tariff_fire.dart';
@@ -14,8 +16,9 @@ import 'membership_tariff_edit.dart';
 
 class MembershipsPage extends StatefulWidget {
   static const routeName = '/memberships';
+  final String? userId;
 
-  const MembershipsPage({super.key});
+  const MembershipsPage({this.userId, super.key});
 
   @override
   State<MembershipsPage> createState() => _MembershipsPageState();
@@ -23,6 +26,7 @@ class MembershipsPage extends StatefulWidget {
 
 class _MembershipsPageState extends State<MembershipsPage> {
   final MembershipTariffFire _membershipTariffFire = MembershipTariffFire();
+  final MembershipFire _membershipFire = MembershipFire();
   late Stream<QuerySnapshot<Map<String, dynamic>>> _stream;
 
   @override
@@ -97,7 +101,14 @@ class _MembershipsPageState extends State<MembershipsPage> {
                         ),
                       ],
                     )
-                  : null,
+                  : widget.userId != null
+                      ? IconButton(
+                          onPressed: () async {
+                            await addMembershipToUser(context, tariffs?[index]);
+                          },
+                          icon: const Icon(Icons.check_circle, color: mainColor),
+                        )
+                      : null,
               onTap: () => showDialog(
                 context: context,
                 builder: (context) => MembershipTariffDialog(tariffs?[index]),
@@ -114,5 +125,36 @@ class _MembershipsPageState extends State<MembershipsPage> {
         style: const TextStyle(fontSize: 23.0),
       ),
     );
+  }
+
+  Future<void> addMembershipToUser(BuildContext context, MembershipTariff? tariff) async {
+    if (tariff == null || widget.userId == null) {
+      return;
+    }
+    ScaffoldMessenger.of(context).clearSnackBars();
+    DateTime? newPickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2200),
+      helpText: 'Выберете дату начала',
+    );
+    if (newPickedDate != null) {
+      try {
+        await _membershipFire.create(Membership(
+          dateOfStart: newPickedDate,
+          dateOfEnd: DateTime(newPickedDate.year, newPickedDate.month + tariff.duration, newPickedDate.day),
+          numberOfVisits: tariff.numberOfVisits,
+          visitCounter: 0,
+          userId: widget.userId!,
+          creationDate: DateTime.now(),
+        ));
+        Navigator.of(context).pop();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.toString()),
+        ));
+      }
+    }
   }
 }
