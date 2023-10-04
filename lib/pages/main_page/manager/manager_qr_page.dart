@@ -18,6 +18,7 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return MainScaffold(
       title: 'qrCode'.i18n(),
       /*floatingActionButton: FloatingAddButton(
@@ -35,7 +36,7 @@ class _ManagerQrPageState extends State<ManagerQrPage> {
                 delegate: CustomSearchDelegate(true),
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.14),
+            SizedBox(height: size.height * 0.14),
             QrItem(
               data: 'scan qr-code'.i18n(),
               onTap: () {

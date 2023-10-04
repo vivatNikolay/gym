@@ -20,8 +20,10 @@ class GenderSwitcher extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 10,
+        runSpacing: 8,
         children: [
           OutlinedButton.icon(
             onPressed: onPressedMale,
@@ -40,7 +42,7 @@ class GenderSwitcher extends StatelessWidget {
                       : Theme.of(context).unselectedWidgetColor,
                 )),
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 30),
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 30),
               side: BorderSide(
                   color: gender.value
                       ? mainColor
@@ -70,7 +72,7 @@ class GenderSwitcher extends StatelessWidget {
                       : mainColor,
                 )),
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 30),
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 30),
               side: BorderSide(
                   color: gender.value
                       ? Theme.of(context).unselectedWidgetColor

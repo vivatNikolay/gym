@@ -54,12 +54,16 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isWideScreen = size.width > 800;
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(40, 120, 40, 10),
+          padding: isWideScreen
+              ? EdgeInsets.fromLTRB(size.width * 0.25, size.height * 0.2, size.width * 0.25, size.height * 0.1)
+              : EdgeInsets.fromLTRB(size.width * 0.1, size.height * 0.15, size.width * 0.1, size.height * 0.1),
           child: Form(
             key: _formKey,
             child: Column(

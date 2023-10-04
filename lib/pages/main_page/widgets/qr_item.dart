@@ -12,10 +12,11 @@ class QrItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return InkWell(
-      borderRadius: const BorderRadius.all(Radius.circular(150)),
+      borderRadius: const BorderRadius.all(Radius.circular(1000)),
       child: Container(
-        padding: EdgeInsets.all(MediaQuery.of(context).size.width/10.8),
+        padding: EdgeInsets.all(size.width * 0.1),
         margin: const EdgeInsets.all(7),
         decoration: BoxDecoration(
           shape: BoxShape.circle,

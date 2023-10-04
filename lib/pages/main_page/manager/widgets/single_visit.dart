@@ -13,9 +13,10 @@ class SingleVisit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(
-          horizontal: 10, vertical: 2),
+          horizontal: 10, vertical: 10),
       child: Row(
         mainAxisAlignment:
         MainAxisAlignment.spaceBetween,
@@ -44,7 +45,7 @@ class SingleVisit extends StatelessWidget {
               );
             },
             icon: const Icon(Icons.add),
-            label: Text('add'.i18n()),
+            label: Text(size.width > 340 ? 'add'.i18n() : ''),
           ),
         ],
       ),

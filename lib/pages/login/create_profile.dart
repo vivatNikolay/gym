@@ -71,6 +71,8 @@ class _CreateProfileState extends State<CreateProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isWideScreen = size.width > 800;
     return Scaffold(
       appBar: AppBar(
         title: Text('profile'.i18n()),
@@ -87,9 +89,7 @@ class _CreateProfileState extends State<CreateProfile> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width / 10)
-              .copyWith(top: 20),
+          padding: EdgeInsets.symmetric(horizontal: isWideScreen ? size.width * 0.25 : size.width * 0.1).copyWith(top: 20),
           children: [
             CircleImage(
                 image: AssetImage('images/profileImg${_iconNum.value}.png'),

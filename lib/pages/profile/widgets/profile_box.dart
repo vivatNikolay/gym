@@ -35,29 +35,32 @@ class ProfileBox extends StatelessWidget {
               ),
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(12),
                 backgroundColor: Colors.white.withOpacity(0.8),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 6),
-        Text(
-          '${account.firstName} ${account.lastName}',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 24.0,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          account.email,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18.0,
-          ),
-        ),
+        _textWithTooltip('${account.firstName} ${account.lastName}', 24),
+        _textWithTooltip(account.email, 18),
       ],
+    );
+  }
+
+  Widget _textWithTooltip(String text, double? fontSize) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Tooltip(
+        message: text,
+        child: Text(
+          text,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: fontSize,
+          ),
+        ),
+      ),
     );
   }
 }

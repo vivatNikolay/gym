@@ -17,13 +17,15 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final account = Provider.of<AccountPr>(context, listen: false).account!;
+    final size = MediaQuery.of(context).size;
     return Drawer(
+      width: size.width * 0.75,
       backgroundColor: Theme.of(context).primaryColor,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           SizedBox(
-            height: 246,
+            height: 210,
             child: DrawerHeader(
               decoration: BoxDecoration(
                 gradient: LinearGradient(

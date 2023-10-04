@@ -10,74 +10,30 @@ class ImageSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('selectAvatar'.i18n()),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CircleImage(
-                  image: const AssetImage('images/profileImg1.png'),
-                  icon: iconNum.value == 1 ? Icons.check : null,
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.topCenter,
+          padding: EdgeInsets.all(size.width * 0.05),
+          child: Wrap(
+            spacing: 30,
+            runSpacing: 15,
+            children: List.generate(
+              6,
+              (index) => CircleImage(
+                  image: AssetImage('images/profileImg${index+1}.png'),
+                  icon: iconNum.value == index+1 ? Icons.check : null,
                   onTap: () {
-                    iconNum.value = 1;
+                    iconNum.value = index+1;
                     Navigator.of(context).pop();
                   }),
-              CircleImage(
-                  image: const AssetImage('images/profileImg2.png'),
-                  icon: iconNum.value == 2 ? Icons.check : null,
-                  onTap: () {
-                    iconNum.value = 2;
-                    Navigator.of(context).pop();
-                  }),
-            ],
+            ),
           ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CircleImage(
-                  image: const AssetImage('images/profileImg3.png'),
-                  icon: iconNum.value == 3 ? Icons.check : null,
-                  onTap: () {
-                    iconNum.value = 3;
-                    Navigator.of(context).pop();
-                  }),
-              CircleImage(
-                  image: const AssetImage('images/profileImg4.png'),
-                  icon: iconNum.value == 4 ? Icons.check : null,
-                  onTap: () {
-                    iconNum.value = 4;
-                    Navigator.of(context).pop();
-                  }),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CircleImage(
-                  image: const AssetImage('images/profileImg5.png'),
-                  icon: iconNum.value == 5 ? Icons.check : null,
-                  onTap: () {
-                    iconNum.value = 5;
-                    Navigator.of(context).pop();
-                  }),
-              CircleImage(
-                  image: const AssetImage('images/profileImg6.png'),
-                  icon: iconNum.value == 6 ? Icons.check : null,
-                  onTap: () {
-                    iconNum.value = 6;
-                    Navigator.of(context).pop();
-                  }),
-            ],
-          ),
-          const SizedBox(height: 10),
-        ],
+        ),
       ),
     );
   }

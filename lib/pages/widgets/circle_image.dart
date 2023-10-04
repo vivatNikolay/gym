@@ -11,14 +11,17 @@ class CircleImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Stack(
-        children: [
-          buildImage(context),
-          if (icon != null)
-            Positioned(bottom: 0, right: 2, child: buildIcon(mainColor)),
-        ],
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Stack(
+          children: [
+            buildImage(context),
+            if (icon != null) Positioned(bottom: 0, right: 2, child: buildIcon(mainColor)),
+          ],
+        ),
+      ],
     );
   }
 

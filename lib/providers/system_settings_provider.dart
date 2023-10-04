@@ -46,7 +46,7 @@ class MyThemes {
     appBarTheme: const AppBarTheme(
       backgroundColor: mainColor,
       titleTextStyle:
-          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFFFFFFFF)),
       titleSpacing: 18,
       centerTitle: true,
       shape: RoundedRectangleBorder(
@@ -92,7 +92,7 @@ class MyThemes {
       appBarTheme: const AppBarTheme(
         backgroundColor: mainColor,
         titleTextStyle:
-            TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFFFFFFFF)),
         titleSpacing: 18,
         centerTitle: true,
         shape: RoundedRectangleBorder(

@@ -39,6 +39,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('changingPassword'.i18n()),
@@ -70,7 +71,7 @@ class _PasswordChangerState extends State<PasswordChanger> {
         height: double.infinity,
         color: Theme.of(context).colorScheme.background,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.1).copyWith(top: 30),
           children: [
             MyTextField(
               controller: _newPass1Controller,
