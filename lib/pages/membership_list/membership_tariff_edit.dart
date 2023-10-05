@@ -104,7 +104,7 @@ class _MembershipTariffEditState extends State<MembershipTariffEdit> {
           children: [
             MyTextFormField(
               initialValue: _name,
-              fieldName: 'name'.i18n(),
+              fieldName: 'title'.i18n(),
               fontSize: 20,
               textAlign: TextAlign.center,
               validator: (value) {
