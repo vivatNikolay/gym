@@ -25,7 +25,7 @@ class Profile extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           SizedBox(
-            height: 210,
+            height: 246,
             child: DrawerHeader(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
