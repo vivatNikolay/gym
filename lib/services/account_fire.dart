@@ -96,6 +96,10 @@ class AccountFire extends Fire<Account> {
     return firestore.collection(dbName).where('email', isEqualTo: email).where('role', isEqualTo: 'USER').get();
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamManagers() {
+    return firestore.collection(dbName).where('role', isEqualTo: 'MANAGER').snapshots();
+  }
+
   Future<void> changeRole(String? id, String role) async {
     if (id != null) {
       if (role == 'MANAGER') {
