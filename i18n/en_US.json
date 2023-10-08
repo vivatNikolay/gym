@@ -103,5 +103,7 @@
   "durationMonth": "Duration (month)",
   "price": "Price",
   "order": "Order",
-  "description": "Description"
+  "description": "Description",
+  "visits": "visits",
+  "months": "months"
 }

@@ -103,5 +103,7 @@
   "durationMonth": "Длительность (мес)",
   "price": "Цена",
   "order": "Порядок",
-  "description": "Описание"
+  "description": "Описание",
+  "visits": "посещений",
+  "months": "мес."
 }

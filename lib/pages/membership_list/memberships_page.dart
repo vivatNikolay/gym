@@ -75,40 +75,20 @@ class _MembershipsPageState extends State<MembershipsPage> {
 
   ListView listView(List<MembershipTariff>? tariffs, String? role) {
     return ListView.builder(
+        padding: const EdgeInsets.all(4),
         itemCount: tariffs?.length,
         itemBuilder: (context, index) {
           return Card(
-            color: Theme.of(context).primaryColor.withOpacity(0.75),
+            color: Theme.of(context).primaryColor.withOpacity(0.8),
             child: ListTile(
-              title: Text(tariffs?[index].name ?? ''),
-              trailing: role == 'ADMIN'
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => MembershipTariffEdit(tariff: tariffs?[index]))),
-                          icon: const Icon(Icons.edit, color: mainColor),
-                        ),
-                        IconButton(
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (context) => ConfirmDialog(
-                              onYes: () async => _membershipTariffFire.delete(tariffs?[index].id),
-                            ),
-                          ),
-                          icon: const Icon(Icons.delete_outline, color: Colors.red),
-                        ),
-                      ],
-                    )
-                  : widget.userId != null
-                      ? IconButton(
-                          onPressed: () async {
-                            await addMembershipToUser(context, tariffs?[index]);
-                          },
-                          icon: const Icon(Icons.check_circle, color: mainColor),
-                        )
-                      : null,
+              title: Text(
+                tariffs?[index].name ?? '',
+                style: const TextStyle(fontSize: 20),
+              ),
+              subtitle: Text('${tariffs?[index].numberOfVisits} ${'visits'.i18n()},'
+                  ' ${tariffs?[index].duration} ${'months'.i18n()}'),
+              isThreeLine: true,
+              trailing: buildTrailing(role, context, tariffs?[index], index),
               onTap: () => showDialog(
                 context: context,
                 builder: (context) => MembershipTariffDialog(tariffs?[index]),
@@ -116,6 +96,46 @@ class _MembershipsPageState extends State<MembershipsPage> {
             ),
           );
         });
+  }
+
+  Widget? buildTrailing(String? role, BuildContext context, MembershipTariff? tariff, int index) {
+    if (role == 'ADMIN') {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => MembershipTariffEdit(tariff: tariff))),
+            icon: const Icon(Icons.edit, color: mainColor),
+          ),
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => ConfirmDialog(
+                onYes: () async => _membershipTariffFire.delete(tariff?.id),
+              ),
+            ),
+            icon: const Icon(Icons.delete_outline, color: Colors.red),
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('${tariff?.price}'),
+          widget.userId != null
+              ? IconButton(
+                  splashRadius: 25,
+                  onPressed: () async {
+                    await addMembershipToUser(context, tariff);
+                  },
+                  icon: const Icon(Icons.check_circle, color: mainColor),
+                )
+              : Container(),
+        ],
+      );
+    }
   }
 
   Center emptyMess() {

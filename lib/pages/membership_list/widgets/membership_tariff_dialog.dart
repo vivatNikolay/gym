@@ -30,9 +30,9 @@ class MembershipTariffDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Длительность: ${tariff!.duration}'),
-            Text('Кол-во посещений: ${tariff!.numberOfVisits}'),
-            Text('Цена: ${tariff!.price}'),
+            Text('${'durationMonth'.i18n()}: ${tariff!.duration}'),
+            Text('${'numberOfVisits'.i18n()}: ${tariff!.numberOfVisits}'),
+            Text('${'price'.i18n()}: ${tariff!.price}'),
             Text(tariff!.description ?? ''),
           ],
         ),
