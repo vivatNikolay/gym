@@ -31,6 +31,7 @@ class TrainingEdit extends StatelessWidget {
         color: Theme.of(context).colorScheme.background,
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: Text(trainingName),
