@@ -12,12 +12,12 @@ import 'widgets/add_training_dialog.dart';
 import 'widgets/training_card.dart';
 import '../widgets/floating_add_button.dart';
 
+final TrainingFire _trainingFire = TrainingFire();
+final ExerciseFire _exerciseFire = ExerciseFire();
+
 class TrainingList extends StatelessWidget {
 
-  final TrainingFire _trainingFire = TrainingFire();
-  final ExerciseFire _exerciseFire = ExerciseFire();
-
-  TrainingList({Key? key}) : super(key: key);
+  const TrainingList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

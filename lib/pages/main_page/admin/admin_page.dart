@@ -10,10 +10,11 @@ import '../../widgets/main_scaffold.dart';
 import '../../widgets/custom_search_delegate.dart';
 import '../../widgets/search_field.dart';
 
-class AdminPage extends StatelessWidget {
-  final AccountFire _accountFire = AccountFire();
+final AccountFire _accountFire = AccountFire();
 
-  AdminPage({Key? key}) : super(key: key);
+class AdminPage extends StatelessWidget {
+
+  const AdminPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

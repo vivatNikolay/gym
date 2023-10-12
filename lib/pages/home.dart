@@ -57,7 +57,10 @@ class _HomeState extends State<Home> {
       child: account != null
           ? Scaffold(
               backgroundColor: Colors.transparent,
-              body: widgetsByRole(account.role).elementAt(_selectedIndex),
+              body: IndexedStack(
+                index: _selectedIndex,
+                children: widgetsByRole(account.role),
+              ),
               bottomNavigationBar: widgetsByRole(account.role).length > 1
                   ? ClipRRect(
                       borderRadius: const BorderRadius.only(
@@ -88,11 +91,11 @@ class _HomeState extends State<Home> {
         }
       case 'ADMIN':
         {
-          return [AdminPage()];
+          return const [AdminPage()];
         }
     }
-    return [
-      const SportsmanQrPage(),
+    return const [
+      SportsmanQrPage(),
       TrainingList(),
     ];
   }
