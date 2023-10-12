@@ -9,12 +9,13 @@ import '../../pages/training_list/exercise_edit.dart';
 import '../widgets/floating_add_button.dart';
 import 'widgets/training_card.dart';
 
+final ExerciseFire _exerciseFire = ExerciseFire();
+
 class TrainingEdit extends StatelessWidget {
-  final ExerciseFire _exerciseFire = ExerciseFire();
   final String trainingId;
   final String trainingName;
 
-  TrainingEdit(this.trainingId, this.trainingName, {Key? key}) : super(key: key);
+  const TrainingEdit(this.trainingId, this.trainingName, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
