@@ -3,11 +3,10 @@ import 'package:localization/localization.dart';
 
 import '../../../helpers/constants.dart';
 import '../../widgets/main_scaffold.dart';
-import 'managers_list.dart';
+import 'manager_qr.dart';
 
-class AdminPage extends StatelessWidget {
-
-  const AdminPage({Key? key}) : super(key: key);
+class ManagerPage extends StatelessWidget {
+  const ManagerPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +22,8 @@ class AdminPage extends StatelessWidget {
         color: Theme.of(context).colorScheme.background,
       ),
       child: MainScaffold(
-        title: 'adminPage'.i18n(),
-        body: const ManagersList(),
+        title: 'qrCode'.i18n(),
+        body: const ManagerQr(),
       ),
     );
   }

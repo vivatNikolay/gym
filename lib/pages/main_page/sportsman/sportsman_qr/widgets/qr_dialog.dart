@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../../../../helpers/constants.dart';
+import '../../../../../helpers/constants.dart';
 
 class QrDialog extends StatelessWidget {
   final String data;

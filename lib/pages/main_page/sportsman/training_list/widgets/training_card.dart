@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../helpers/constants.dart';
+import '../../../../../helpers/constants.dart';
 
 class TrainingCard extends StatelessWidget {
   final String title;

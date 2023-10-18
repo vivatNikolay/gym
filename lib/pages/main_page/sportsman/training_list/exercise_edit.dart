@@ -3,12 +3,12 @@ import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-import '../../services/exercise_fire.dart';
-import '../../helpers/constants.dart';
-import '../../models/exercise.dart';
-import '../../models/user_settings.dart';
-import '../../providers/user_settings_provider.dart';
-import '../widgets/my_text_form_field.dart';
+import '../../../../helpers/constants.dart';
+import '../../../../models/exercise.dart';
+import '../../../../models/user_settings.dart';
+import '../../../../providers/user_settings_provider.dart';
+import '../../../../services/exercise_fire.dart';
+import '../../../widgets/my_text_form_field.dart';
 
 class ExerciseEdit extends StatefulWidget {
   final Exercise? exercise;

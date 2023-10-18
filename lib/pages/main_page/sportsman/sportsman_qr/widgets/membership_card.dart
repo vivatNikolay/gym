@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 
-import '../../../../helpers/constants.dart';
-import '../../../../models/custom_icons.dart';
+import '../../../../../helpers/constants.dart';
+import '../../../../../models/custom_icons.dart';
 
 class MembershipCard extends StatelessWidget {
   final Widget subtitle;

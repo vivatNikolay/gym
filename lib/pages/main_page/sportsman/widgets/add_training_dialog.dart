@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/training.dart';
-import '../../../services/training_fire.dart';
-import '../../../helpers/constants.dart';
-import '../../../providers/account_provider.dart';
-import '../../widgets/my_text_field.dart';
+import '../../../../helpers/constants.dart';
+import '../../../../models/training.dart';
+import '../../../../providers/account_provider.dart';
+import '../../../../services/training_fire.dart';
+import '../../../widgets/my_text_field.dart';
 
 class AddTrainingDialog extends StatelessWidget {
   final TrainingFire _trainingFire = TrainingFire();

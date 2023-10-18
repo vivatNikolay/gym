@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 
-import '../../services/exercise_fire.dart';
-import '../../helpers/constants.dart';
-import '../../models/exercise.dart';
-import '../../pages/training_list/exercise_edit.dart';
-import '../widgets/floating_add_button.dart';
+import '../../../../helpers/constants.dart';
+import '../../../../models/exercise.dart';
+import '../../../../services/exercise_fire.dart';
+import '../../../widgets/floating_add_button.dart';
 import 'widgets/training_card.dart';
+import 'exercise_edit.dart';
 
 final ExerciseFire _exerciseFire = ExerciseFire();
 
