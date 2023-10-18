@@ -16,12 +16,13 @@ final TrainingFire _trainingFire = TrainingFire();
 final ExerciseFire _exerciseFire = ExerciseFire();
 
 class TrainingList extends StatelessWidget {
-
-  const TrainingList({Key? key}) : super(key: key);
+  final Widget? bottomNavBar;
+  const TrainingList({this.bottomNavBar, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
+      bottomNavBar: bottomNavBar,
       title: 'trainings'.i18n(),
       floatingActionButton: FloatingAddButton(
         text: 'addTraining'.i18n(),

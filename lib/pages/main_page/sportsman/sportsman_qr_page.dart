@@ -13,38 +13,17 @@ import '../widgets/qr_item.dart';
 import 'widgets/membership_card.dart';
 import 'widgets/qr_dialog.dart';
 
-class SportsmanQrPage extends StatefulWidget {
-  const SportsmanQrPage({Key? key}) : super(key: key);
+final String _accountId = AccountFire().currentUserId();
+final MembershipFire _membershipFire = MembershipFire();
 
-  @override
-  State<SportsmanQrPage> createState() => _SportsmanQrPageState();
-}
-
-class _SportsmanQrPageState extends State<SportsmanQrPage>
-    with SingleTickerProviderStateMixin {
-  final String _accountId = AccountFire().currentUserId();
-  final MembershipFire _membershipFire = MembershipFire();
-  late AnimationController _animationController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
+class SportsmanQrPage extends StatelessWidget {
+  final Widget? bottomNavBar;
+  const SportsmanQrPage({this.bottomNavBar, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
+      bottomNavBar: bottomNavBar,
       title: 'qrCode'.i18n(),
       body: SingleChildScrollView(
         child: Column(

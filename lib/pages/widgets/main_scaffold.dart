@@ -6,8 +6,15 @@ class MainScaffold extends StatelessWidget {
   final String title;
   final Widget body;
   final Widget? floatingActionButton;
+  final Widget? bottomNavBar;
 
-  const MainScaffold({required this.title, required this.body, this.floatingActionButton, Key? key}) : super(key: key);
+  const MainScaffold({
+    required this.title,
+    required this.body,
+    this.floatingActionButton,
+    this.bottomNavBar,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +32,7 @@ class MainScaffold extends StatelessWidget {
       floatingActionButton: floatingActionButton,
       drawer: const Profile(),
       body: body,
+      bottomNavigationBar: bottomNavBar,
     );
   }
 }

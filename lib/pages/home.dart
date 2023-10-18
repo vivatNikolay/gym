@@ -55,27 +55,26 @@ class _HomeState extends State<Home> {
         color: Theme.of(context).colorScheme.background,
       ),
       child: account != null
-          ? Scaffold(
-              backgroundColor: Colors.transparent,
-              body: IndexedStack(
-                index: _selectedIndex,
-                children: widgetsByRole(account.role),
+          ? IndexedStack(
+              index: _selectedIndex,
+              children: _widgetsByRole(
+                account.role,
+                _widgetsByRole(account.role).length > 1
+                    ? ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(30.0),
+                        ),
+                        child: BottomNavigationBar(
+                          selectedItemColor: mainColor,
+                          items: _bottomItemsByRole(account.role),
+                          currentIndex: _selectedIndex,
+                          onTap: _onItemTapped,
+                          iconSize: 26,
+                          backgroundColor: Theme.of(context).colorScheme.background,
+                        ),
+                      )
+                    : null,
               ),
-              bottomNavigationBar: widgetsByRole(account.role).length > 1
-                  ? ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(30.0),
-                      ),
-                      child: BottomNavigationBar(
-                        selectedItemColor: mainColor,
-                        items: bottomItemsByRole(account.role),
-                        currentIndex: _selectedIndex,
-                        onTap: _onItemTapped,
-                        iconSize: 26,
-                        backgroundColor: Theme.of(context).colorScheme.background,
-                      ),
-                    )
-                  : null,
             )
           : const Center(
               child: CircularProgressIndicator(),
@@ -83,7 +82,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  List<Widget> widgetsByRole(String role) {
+  List<Widget> _widgetsByRole(String role, [Widget? bottomNavBar]) {
     switch (role) {
       case 'MANAGER':
         {
@@ -94,13 +93,13 @@ class _HomeState extends State<Home> {
           return const [AdminPage()];
         }
     }
-    return const [
-      SportsmanQrPage(),
-      TrainingList(),
+    return [
+      SportsmanQrPage(bottomNavBar: bottomNavBar),
+      TrainingList(bottomNavBar: bottomNavBar),
     ];
   }
 
-  List<BottomNavigationBarItem> bottomItemsByRole(String role) {
+  List<BottomNavigationBarItem> _bottomItemsByRole(String role) {
     switch (role) {
       case 'MANAGER':
         {
@@ -113,7 +112,12 @@ class _HomeState extends State<Home> {
         }
       case 'ADMIN':
         {
-          break;
+          return [
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.admin_panel_settings),
+              label: 'adminPage'.i18n(),
+            ),
+          ];
         }
     }
     return [
