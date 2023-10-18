@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
                   return const Splash();
                 }
                 if (snapshot.hasData) {
-                  return const Home();
+                  return Home();
                 } else {
                   return const Login();
                 }

@@ -8,11 +8,15 @@ import 'main_page/manager/manager_page.dart';
 import 'main_page/sportsman/sportsman_page.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  bool _isInit = true;
+  Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AccountPr>(context, listen: false).init();
+    if (_isInit) {
+      Provider.of<AccountPr>(context, listen: false).init();
+      _isInit = false;
+    }
     final acc = Provider.of<AccountPr>(context).account;
     Provider.of<UserSettingsPr>(context, listen: false).init();
     if (acc != null) {
